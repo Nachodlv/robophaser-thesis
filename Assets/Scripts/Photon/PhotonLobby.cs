@@ -36,6 +36,7 @@ namespace Photon
         public override void OnConnectedToMaster()
         {
             Debug.Log("Player has connected to the Photon master server");
+            PhotonNetwork.AutomaticallySyncScene = true;
             battleButton.interactable = true;
         }
 
@@ -49,11 +50,6 @@ namespace Photon
         {
             Debug.Log($"Failed to create a room with error: {message} and return code: {returnCode}");
             CreateRoom();
-        }
-
-        public override void OnJoinedRoom()
-        {
-            Debug.Log("Player joined a room!");
         }
 
         private void OnBattleButtonClicked()
@@ -72,9 +68,9 @@ namespace Photon
 
         private static void CreateRoom()
         {
-            var randomRoomNumber = Random.Range(0, 1000);
+            var randomRoomNumber = Random.Range(0, 1000); //TODO probably can be improved
             var roomOptions = new RoomOptions{IsVisible = true, IsOpen = true, MaxPlayers = 2};
-            PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOptions);
+            PhotonNetwork.CreateRoom($"Room{randomRoomNumber}", roomOptions);
         }
       
     }
