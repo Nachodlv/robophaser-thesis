@@ -7,15 +7,13 @@ using Random = UnityEngine.Random;
 namespace Photon.GameControllers
 {
     [RequireComponent(typeof(PhotonView))]
-    public class PhotonPlayer : MonoBehaviour
+    public class PhotonPlayer : MonoBehaviourPun
     {
         private GameObject _playerAvatar;
-        private PhotonView _photonView;
 
         private void Awake()
         {
-            _photonView = GetComponent<PhotonView>();
-            if (!_photonView.IsMine) return;
+            if (!photonView.IsMine) return;
             var spawnPoint = GetRandomSpawnPoint();
             _playerAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
                 spawnPoint.position, spawnPoint.rotation);
