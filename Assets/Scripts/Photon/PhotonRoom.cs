@@ -65,7 +65,7 @@ namespace Photon
 
         private void CreatePlayer()
         {
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), transform.position,
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), transform.position,
                 Quaternion.identity);
         }
 
