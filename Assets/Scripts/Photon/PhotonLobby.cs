@@ -11,12 +11,10 @@ namespace Photon
     {
         [SerializeField] private Button battleButton;
         [SerializeField] private Button cancelButton;
+        [SerializeField] private MultiplayerSettings settings;
         
-        public static PhotonLobby Lobby;
-
         private void Awake()
         {
-            Lobby = this;
             battleButton.interactable = false;
             battleButton.onClick.AddListener(OnBattleButtonClicked);
             cancelButton.onClick.AddListener(OnCancelButtonClicked);
@@ -66,10 +64,10 @@ namespace Photon
             PhotonNetwork.LeaveRoom();
         }
 
-        private static void CreateRoom()
+        private void CreateRoom()
         {
             var randomRoomNumber = Random.Range(0, 1000); //TODO probably can be improved
-            var roomOptions = new RoomOptions{IsVisible = true, IsOpen = true, MaxPlayers = 2};
+            var roomOptions = new RoomOptions{IsVisible = true, IsOpen = true, MaxPlayers = (byte) settings.maxPlayers};
             PhotonNetwork.CreateRoom($"Room{randomRoomNumber}", roomOptions);
         }
       

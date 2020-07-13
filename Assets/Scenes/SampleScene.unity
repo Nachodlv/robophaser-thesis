@@ -468,7 +468,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: -2.1699253e-13, y: 6.2274107e+27, z: -3418108.5, w: 7.0336453e+25}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1038,6 +1038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleButton: {fileID: 753616449}
   cancelButton: {fileID: 378040689}
+  settings: {fileID: 11400000, guid: d9c4a7cf457b2c44c848f7fae7d6d505, type: 2}
 --- !u!4 &1325118881
 Transform:
   m_ObjectHideFlags: 0
@@ -1301,7 +1302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 984c3cd1b5ae4fa59eedffdfee50b03f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplayerScene: 1
+  settings: {fileID: 11400000, guid: d9c4a7cf457b2c44c848f7fae7d6d505, type: 2}
+  startingTime: 10
 --- !u!114 &1628193793
 MonoBehaviour:
   m_ObjectHideFlags: 0
