@@ -11,21 +11,16 @@ namespace Photon
     public class PhotonRoom : MonoBehaviourPunCallbacks
     {
         [SerializeField] private MultiplayerSettings settings;
-        [SerializeField] private float startingTime;
+        [SerializeField] private float waitTimeWhenFull;
 
         private static PhotonRoom _room;
 
         private int _currentScene;
         private bool _isGameLoaded;
         private Player[] _photonPlayers;
-        private int _playersInRoom;
-        private int _numberInRoom;
-        private int _playerInGame;
+        private int _playersInGame;
 
-        private bool _readyToCount;
         private bool _readyToStart;
-        private float _lessThanMaxPlayers;
-        private float _atMaxPlayers;
         private float _timeToStart;
 
         private void Awake()
@@ -47,31 +42,12 @@ namespace Photon
 
         private void Update()
         {
-            if (settings.delayStart)
-            {
-                if (_playersInRoom == 1)
-                {
-                    RestartTimer();
-                }
+            if (_isGameLoaded || !_readyToStart) return;
 
-                if (!_isGameLoaded)
-                {
-                    if (_readyToStart)
-                    {
-                        _atMaxPlayers -= Time.deltaTime;
-                        _lessThanMaxPlayers = _atMaxPlayers;
-                        _timeToStart = _atMaxPlayers;
-                    }
-                    else if (_readyToCount)
-                    {
-                        _lessThanMaxPlayers -= Time.deltaTime;
-                        _timeToStart = _lessThanMaxPlayers;
-                    }
+            _timeToStart -= Time.deltaTime;
+            Debug.Log($"Time to start the game: {_timeToStart}");
+            if (_timeToStart <= 0) StartGame();
 
-                    Debug.Log($"Time to start the game: {_timeToStart}");
-                    if (_timeToStart <= 0) StartGame();
-                }
-            }
         }
 
         public override void OnEnable()
@@ -91,102 +67,59 @@ namespace Photon
         public override void OnJoinedRoom()
         {
             base.OnJoinedRoom();
-            Debug.Log("Player joined a room!");
             _photonPlayers = PhotonNetwork.PlayerList;
-            _playersInRoom = _photonPlayers.Length;
-            _numberInRoom = _playersInRoom;
-            PhotonNetwork.NickName = _numberInRoom.ToString();
-            if (settings.delayStart)
-            {
-                Debug.Log($"Waiting for players to join ({_playerInGame} : {settings.maxPlayers})");
-                if (_playersInRoom > 1)
-                {
-                    _readyToCount = true;
-                }
-
-                if (_playersInRoom != settings.maxPlayers) return;
-                _readyToStart = true;
-                if (!PhotonNetwork.IsMasterClient) return;
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
-            else
-            {
-                StartGame();
-            }
+            Debug.Log("Player joined a room!");
+            PlayerJoinedRoom();
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             base.OnPlayerEnteredRoom(newPlayer);
-            _photonPlayers = PhotonNetwork.PlayerList;
-            _playersInRoom++;
-            if (settings.delayStart)
-            {
-                Debug.Log($"Waiting for players to join ({_playerInGame} : {settings.maxPlayers})");
-                if (_playersInRoom > 1)
-                {
-                    _readyToCount = true;
-                }
-
-                if (_playersInRoom != settings.maxPlayers) return;
-                _readyToStart = true;
-                if (!PhotonNetwork.IsMasterClient) return;
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
-            else
-            {
-                StartGame();
-            }
+            PlayerJoinedRoom();
         }
 
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
-            if (_currentScene == settings.multiplayerScene)
-            {
-                _isGameLoaded = true;
-                if (settings.delayStart)
-                {
-                    photonView.RPC("RPC_LoadedGameScene", RpcTarget.MasterClient);
-                }
-                else
-                {
-                    RPC_CreatePlayer();
-                }
-            }
+            if (_currentScene != settings.multiplayerScene) return;
+            _isGameLoaded = true;
+            photonView.RPC("RPC_LoadedGameScene", RpcTarget.MasterClient);
+        }
+
+        private void PlayerJoinedRoom()
+        {
+            _photonPlayers = PhotonNetwork.PlayerList;
+            Debug.Log($"Waiting for players to join ({_photonPlayers.Length} : {settings.maxPlayers})");
+            if (_photonPlayers.Length < settings.maxPlayers) return;
+            _readyToStart = true;
+            if (!PhotonNetwork.IsMasterClient) return;
+            PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
         private void StartGame()
         {
             _isGameLoaded = true;
+            _timeToStart = waitTimeWhenFull;
             if (!PhotonNetwork.IsMasterClient) return;
-            if (settings.delayStart)
-            {
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-            }
+            PhotonNetwork.CurrentRoom.IsOpen = false;
 
             PhotonNetwork.LoadLevel(settings.multiplayerScene);
         }
 
         private void RestartTimer()
         {
-            _lessThanMaxPlayers = startingTime;
-            _timeToStart = startingTime;
-            _atMaxPlayers = 6;
-            _readyToCount = false;
             _readyToStart = false;
         }
 
         [PunRPC]
         private void RPC_LoadedGameScene()
         {
-            _playerInGame++;
-            if (_playerInGame == PhotonNetwork.PlayerList.Length)
+            _playersInGame++;
+            if (_playersInGame == PhotonNetwork.PlayerList.Length)
             {
                 photonView.RPC("RPC_CreatePlayer", RpcTarget.All);
             }
         }
-
 
         [PunRPC]
         private void RPC_CreatePlayer()
