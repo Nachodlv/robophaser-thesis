@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Multiplayer Settings
   m_EditorClassIdentifier: 
   maxPlayers: 2
-  menuScene: 0
   multiplayerScene: 1
+  mainMenuScene: 0

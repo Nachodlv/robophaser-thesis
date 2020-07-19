@@ -78,6 +78,18 @@ namespace Photon
             PlayerJoinedRoom();
         }
 
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            base.OnPlayerLeftRoom(otherPlayer);
+            Debug.Log($"{otherPlayer.NickName} has left the game");
+        }
+
+        public override void OnLeftRoom()
+        {
+            base.OnLeftRoom();
+            Destroy(gameObject);
+        }
+
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
