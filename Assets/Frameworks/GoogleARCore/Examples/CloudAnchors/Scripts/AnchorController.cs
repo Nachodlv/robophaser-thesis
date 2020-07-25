@@ -18,18 +18,19 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Photon.Pun;
+
 namespace GoogleARCore.Examples.CloudAnchors
 {
     using GoogleARCore;
     using GoogleARCore.CrossPlatform;
     using UnityEngine;
-    using UnityEngine.Networking;
 
     /// <summary>
     /// A Controller for the Anchor object that handles hosting and resolving the Cloud Anchor.
     /// </summary>
 #pragma warning disable 618
-    public class AnchorController : NetworkBehaviour
+    public class AnchorController : MonoBehaviourPun
 #pragma warning restore 618
     {
         /// <summary>
@@ -42,9 +43,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The Cloud Anchor ID that will be used to host and resolve the Cloud Anchor. This
         /// variable will be syncrhonized over all clients.
         /// </summary>
-#pragma warning disable 618
-        [SyncVar(hook = "_OnChangeId")]
-#pragma warning restore 618
         private string m_CloudAnchorId = string.Empty;
 
         /// <summary>
@@ -91,18 +89,12 @@ namespace GoogleARCore.Examples.CloudAnchors
                     .GetComponent<CloudAnchorsExampleController>();
             m_AnchorMesh = transform.Find("AnchorMesh").gameObject;
             m_AnchorMesh.SetActive(false);
-        }
-
-        /// <summary>
-        /// The Unity OnStartClient() method.
-        /// </summary>
-        public override void OnStartClient()
-        {
             if (m_CloudAnchorId != string.Empty)
             {
                 m_ShouldResolve = true;
             }
         }
+
 
         /// <summary>
         /// The Unity Update() method.
@@ -137,12 +129,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// Command run on the server to set the Cloud Anchor Id.
         /// </summary>
         /// <param name="cloudAnchorId">The new Cloud Anchor Id.</param>
-#pragma warning disable 618
-        [Command]
-#pragma warning restore 618
-        public void CmdSetCloudAnchorId(string cloudAnchorId)
+        [PunRPC]
+        private void RPC_SetCloudAnchorId(string cloudAnchorId)
         {
-            m_CloudAnchorId = cloudAnchorId;
+            if (cloudAnchorId != string.Empty)
+            {
+                m_CloudAnchorId = cloudAnchorId;
+                m_ShouldResolve = true;
+            }
         }
 
         /// <summary>
@@ -183,7 +177,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
                 Debug.Log(string.Format(
                     "Cloud Anchor {0} was created and saved.", result.Anchor.CloudId));
-                CmdSetCloudAnchorId(result.Anchor.CloudId);
+                photonView.RPC("RPC_SetCloudAnchorId", RpcTarget.AllBuffered, result.Anchor.CloudId);
 
                 m_CloudAnchorsExampleController.OnAnchorHosted(true, result.Response.ToString());
             });
@@ -246,17 +240,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             m_PassedResolvingTimeout = true;
         }
 
-        /// <summary>
-        /// Callback invoked once the Cloud Anchor Id changes.
-        /// </summary>
-        /// <param name="newId">New identifier.</param>
-        private void _OnChangeId(string newId)
-        {
-            if (!m_IsHost && newId != string.Empty)
-            {
-                m_CloudAnchorId = newId;
-                m_ShouldResolve = true;
-            }
-        }
+
     }
 }

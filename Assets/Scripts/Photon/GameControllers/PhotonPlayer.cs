@@ -14,9 +14,9 @@ namespace Photon.GameControllers
         private void Awake()
         {
             if (!photonView.IsMine) return;
-            var spawnPoint = GetRandomSpawnPoint();
+            // var spawnPoint = GetRandomSpawnPoint();
             _playerAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
-                spawnPoint.position, spawnPoint.rotation);
+                Vector3.zero, Quaternion.identity); //TODO restore
         }
 
         private Transform GetRandomSpawnPoint()

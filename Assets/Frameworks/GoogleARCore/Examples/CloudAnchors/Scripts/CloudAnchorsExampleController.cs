@@ -18,12 +18,14 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Photon;
+using Photon.Pun;
+
 namespace GoogleARCore.Examples.CloudAnchors
 {
     using GoogleARCore;
     using UnityEngine;
     using UnityEngine.EventSystems;
-    using UnityEngine.Networking;
     using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
@@ -158,7 +160,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The Network Manager.
         /// </summary>
 #pragma warning disable 618
-        private CloudAnchorsNetworkManager m_NetworkManager;
+        private PhotonRoom m_NetworkManager;
 #pragma warning restore 618
 
         /// <summary>
@@ -242,10 +244,21 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void Start()
         {
 #pragma warning disable 618
-            m_NetworkManager = NetworkUIController.GetComponent<CloudAnchorsNetworkManager>();
+            m_NetworkManager = FindObjectOfType<PhotonRoom>();
 #pragma warning restore 618
-            m_NetworkManager.OnClientConnected += _OnConnectedToServer;
-            m_NetworkManager.OnClientDisconnected += _OnDisconnectedFromServer;
+            // m_NetworkManager.OnPlayerJoined += _OnConnectedToServer;
+            m_NetworkManager.OnPlayerJoined += () =>
+            {
+                if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
+                else OnEnterResolvingModeClick();
+            };
+            m_NetworkManager.OnPlayerLeft += _OnDisconnectedFromServer;
+            m_NetworkManager.OnGameStart += () =>
+            {
+                _OnConnectedToServer();
+                OnLobbyVisibilityChanged(false);
+            };
+            // m_NetworkManager.OnGameStartAsHost += OnEnterHostingModeClick;
 
             // A Name is provided to the Game Object so it can be found by other Scripts
             // instantiated as prefabs in the scene.
@@ -554,7 +567,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .CmdSpawnStar(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+                .SpawnStar(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
         }
 
         /// <summary>
@@ -716,9 +729,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private void _DoReturnToLobby()
         {
-#pragma warning disable 618
-            NetworkManager.Shutdown();
-#pragma warning restore 618
+            PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene("CloudAnchors");
         }
     }

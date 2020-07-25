@@ -5,10 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu Scene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multiplayer Scene.unity
     guid: 03e09bfe3fd3e9d4cb93b841c7c03a06
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Frameworks/GoogleARCore/Examples/CloudAnchors/Scenes/CloudAnchors.unity
+    guid: 83fb41cc294e74bdea57537befa00ffc
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 7f9e44287b92c1e42a798451502747e9,
+      type: 2}
