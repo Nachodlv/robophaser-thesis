@@ -1,0 +1,45 @@
+<set>
+  <tiles>
+<tile name="WFC Prefabs/Summer/waterturn 3_L" symmetry="L" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/waterside 3_T" symmetry="T" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/water_a 0_X" symmetry="X" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/waterside 2_T" symmetry="T" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/grass 0_X" symmetry="X" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/waterturn 0_L" symmetry="L" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/waterside 0_T" symmetry="T" weight="1,0"/>
+<tile name="WFC Prefabs/Summer/waterturn 1_L" symmetry="L" weight="1,0"/>
+	</tiles>
+<neighbors>  <neighbor left="WFC Prefabs/Summer/water_a 0_X 0" right="WFC Prefabs/Summer/water_a 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 1" right="WFC Prefabs/Summer/water_a 0_X 1"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 1" right="WFC Prefabs/Summer/waterturn 3_L 2"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 1" right="WFC Prefabs/Summer/waterside 2_T 1"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 1" right="WFC Prefabs/Summer/waterturn 3_L 1"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 0" right="WFC Prefabs/Summer/waterturn 3_L 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 3_L 1" right="WFC Prefabs/Summer/waterside 2_T 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 3_L 2" right="WFC Prefabs/Summer/waterside 3_T 3"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 2_T 0" right="WFC Prefabs/Summer/waterside 2_T 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 2_T 1" right="WFC Prefabs/Summer/grass 0_X 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 2_T 0" right="WFC Prefabs/Summer/waterturn 3_L 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 3_L 0" right="WFC Prefabs/Summer/water_a 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 3_L 1" right="WFC Prefabs/Summer/waterside 3_T 1"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 0" right="WFC Prefabs/Summer/waterside 3_T 2"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 2" right="WFC Prefabs/Summer/grass 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 3" right="WFC Prefabs/Summer/waterside 3_T 3"/>
+  <neighbor left="WFC Prefabs/Summer/grass 0_X 0" right="WFC Prefabs/Summer/grass 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/grass 0_X 1" right="WFC Prefabs/Summer/grass 0_X 1"/>
+  <neighbor left="WFC Prefabs/Summer/grass 0_X 0" right="WFC Prefabs/Summer/waterside 3_T 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 0" right="WFC Prefabs/Summer/water_a 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 1" right="WFC Prefabs/Summer/waterside 3_T 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 3" right="WFC Prefabs/Summer/waterturn 1_L 1"/>
+  <neighbor left="WFC Prefabs/Summer/grass 0_X 1" right="WFC Prefabs/Summer/waterside 0_T 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 3_T 1" right="WFC Prefabs/Summer/waterturn 0_L 1"/>
+  <neighbor left="WFC Prefabs/Summer/water_a 0_X 0" right="WFC Prefabs/Summer/waterturn 1_L 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 1_L 0" right="WFC Prefabs/Summer/waterside 0_T 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 1_L 1" right="WFC Prefabs/Summer/water_a 0_X 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 0_T 0" right="WFC Prefabs/Summer/waterside 0_T 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 0_T 1" right="WFC Prefabs/Summer/water_a 0_X 1"/>
+  <neighbor left="WFC Prefabs/Summer/waterside 0_T 0" right="WFC Prefabs/Summer/waterturn 0_L 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 0_L 0" right="WFC Prefabs/Summer/water_a 0_X 0"/>
+  <neighbor left="WFC Prefabs/Summer/waterturn 0_L 1" right="WFC Prefabs/Summer/water_a 0_X 1"/>
+	</neighbors>
+</set>
