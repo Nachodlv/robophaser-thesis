@@ -38,10 +38,11 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - RPC_AddCharacter
   - RPC_CreatePlayer
   - RPC_LoadedGameScene
-  - RPC_AddCharacter
   - RPC_Shoot
+  - RPC_SetCloudAnchorId
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 1

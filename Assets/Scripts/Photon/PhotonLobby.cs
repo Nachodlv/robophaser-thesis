@@ -12,7 +12,8 @@ namespace Photon
         [SerializeField] private Button battleButton;
         [SerializeField] private Button cancelButton;
         [SerializeField] private MultiplayerSettings settings;
-        
+
+
         private void Awake()
         {
             battleButton.interactable = false;
@@ -43,7 +44,7 @@ namespace Photon
             Debug.Log($"Failed to join a random room with error: {message} and return code: {returnCode}");
             CreateRoom();
         }
-        
+
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
             Debug.Log($"Failed to create a room with error: {message} and return code: {returnCode}");
@@ -70,6 +71,6 @@ namespace Photon
             var roomOptions = new RoomOptions{IsVisible = true, IsOpen = true, MaxPlayers = (byte) settings.maxPlayers};
             PhotonNetwork.CreateRoom($"Room{randomRoomNumber}", roomOptions);
         }
-      
+
     }
 }
