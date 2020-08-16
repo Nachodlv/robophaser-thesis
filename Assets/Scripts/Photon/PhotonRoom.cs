@@ -95,7 +95,7 @@ namespace Photon
         {
             base.OnLeftRoom();
             OnPlayerLeft?.Invoke();
-            Destroy(gameObject);
+            RestartTimer();
         }
 
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
@@ -132,6 +132,8 @@ namespace Photon
         private void RestartTimer()
         {
             _readyToStart = false;
+            _isGameLoaded = false;
+            _timeToStart = waitTimeWhenFull;
         }
 
         [PunRPC]

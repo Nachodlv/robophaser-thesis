@@ -36,7 +36,7 @@ namespace Photon
 
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            errorDisplayer.ShowError(message);
+            Debug.LogError(message);
             CreateRoom();
         }
 
@@ -48,7 +48,7 @@ namespace Photon
         public void JoinRoom(string roomName)
         {
             Loader.Instance.StartLoading();
-            var result = PhotonNetwork.JoinRoom(roomName);
+            var result = PhotonNetwork.JoinRoom(roomName.ToUpper());
             if (result) return;
             Loader.Instance.StopLoading();
             errorDisplayer.ShowError("Error joining room. Try again later");
