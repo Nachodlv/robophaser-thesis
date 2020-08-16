@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class WaitingRoom : MonoBehaviour
+    public class WaitingRoomScreen : MonoBehaviour
     {
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button joinGameButton;
@@ -19,7 +19,7 @@ namespace UI
             joinGameButton.interactable = false;
             joinGameButton.onClick.AddListener(() => photonLobby.JoinRoom(inputField.text));
             inputField.onValueChanged.AddListener(InputFieldChanged);
-            inputField.onEndEdit.AddListener(photonLobby.JoinRoom);
+            inputField.onSubmit.AddListener(photonLobby.JoinRoom);
         }
 
         private void InputFieldChanged(string text)

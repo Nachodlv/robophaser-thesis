@@ -27,10 +27,11 @@ namespace Photon
             screensController.ShowScreen(Screen.WaitingScreen);
         }
 
-        public override void OnJoinRandomFailed(short returnCode, string message)
+        public override void OnJoinRoomFailed(short returnCode, string message)
         {
+            base.OnJoinRandomFailed(returnCode, message);
+            Loader.Instance.StopLoading();
             errorDisplayer.ShowError(message);
-            CreateRoom();
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -47,7 +48,6 @@ namespace Photon
         public void JoinRoom(string roomName)
         {
             Loader.Instance.StartLoading();
-            Debug.Log($"Trying to join room {roomName}");
             var result = PhotonNetwork.JoinRoom(roomName);
             if (result) return;
             Loader.Instance.StopLoading();
