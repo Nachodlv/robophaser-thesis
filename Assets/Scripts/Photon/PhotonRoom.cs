@@ -2,6 +2,7 @@
 using System.IO;
 using Photon.Pun;
 using Photon.Realtime;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -72,7 +73,8 @@ namespace Photon
         {
             base.OnJoinedRoom();
             _photonPlayers = PhotonNetwork.PlayerList;
-            Debug.Log("Player joined a room!");
+            Loader.Instance.StopLoading();
+            Debug.Log($"Player joined a room! Id: {PhotonNetwork.CurrentRoom.Name}");
             PlayerJoinedRoom();
             OnPlayerJoined?.Invoke();
         }

@@ -4,6 +4,7 @@ using Photon.Realtime;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 using Random = UnityEngine.Random;
 using Screen = UI.Screen;
 
@@ -22,27 +23,20 @@ namespace Photon
 
         public override void OnConnectedToMaster()
         {
-            Debug.Log("Player has connected to the Photon master server");
             PhotonNetwork.AutomaticallySyncScene = true;
             screensController.ShowScreen(Screen.WaitingScreen);
-            errorDisplayer.ShowError("Player has connected to the Photon master server");
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            Debug.Log($"Failed to join a random room with error: {message} and return code: {returnCode}");
+            errorDisplayer.ShowError(message);
             CreateRoom();
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            Debug.Log($"Failed to create a room with error: {message} and return code: {returnCode}");
+            errorDisplayer.ShowError(message);
             CreateRoom();
-        }
-
-        public void JoinRandomRoom()
-        {
-            PhotonNetwork.JoinRandomRoom();
         }
 
         public void LeaveRoom()
@@ -50,16 +44,28 @@ namespace Photon
             PhotonNetwork.LeaveRoom();
         }
 
-        private void CreateRoom()
+        public void JoinRoom(string roomName)
         {
-            var randomRoomNumber = Random.Range(0, 1000); //TODO probably can be improved
+            Loader.Instance.StartLoading();
+            Debug.Log($"Trying to join room {roomName}");
+            var result = PhotonNetwork.JoinRoom(roomName);
+            if (result) return;
+            Loader.Instance.StopLoading();
+            errorDisplayer.ShowError("Error joining room. Try again later");
+        }
+
+        public void CreateRoom()
+        {
             var roomOptions = new RoomOptions{IsVisible = true, IsOpen = true, MaxPlayers = (byte) settings.maxPlayers};
-            PhotonNetwork.CreateRoom($"Room{randomRoomNumber}", roomOptions);
+            Loader.Instance.StartLoading();
+            screensController.ShowScreen(Screen.GameScreen);
+            PhotonNetwork.CreateRoom(RandomString.CreateString(5), roomOptions);
         }
 
         public override void OnErrorInfo(ErrorInfo errorInfo)
         {
             base.OnErrorInfo(errorInfo);
+            errorDisplayer.ShowError(errorInfo.Info);
         }
     }
 }
