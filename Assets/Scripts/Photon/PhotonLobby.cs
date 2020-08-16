@@ -1,42 +1,31 @@
 ﻿using System;
 using Photon.Pun;
 using Photon.Realtime;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using Screen = UI.Screen;
 
 namespace Photon
 {
     public class PhotonLobby : MonoBehaviourPunCallbacks
     {
-        [SerializeField] private Button battleButton;
-        [SerializeField] private Button cancelButton;
         [SerializeField] private MultiplayerSettings settings;
-
-
-        private void Awake()
-        {
-            battleButton.interactable = false;
-            battleButton.onClick.AddListener(OnBattleButtonClicked);
-            cancelButton.onClick.AddListener(OnCancelButtonClicked);
-        }
+        [SerializeField] private ScreensController screensController;
+        [SerializeField] private ErrorDisplayer errorDisplayer;
 
         private void Start()
         {
             PhotonNetwork.ConnectUsingSettings();
         }
 
-        private void OnDestroy()
-        {
-            battleButton.onClick.RemoveListener(OnBattleButtonClicked);
-            cancelButton.onClick.RemoveListener(OnCancelButtonClicked);
-        }
-
         public override void OnConnectedToMaster()
         {
             Debug.Log("Player has connected to the Photon master server");
             PhotonNetwork.AutomaticallySyncScene = true;
-            battleButton.interactable = true;
+            screensController.ShowScreen(Screen.WaitingScreen);
+            errorDisplayer.ShowError("Player has connected to the Photon master server");
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
@@ -51,17 +40,13 @@ namespace Photon
             CreateRoom();
         }
 
-        private void OnBattleButtonClicked()
+        public void JoinRandomRoom()
         {
-            battleButton.gameObject.SetActive(false);
-            cancelButton.gameObject.SetActive(true);
             PhotonNetwork.JoinRandomRoom();
         }
 
-        private void OnCancelButtonClicked()
+        public void LeaveRoom()
         {
-            cancelButton.gameObject.SetActive(false);
-            battleButton.gameObject.SetActive(true);
             PhotonNetwork.LeaveRoom();
         }
 
@@ -72,5 +57,9 @@ namespace Photon
             PhotonNetwork.CreateRoom($"Room{randomRoomNumber}", roomOptions);
         }
 
+        public override void OnErrorInfo(ErrorInfo errorInfo)
+        {
+            base.OnErrorInfo(errorInfo);
+        }
     }
 }
