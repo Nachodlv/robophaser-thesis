@@ -5,6 +5,7 @@ using Photon.Realtime;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace Photon
 {
@@ -89,6 +90,9 @@ namespace Photon
         {
             base.OnPlayerLeftRoom(otherPlayer);
             Debug.Log($"{otherPlayer.NickName} has left the game");
+            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
+            PhotonNetwork.LeaveRoom();
+            Destroy(gameObject);
         }
 
         public override void OnLeftRoom()
@@ -124,8 +128,7 @@ namespace Photon
             if (!PhotonNetwork.IsMasterClient)
                 return;
             PhotonNetwork.CurrentRoom.IsOpen = false;
-
-            // PhotonNetwork.LoadLevel(settings.multiplayerScene); TODO restore
+            SceneLoader.Instance.LoadSceneAsync(settings.multiplayerScene);
             photonView.RPC("RPC_CreatePlayer", RpcTarget.All);
         }
 

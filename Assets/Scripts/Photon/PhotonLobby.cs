@@ -19,12 +19,16 @@ namespace Photon
         private void Start()
         {
             PhotonNetwork.ConnectUsingSettings();
+            if (PhotonNetwork.IsConnected)
+            {
+                FinishConnecting();
+            }
         }
 
         public override void OnConnectedToMaster()
         {
             PhotonNetwork.AutomaticallySyncScene = true;
-            screensController.ShowScreen(Screen.WaitingScreen);
+            FinishConnecting();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -66,6 +70,11 @@ namespace Photon
         {
             base.OnErrorInfo(errorInfo);
             errorDisplayer.ShowError(errorInfo.Info);
+        }
+
+        private void FinishConnecting()
+        {
+            screensController.ShowScreen(Screen.WaitingScreen);
         }
     }
 }
