@@ -36,71 +36,17 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// The snackbar text.
         /// </summary>
-        public Text SnackbarText;
-
-        /// <summary>
-        /// The Label showing the current active room.
-        /// </summary>
-        public GameObject CurrentRoomLabel;
-
-        /// <summary>
-        /// The return to lobby button in AR Scene.
-        /// </summary>
-        public GameObject ReturnButton;
-
-        /// <summary>
-        /// The Cloud Anchors Example Controller.
-        /// </summary>
-        public CloudAnchorsExampleController CloudAnchorsExampleController;
-
-        /// <summary>
-        /// The Panel containing the list of available rooms to join.
-        /// </summary>
-        public GameObject RoomListPanel;
-
-        /// <summary>
-        /// Text indicating that no previous rooms exist.
-        /// </summary>
-        public Text NoPreviousRoomsText;
-
-        /// <summary>
-        /// The prefab for a row in the available rooms list.
-        /// </summary>
-        public GameObject JoinRoomListRowPrefab;
+        public Text snackbarText;
 
         /// <summary>
         /// The number of matches that will be shown.
         /// </summary>
-        private const int k_MatchPageSize = 5;
+        private const int MatchPageSize = 5;
 
         /// <summary>
         /// The current room number.
         /// </summary>
-        private string m_CurrentRoomNumber;
-
-        /// <summary>
-        /// The Join Room buttons.
-        /// </summary>
-        private List<GameObject> m_JoinRoomButtonsPool = new List<GameObject>();
-
-        /// <summary>
-        /// The Unity Awake() method.
-        /// </summary>
-        public void Awake()
-        {
-            // Initialize the pool of Join Room buttons.
-            for (int i = 0; i < k_MatchPageSize; i++)
-            {
-                GameObject button = Instantiate(JoinRoomListRowPrefab);
-                button.transform.SetParent(RoomListPanel.transform, false);
-                button.GetComponent<RectTransform>().anchoredPosition =
-                    new Vector2(0, -(100 * i));
-                button.SetActive(true);
-                button.GetComponentInChildren<Text>().text = string.Empty;
-                m_JoinRoomButtonsPool.Add(button);
-            }
-
-        }
+        private string _currentRoomNumber;
 
 
         /// <summary>
@@ -112,11 +58,11 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (isHost)
             {
-                SnackbarText.text = "Hosting Cloud Anchor...";
+                snackbarText.text = "Hosting Cloud Anchor...";
             }
             else
             {
-                SnackbarText.text =
+                snackbarText.text =
                     "Cloud Anchor added to session! Attempting to resolve anchor...";
             }
         }
@@ -131,11 +77,11 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully hosted! Tap to place more stars.";
+                snackbarText.text = "Cloud Anchor successfully hosted! Tap to place more stars.";
             }
             else
             {
-                SnackbarText.text = "Cloud Anchor could not be hosted. " + response;
+                snackbarText.text = "Cloud Anchor could not be hosted. " + response;
             }
         }
 
@@ -149,11 +95,11 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             if (success)
             {
-                SnackbarText.text = "Cloud Anchor successfully resolved! Tap to place more stars.";
+                snackbarText.text = "Cloud Anchor successfully resolved! Tap to place more stars.";
             }
             else
             {
-                SnackbarText.text =
+                snackbarText.text =
                     "Cloud Anchor could not be resolved. Will attempt again. " + response;
             }
         }
@@ -164,7 +110,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <param name="debugMessage">The debug message to be displayed on the snackbar.</param>
         public void ShowDebugMessage(string debugMessage)
         {
-            SnackbarText.text = debugMessage;
+            snackbarText.text = debugMessage;
         }
 
 

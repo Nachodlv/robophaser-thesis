@@ -107,7 +107,7 @@ namespace Photon
             _currentScene = scene.buildIndex;
             if (_currentScene != settings.multiplayerScene) return;
             _isGameLoaded = true;
-            photonView.RPC("RPC_LoadedGameScene", RpcTarget.MasterClient);
+            photonView.RPC(nameof(RPC_LoadedGameScene), RpcTarget.MasterClient);
         }
 
         private void PlayerJoinedRoom()
@@ -120,7 +120,7 @@ namespace Photon
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
-        private void StartGame()
+        private async void StartGame()
         {
             _isGameLoaded = true;
             _timeToStart = waitTimeWhenFull;
@@ -129,7 +129,7 @@ namespace Photon
                 return;
             PhotonNetwork.CurrentRoom.IsOpen = false;
             SceneLoader.Instance.LoadSceneAsync(settings.multiplayerScene);
-            photonView.RPC("RPC_CreatePlayer", RpcTarget.All);
+            // photonView.RPC(nameof(RPC_CreatePlayer), RpcTarget.All);
         }
 
         private void RestartTimer()
@@ -145,7 +145,7 @@ namespace Photon
             _playersInGame++;
             if (_playersInGame == PhotonNetwork.PlayerList.Length)
             {
-                photonView.RPC("RPC_CreatePlayer", RpcTarget.All);
+                photonView.RPC(nameof(RPC_CreatePlayer), RpcTarget.All);
             }
         }
 

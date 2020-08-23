@@ -20,6 +20,7 @@
 
 using Photon;
 using Photon.Pun;
+using Utils;
 
 namespace GoogleARCore.Examples.CloudAnchors
 {
@@ -66,17 +67,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public Camera ARKitFirstPersonCamera;
 
+        public MultiplayerSettings settings;
+
         [Header("UI")]
 
         /// <summary>
         /// The network manager UI Controller.
         /// </summary>
         public NetworkManagerUIController NetworkUIController;
-
-        /// <summary>
-        /// The Lobby Screen to see Available Rooms or create a new one.
-        /// </summary>
-        public GameObject LobbyScreen;
 
         /// <summary>
         /// The Start Screen to see help information.
@@ -97,76 +95,76 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The key name used in PlayerPrefs which indicates whether
         /// the start info has displayed at least one time.
         /// </summary>
-        private const string k_HasDisplayedStartInfoKey = "HasDisplayedStartInfo";
+        private const string HasDisplayedStartInfoKey = "HasDisplayedStartInfo";
 
         /// <summary>
         /// The time between room starts up and ARCore session starts resolving.
         /// </summary>
-        private const float k_ResolvingPrepareTime = 3.0f;
+        private const float ResolvingPrepareTime = 3.0f;
 
         /// <summary>
         /// Record the time since the room started. If it passed the resolving prepare time,
         /// applications in resolving mode start resolving the anchor.
         /// </summary>
-        private float m_TimeSinceStart = 0.0f;
+        private float _timeSinceStart = 0.0f;
 
         /// <summary>
         /// Indicates whether passes the resolving prepare time.
         /// </summary>
-        private bool m_PassedResolvingPreparedTime = false;
+        private bool _passedResolvingPreparedTime = false;
 
         /// <summary>
         /// A helper object to ARKit functionality.
         /// </summary>
-        private ARKitHelper m_ARKit = new ARKitHelper();
+        private readonly ARKitHelper _aRKit = new ARKitHelper();
 
         /// <summary>
         /// Indicates whether the Anchor was already instantiated.
         /// </summary>
-        private bool m_AnchorAlreadyInstantiated = false;
+        private bool _anchorAlreadyInstantiated = false;
 
         /// <summary>
         /// Indicates whether the Cloud Anchor finished hosting.
         /// </summary>
-        private bool m_AnchorFinishedHosting = false;
+        private bool _anchorFinishedHosting = false;
 
         /// <summary>
         /// True if the app is in the process of quitting due to an ARCore connection error,
         /// otherwise false.
         /// </summary>
-        private bool m_IsQuitting = false;
+        private bool _isQuitting = false;
 
         /// <summary>
         /// The anchor component that defines the shared world origin.
         /// </summary>
-        private Component m_WorldOriginAnchor = null;
+        private Component _worldOriginAnchor = null;
 
         /// <summary>
         /// The last pose of the hit point from AR hit test.
         /// </summary>
-        private Pose? m_LastHitPose = null;
+        private Pose? _lastHitPose = null;
 
         /// <summary>
         /// The current cloud anchor mode.
         /// </summary>
-        private ApplicationMode m_CurrentMode = ApplicationMode.Ready;
+        private ApplicationMode _currentMode = ApplicationMode.Ready;
 
         /// <summary>
         /// The current active UI screen.
         /// </summary>
-        private ActiveScreen m_CurrentActiveScreen = ActiveScreen.LobbyScreen;
+        private ActiveScreen _currentActiveScreen = ActiveScreen.StartScreen;
 
         /// <summary>
         /// The Network Manager.
         /// </summary>
 #pragma warning disable 618
-        private PhotonRoom m_NetworkManager;
+        private PhotonRoom _networkManager;
 #pragma warning restore 618
 
         /// <summary>
         /// Enumerates modes the example application can be in.
         /// </summary>
-        public enum ApplicationMode
+        private enum ApplicationMode
         {
             /// <summary>
             /// Enume mode that indicate the example application is ready to host or resolve.
@@ -187,13 +185,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// Enumerates the active UI screens the example application can be in.
         /// </summary>
-        public enum ActiveScreen
+        private enum ActiveScreen
         {
-            /// <summary>
-            /// Enume mode that indicate the example application is on lobby screen.
-            /// </summary>
-            LobbyScreen,
-
             /// <summary>
             /// Enume mode that indicate the example application is on start screen.
             /// </summary>
@@ -243,22 +236,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void Start()
         {
-#pragma warning disable 618
-            m_NetworkManager = FindObjectOfType<PhotonRoom>();
-#pragma warning restore 618
-            // m_NetworkManager.OnPlayerJoined += _OnConnectedToServer;
-            m_NetworkManager.OnPlayerJoined += () =>
-            {
-                if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
-                else OnEnterResolvingModeClick();
-            };
-            m_NetworkManager.OnPlayerLeft += _OnDisconnectedFromServer;
-            m_NetworkManager.OnGameStart += () =>
-            {
-                _OnConnectedToServer();
-                OnLobbyVisibilityChanged(false);
-            };
-            // m_NetworkManager.OnGameStartAsHost += OnEnterHostingModeClick;
+            _networkManager = FindObjectOfType<PhotonRoom>();
+
+            if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
+            else OnEnterResolvingModeClick();
+
+            _networkManager.OnPlayerLeft += _OnDisconnectedFromServer;
+            _OnConnectedToServer();
 
             // A Name is provided to the Game Object so it can be found by other Scripts
             // instantiated as prefabs in the scene.
@@ -275,27 +259,27 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             _UpdateApplicationLifecycle();
 
-            if (m_CurrentActiveScreen != ActiveScreen.ARScreen)
+            if (_currentActiveScreen != ActiveScreen.ARScreen)
             {
                 return;
             }
 
             // If we are neither in hosting nor resolving mode then the update is complete.
-            if (m_CurrentMode != ApplicationMode.Hosting &&
-                m_CurrentMode != ApplicationMode.Resolving)
+            if (_currentMode != ApplicationMode.Hosting &&
+                _currentMode != ApplicationMode.Resolving)
             {
                 return;
             }
 
             // Give ARCore session some time to prepare for resolving and update the UI message
             // once the preparation time passed.
-            if (m_CurrentMode == ApplicationMode.Resolving && !m_PassedResolvingPreparedTime)
+            if (_currentMode == ApplicationMode.Resolving && !_passedResolvingPreparedTime)
             {
-                m_TimeSinceStart += Time.deltaTime;
+                _timeSinceStart += Time.deltaTime;
 
-                if (m_TimeSinceStart > k_ResolvingPrepareTime)
+                if (_timeSinceStart > ResolvingPrepareTime)
                 {
-                    m_PassedResolvingPreparedTime = true;
+                    _passedResolvingPreparedTime = true;
                     NetworkUIController.ShowDebugMessage(
                         "Waiting for Cloud Anchor to be hosted...");
                 }
@@ -303,7 +287,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             // If the origin anchor has not been placed yet, then update in resolving mode is
             // complete.
-            if (m_CurrentMode == ApplicationMode.Resolving && !IsOriginPlaced)
+            if (_currentMode == ApplicationMode.Resolving && !IsOriginPlaced)
             {
                 return;
             }
@@ -322,7 +306,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             TrackableHit arcoreHitResult = new TrackableHit();
-            m_LastHitPose = null;
+            _lastHitPose = null;
 
             // Raycast against the location the player touched to search for planes.
             if (Application.platform != RuntimePlatform.IPhonePlayer)
@@ -330,21 +314,21 @@ namespace GoogleARCore.Examples.CloudAnchors
                 if (ARCoreWorldOriginHelper.Raycast(touch.position.x, touch.position.y,
                         TrackableHitFlags.PlaneWithinPolygon, out arcoreHitResult))
                 {
-                    m_LastHitPose = arcoreHitResult.Pose;
+                    _lastHitPose = arcoreHitResult.Pose;
                 }
             }
             else
             {
                 Pose hitPose;
-                if (m_ARKit.RaycastPlane(
+                if (_aRKit.RaycastPlane(
                     ARKitFirstPersonCamera, touch.position.x, touch.position.y, out hitPose))
                 {
-                    m_LastHitPose = hitPose;
+                    _lastHitPose = hitPose;
                 }
             }
 
             // If there was an anchor placed, then instantiate the corresponding object.
-            if (m_LastHitPose != null)
+            if (_lastHitPose != null)
             {
                 // The first touch on the Hosting mode will instantiate the origin anchor. Any
                 // subsequent touch will instantiate a star, both in Hosting and Resolving modes.
@@ -352,19 +336,19 @@ namespace GoogleARCore.Examples.CloudAnchors
                 {
                     _InstantiateStar();
                 }
-                else if (!IsOriginPlaced && m_CurrentMode == ApplicationMode.Hosting)
+                else if (!IsOriginPlaced && _currentMode == ApplicationMode.Hosting)
                 {
                     if (Application.platform != RuntimePlatform.IPhonePlayer)
                     {
-                        m_WorldOriginAnchor =
+                        _worldOriginAnchor =
                             arcoreHitResult.Trackable.CreateAnchor(arcoreHitResult.Pose);
                     }
                     else
                     {
-                        m_WorldOriginAnchor = m_ARKit.CreateAnchor(m_LastHitPose.Value);
+                        _worldOriginAnchor = _aRKit.CreateAnchor(_lastHitPose.Value);
                     }
 
-                    SetWorldOrigin(m_WorldOriginAnchor.transform);
+                    SetWorldOrigin(_worldOriginAnchor.transform);
                     _InstantiateAnchor();
                     OnAnchorInstantiated(true);
                 }
@@ -379,8 +363,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </returns>
         public bool IsResolvingPrepareTimePassed()
         {
-            return m_CurrentMode != ApplicationMode.Ready &&
-                m_TimeSinceStart > k_ResolvingPrepareTime;
+            return _currentMode != ApplicationMode.Ready &&
+                _timeSinceStart > ResolvingPrepareTime;
         }
 
         /// <summary>
@@ -405,27 +389,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
             else
             {
-                m_ARKit.SetWorldOrigin(anchorTransform);
-            }
-        }
-
-        /// <summary>
-        /// Callback called when the lobby screen's visibility is changed.
-        /// </summary>
-        /// <param name="visible">If set to <c>true</c> visible.</param>
-        public void OnLobbyVisibilityChanged(bool visible)
-        {
-            if (visible)
-            {
-                _SwitchActiveScreen(ActiveScreen.LobbyScreen);
-            }
-            else if (PlayerPrefs.HasKey(k_HasDisplayedStartInfoKey))
-            {
-                _SwitchActiveScreen(ActiveScreen.ARScreen);
-            }
-            else
-            {
-                _SwitchActiveScreen(ActiveScreen.StartScreen);
+                _aRKit.SetWorldOrigin(anchorTransform);
             }
         }
 
@@ -434,7 +398,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void OnResolvingTimeoutPassed()
         {
-            if (m_CurrentMode != ApplicationMode.Resolving)
+            if (_currentMode != ApplicationMode.Resolving)
             {
                 Debug.LogWarning("OnResolvingTimeoutPassed shouldn't be called" +
                     "when the application is not in resolving mode.");
@@ -452,14 +416,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void OnEnterHostingModeClick()
         {
-            if (m_CurrentMode == ApplicationMode.Hosting)
+            if (_currentMode == ApplicationMode.Hosting)
             {
-                m_CurrentMode = ApplicationMode.Ready;
+                _currentMode = ApplicationMode.Ready;
                 _ResetStatus();
                 Debug.Log("Reset ApplicationMode from Hosting to Ready.");
             }
 
-            m_CurrentMode = ApplicationMode.Hosting;
+            _currentMode = ApplicationMode.Hosting;
         }
 
         /// <summary>
@@ -468,14 +432,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void OnEnterResolvingModeClick()
         {
-            if (m_CurrentMode == ApplicationMode.Resolving)
+            if (_currentMode == ApplicationMode.Resolving)
             {
-                m_CurrentMode = ApplicationMode.Ready;
+                _currentMode = ApplicationMode.Ready;
                 _ResetStatus();
                 Debug.Log("Reset ApplicationMode from Resolving to Ready.");
             }
 
-            m_CurrentMode = ApplicationMode.Resolving;
+            _currentMode = ApplicationMode.Resolving;
         }
 
         /// <summary>
@@ -485,12 +449,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <param name="isHost">Indicates whether this player is the host.</param>
         public void OnAnchorInstantiated(bool isHost)
         {
-            if (m_AnchorAlreadyInstantiated)
+            if (_anchorAlreadyInstantiated)
             {
                 return;
             }
 
-            m_AnchorAlreadyInstantiated = true;
+            _anchorAlreadyInstantiated = true;
             NetworkUIController.OnAnchorInstantiated(isHost);
         }
 
@@ -502,7 +466,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <param name="response">The response string received.</param>
         public void OnAnchorHosted(bool success, string response)
         {
-            m_AnchorFinishedHosting = success;
+            _anchorFinishedHosting = success;
             NetworkUIController.OnAnchorHosted(success, response);
         }
 
@@ -522,12 +486,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         private void _OnConnectedToServer()
         {
-            if (m_CurrentMode == ApplicationMode.Hosting)
+            if (_currentMode == ApplicationMode.Hosting)
             {
                 NetworkUIController.ShowDebugMessage(
                     "Find a plane, tap to create a Cloud Anchor.");
             }
-            else if (m_CurrentMode == ApplicationMode.Resolving)
+            else if (_currentMode == ApplicationMode.Resolving)
             {
                 NetworkUIController.ShowDebugMessage(
                     "Look at the same scene as the hosting phone.");
@@ -557,7 +521,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // The anchor will be spawned by the host, so no networking Command is needed.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .SpawnAnchor(Vector3.zero, Quaternion.identity, m_WorldOriginAnchor);
+                .SpawnAnchor(Vector3.zero, Quaternion.identity, _worldOriginAnchor);
         }
 
         /// <summary>
@@ -567,7 +531,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             // Star must be spawned in the server so a networking Command is used.
             GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .SpawnStar(m_LastHitPose.Value.position, m_LastHitPose.Value.rotation);
+                .SpawnStar(_lastHitPose.Value.position, _lastHitPose.Value.rotation);
         }
 
         /// <summary>
@@ -593,14 +557,14 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <returns><c>true</c>, if stars can be placed, <c>false</c> otherwise.</returns>
         private bool _CanPlaceStars()
         {
-            if (m_CurrentMode == ApplicationMode.Resolving)
+            if (_currentMode == ApplicationMode.Resolving)
             {
                 return IsOriginPlaced;
             }
 
-            if (m_CurrentMode == ApplicationMode.Hosting)
+            if (_currentMode == ApplicationMode.Hosting)
             {
-                return IsOriginPlaced && m_AnchorFinishedHosting;
+                return IsOriginPlaced && _anchorFinishedHosting;
             }
 
             return false;
@@ -612,34 +576,33 @@ namespace GoogleARCore.Examples.CloudAnchors
         private void _ResetStatus()
         {
             // Reset internal status.
-            m_CurrentMode = ApplicationMode.Ready;
-            if (m_WorldOriginAnchor != null)
+            _currentMode = ApplicationMode.Ready;
+            if (_worldOriginAnchor != null)
             {
-                Destroy(m_WorldOriginAnchor.gameObject);
+                Destroy(_worldOriginAnchor.gameObject);
             }
 
             IsOriginPlaced = false;
-            m_WorldOriginAnchor = null;
+            _worldOriginAnchor = null;
         }
 
         private void _SwitchActiveScreen(ActiveScreen activeScreen)
         {
-            LobbyScreen.SetActive(activeScreen == ActiveScreen.LobbyScreen);
             StatusScreen.SetActive(activeScreen != ActiveScreen.StartScreen);
             StartScreen.SetActive(activeScreen == ActiveScreen.StartScreen);
             ARScreen.SetActive(activeScreen == ActiveScreen.ARScreen);
-            m_CurrentActiveScreen = activeScreen;
+            _currentActiveScreen = activeScreen;
 
-            if (m_CurrentActiveScreen == ActiveScreen.StartScreen)
+            if (_currentActiveScreen == ActiveScreen.StartScreen)
             {
-                PlayerPrefs.SetInt(k_HasDisplayedStartInfoKey, 1);
+                PlayerPrefs.SetInt(HasDisplayedStartInfoKey, 1);
             }
 
-            if (m_CurrentActiveScreen == ActiveScreen.ARScreen)
+            if (_currentActiveScreen == ActiveScreen.ARScreen)
             {
                 // Set platform active when switching to AR Screen so the camera permission only
                 // shows after Start Screen.
-                m_TimeSinceStart = 0.0f;
+                _timeSinceStart = 0.0f;
                 _SetPlatformActive();
             }
         }
@@ -667,7 +630,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
             Screen.sleepTimeout = sleepTimeout;
 
-            if (m_IsQuitting)
+            if (_isQuitting)
             {
                 return;
             }
@@ -690,13 +653,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <param name="reason">The reason of quitting the application.</param>
         private void _QuitWithReason(string reason)
         {
-            if (m_IsQuitting)
+            if (_isQuitting)
             {
                 return;
             }
 
             NetworkUIController.ShowDebugMessage(reason);
-            m_IsQuitting = true;
+            _isQuitting = true;
             Invoke("_DoQuit", 5.0f);
         }
 
@@ -707,13 +670,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         private void _ReturnToLobbyWithReason(string reason)
         {
             // No need to return if the application is currently quitting.
-            if (m_IsQuitting)
+            if (_isQuitting)
             {
                 return;
             }
 
             NetworkUIController.ShowDebugMessage(reason);
-            Invoke("_DoReturnToLobby", 3.0f);
+            Invoke(nameof(_DoReturnToLobby), 3.0f);
         }
 
         /// <summary>
@@ -730,7 +693,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         private void _DoReturnToLobby()
         {
             PhotonNetwork.LeaveRoom();
-            SceneManager.LoadScene("CloudAnchors");
+            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
         }
     }
 }

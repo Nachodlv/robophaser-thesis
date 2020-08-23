@@ -19,7 +19,7 @@ namespace Photon.GameControllers
         private void Update()
         {
             if (!photonView.IsMine || !Input.GetMouseButtonDown(0)) return;
-            photonView.RPC("RPC_Shoot", RpcTarget.All);
+            photonView.RPC(nameof(RPC_Shoot), RpcTarget.All);
         }
 
         [PunRPC]

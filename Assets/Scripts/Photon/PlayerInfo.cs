@@ -20,7 +20,7 @@ namespace Photon
 
         public GameObject[] AllCharacters => allCharacters;
 
-        private void OnEnable()
+        private void Awake()
         {
             if (Instance == null)
             {
@@ -32,10 +32,6 @@ namespace Photon
                 Instance = this;
             }
             DontDestroyOnLoad(this);
-        }
-
-        private void Start()
-        {
             if (PlayerPrefs.HasKey(CharacterPlayerPrefsKey))
             {
                 _characterType = PlayerPrefs.GetInt(CharacterPlayerPrefsKey);
