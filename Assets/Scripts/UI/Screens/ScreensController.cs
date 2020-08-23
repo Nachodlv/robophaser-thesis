@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 
-namespace UI
+namespace UI.Screens
 {
     public enum Screen
     {
-        InitialScreen,
+        TitleScreen,
         WaitingScreen,
         GameScreen
     }
@@ -23,7 +23,7 @@ namespace UI
     public class ScreensController: MonoBehaviour
     {
         [SerializeField] private ScreenGameObject[] screenGameObjects;
-        [SerializeField] private Screen startingScreen;
+        [SerializeField] private Screen startingScreen = Screen.TitleScreen;
 
         private Dictionary<Screen, GameObject> _screens;
         private GameObject _currentScreen;

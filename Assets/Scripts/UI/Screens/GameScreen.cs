@@ -1,20 +1,20 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Screens
 {
     public class GameScreen : MonoBehaviourPunCallbacks
     {
         [SerializeField] private TextMeshProUGUI codeText;
         [SerializeField] private Button leaveGameButton;
+        [SerializeField] private ScreensController screensController;
 
         private void Awake()
         {
             codeText.text = "";
-            leaveGameButton.onClick.AddListener(() => PhotonNetwork.LeaveRoom());
+            leaveGameButton.onClick.AddListener(LeaveRoom);
         }
 
         public override void OnEnable()
@@ -31,6 +31,12 @@ namespace UI
         {
             base.OnJoinedRoom();
             codeText.text = PhotonNetwork.CurrentRoom.Name;
+        }
+
+        private void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom(false);
+            screensController.ShowScreen(Screen.WaitingScreen);
         }
     }
 }

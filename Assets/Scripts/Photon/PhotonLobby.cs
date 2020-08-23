@@ -2,11 +2,12 @@
 using Photon.Pun;
 using Photon.Realtime;
 using UI;
+using UI.Screens;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 using Random = UnityEngine.Random;
-using Screen = UI.Screen;
+using Screen = UI.Screens.Screen;
 
 namespace Photon
 {
@@ -16,19 +17,18 @@ namespace Photon
         [SerializeField] private ScreensController screensController;
         [SerializeField] private ErrorDisplayer errorDisplayer;
 
+        public event Action OnConnectToMaster;
+
         private void Start()
         {
             PhotonNetwork.ConnectUsingSettings();
-            if (PhotonNetwork.IsConnected)
-            {
-                FinishConnecting();
-            }
+            if (PhotonNetwork.IsConnected) OnConnectToMaster?.Invoke();
         }
 
         public override void OnConnectedToMaster()
         {
             PhotonNetwork.AutomaticallySyncScene = true;
-            FinishConnecting();
+            OnConnectToMaster?.Invoke();
         }
 
         public override void OnJoinRoomFailed(short returnCode, string message)
@@ -47,6 +47,13 @@ namespace Photon
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
+            screensController.ShowScreen(Screen.WaitingScreen);
+        }
+
+        public void ChangeNickname(string nickName)
+        {
+            PhotonNetwork.NickName = nickName;
+            screensController.ShowScreen(Screen.WaitingScreen);
         }
 
         public void JoinRoom(string roomName)
@@ -70,11 +77,6 @@ namespace Photon
         {
             base.OnErrorInfo(errorInfo);
             errorDisplayer.ShowError(errorInfo.Info);
-        }
-
-        private void FinishConnecting()
-        {
-            screensController.ShowScreen(Screen.WaitingScreen);
         }
     }
 }
