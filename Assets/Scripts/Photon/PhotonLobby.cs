@@ -78,5 +78,10 @@ namespace Photon
             base.OnErrorInfo(errorInfo);
             errorDisplayer.ShowError(errorInfo.Info);
         }
+
+        public override void OnDisconnected(DisconnectCause cause)
+        {
+            errorDisplayer.ShowError("Error connecting to the servers. Try again later");
+        }
     }
 }
