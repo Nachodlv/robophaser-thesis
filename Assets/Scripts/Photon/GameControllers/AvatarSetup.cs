@@ -8,8 +8,6 @@ namespace Photon.GameControllers
     {
         [SerializeField] private int playerHealth;
         [SerializeField] private int playerDamage;
-        [SerializeField] private Camera playerCamera;
-        [SerializeField] private AudioListener audioListener;
 
         public int PlayerDamage => playerDamage;
 
@@ -19,18 +17,13 @@ namespace Photon.GameControllers
             {
                 photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.AllBuffered, PlayerInfo.Instance.CharacterType);
             }
-            else
-            {
-                Destroy(playerCamera);
-                Destroy(audioListener);
-            }
         }
 
         [PunRPC]
         public void RPC_AddCharacter(int characterTypeToAdd)
         {
             var myTransform = transform;
-            Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], myTransform.position, myTransform.rotation, myTransform);
+            Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], Vector3.zero, Quaternion.identity, myTransform);
         }
 
         public void DealDamage(int damage)

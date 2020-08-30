@@ -166,6 +166,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 #if !UNITY_IOS || ARCORE_IOS_SUPPORT
             XPSession.CreateCloudAnchor(anchor).ThenAction(result =>
             {
+                Debug.Log($"###### Response: {result.Response}");
                 if (result.Response != CloudServiceResponse.Success)
                 {
                     Debug.Log(string.Format("Failed to host Cloud Anchor: {0}", result.Response));

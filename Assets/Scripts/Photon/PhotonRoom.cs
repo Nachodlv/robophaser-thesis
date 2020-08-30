@@ -19,7 +19,7 @@ namespace Photon
         public event Action OnPlayerLeft;
         public event Action OnGameStart;
 
-        private static PhotonRoom _room;
+        public static PhotonRoom Instance;
 
         private int _currentScene;
         private bool _isGameLoaded;
@@ -31,14 +31,14 @@ namespace Photon
 
         private void Awake()
         {
-            if (_room == null)
+            if (Instance == null)
             {
-                _room = this;
+                Instance = this;
             }
-            else if (_room != this)
+            else if (Instance != this)
             {
-                Destroy(_room.gameObject);
-                _room = this;
+                Destroy(Instance.gameObject);
+                Instance = this;
             }
 
             DontDestroyOnLoad(gameObject);
@@ -102,12 +102,16 @@ namespace Photon
             RestartTimer();
         }
 
+        public void InstancePlayer()
+        {
+            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), Vector3.zero, Quaternion.identity);
+        }
+
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
             if (_currentScene != settings.multiplayerScene) return;
             _isGameLoaded = true;
-            photonView.RPC(nameof(RPC_LoadedGameScene), RpcTarget.MasterClient);
         }
 
         private void PlayerJoinedRoom()
@@ -139,20 +143,5 @@ namespace Photon
             _timeToStart = waitTimeWhenFull;
         }
 
-        [PunRPC]
-        private void RPC_LoadedGameScene()
-        {
-            _playersInGame++;
-            if (_playersInGame == PhotonNetwork.PlayerList.Length)
-            {
-                photonView.RPC(nameof(RPC_CreatePlayer), RpcTarget.All);
-            }
-        }
-
-        [PunRPC]
-        private void RPC_CreatePlayer()
-        {
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), Vector3.zero, Quaternion.identity);
-        }
     }
 }

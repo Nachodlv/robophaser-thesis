@@ -210,6 +210,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void OnStartNowButtonClicked()
         {
             _SwitchActiveScreen(ActiveScreen.ARScreen);
+            PhotonRoom.Instance.InstancePlayer();
         }
 
         /// <summary>
@@ -236,6 +237,8 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// </summary>
         public void Start()
         {
+            _ResetStatus();
+
             _networkManager = FindObjectOfType<PhotonRoom>();
 
             if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
@@ -249,7 +252,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             gameObject.name = "CloudAnchorsExampleController";
             ARCoreRoot.SetActive(false);
             ARKitRoot.SetActive(false);
-            _ResetStatus();
         }
 
         /// <summary>
