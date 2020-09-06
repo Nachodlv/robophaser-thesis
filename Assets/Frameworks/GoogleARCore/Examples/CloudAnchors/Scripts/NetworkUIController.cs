@@ -18,72 +18,23 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using TMPro;
+
 namespace GoogleARCore.Examples.CloudAnchors
 {
-    using System.Collections.Generic;
     using UnityEngine;
-    using UnityEngine.Networking;
-    using UnityEngine.Networking.Match;
-    using UnityEngine.Networking.Types;
-    using UnityEngine.SceneManagement;
     using UnityEngine.UI;
 
     /// <summary>
     /// Controller managing UI for joining and creating rooms.
     /// </summary>
-    public class NetworkManagerUIController : MonoBehaviour
+    public class NetworkUIController : MonoBehaviour
     {
         /// <summary>
         /// The snackbar text.
         /// </summary>
-        public Text snackbarText;
+        public TextMeshProUGUI snackbarText;
 
-        /// <summary>
-        /// The number of matches that will be shown.
-        /// </summary>
-        private const int MatchPageSize = 5;
-
-        /// <summary>
-        /// The current room number.
-        /// </summary>
-        private string _currentRoomNumber;
-
-
-        /// <summary>
-        /// Callback indicating that the Cloud Anchor was instantiated and the host request was
-        /// made.
-        /// </summary>
-        /// <param name="isHost">Indicates whether this player is the host.</param>
-        public void OnAnchorInstantiated(bool isHost)
-        {
-            if (isHost)
-            {
-                snackbarText.text = "Hosting Cloud Anchor...";
-            }
-            else
-            {
-                snackbarText.text =
-                    "Cloud Anchor added to session! Attempting to resolve anchor...";
-            }
-        }
-
-        /// <summary>
-        /// Callback indicating that the Cloud Anchor was hosted.
-        /// </summary>
-        /// <param name="success">If set to <c>true</c> indicates the Cloud Anchor was hosted
-        /// successfully.</param>
-        /// <param name="response">The response string received.</param>
-        public void OnAnchorHosted(bool success, string response)
-        {
-            if (success)
-            {
-                snackbarText.text = "Cloud Anchor successfully hosted! Tap to place more stars.";
-            }
-            else
-            {
-                snackbarText.text = "Cloud Anchor could not be hosted. " + response;
-            }
-        }
 
         /// <summary>
         /// Callback indicating that the Cloud Anchor was resolved.
@@ -112,8 +63,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             snackbarText.text = debugMessage;
         }
-
-
 
 
     }

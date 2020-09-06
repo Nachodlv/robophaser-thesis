@@ -15,9 +15,7 @@ namespace Photon
         [SerializeField] private MultiplayerSettings settings;
         [SerializeField] private float waitTimeWhenFull;
 
-        public event Action OnPlayerJoined;
         public event Action OnPlayerLeft;
-        public event Action OnGameStart;
 
         public static PhotonRoom Instance;
 
@@ -77,7 +75,6 @@ namespace Photon
             Loader.Instance.StopLoading();
             Debug.Log($"Player joined a room! Id: {PhotonNetwork.CurrentRoom.Name}");
             PlayerJoinedRoom();
-            OnPlayerJoined?.Invoke();
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -107,6 +104,11 @@ namespace Photon
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PhotonPlayer"), Vector3.zero, Quaternion.identity);
         }
 
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
@@ -124,16 +126,14 @@ namespace Photon
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
-        private async void StartGame()
+        private void StartGame()
         {
             _isGameLoaded = true;
             _timeToStart = waitTimeWhenFull;
-            OnGameStart?.Invoke();
             if (!PhotonNetwork.IsMasterClient)
                 return;
             PhotonNetwork.CurrentRoom.IsOpen = false;
             SceneLoader.Instance.LoadSceneAsync(settings.multiplayerScene);
-            // photonView.RPC(nameof(RPC_CreatePlayer), RpcTarget.All);
         }
 
         private void RestartTimer()

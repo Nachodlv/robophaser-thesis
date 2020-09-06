@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Photon.Pun;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,7 +27,15 @@ namespace Utils
             _fader = GetComponent<Fader>();
         }
 
-        public async void LoadSceneAsync(int sceneIndex)
+        public async void LoadSceneAsyncWithError(int sceneIndex, string errorMessage)
+        {
+            await LoadSceneAsync(sceneIndex);
+            var errorDisplayer = FindObjectOfType<ErrorDisplayer>();
+            if (errorDisplayer == null) return;
+            errorDisplayer.ShowError(errorMessage);
+        }
+
+        public async Task LoadSceneAsync(int sceneIndex)
         {
             await _fader.FadeIn();
             PhotonNetwork.LoadLevel(sceneIndex);

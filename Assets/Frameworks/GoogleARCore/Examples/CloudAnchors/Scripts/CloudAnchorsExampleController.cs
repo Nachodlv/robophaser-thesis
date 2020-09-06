@@ -18,6 +18,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using System;
 using Photon;
 using Photon.Pun;
 using Utils;
@@ -74,7 +75,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// The network manager UI Controller.
         /// </summary>
-        public NetworkManagerUIController NetworkUIController;
+        public NetworkUIController NetworkUIController;
 
         /// <summary>
         /// The Start Screen to see help information.
@@ -90,6 +91,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The Status Screen to display the connection status and cloud anchor instructions.
         /// </summary>
         public GameObject StatusScreen;
+
+        public delegate void CloudAnchorCallback(bool success, string response);
+
+        public event Action OnAnchorStartInstantiating;
+        public event CloudAnchorCallback OnAnchorFinishHosting;
+        public event CloudAnchorCallback OnAnchorFinishResolving;
 
         /// <summary>
         /// The key name used in PlayerPrefs which indicates whether
@@ -213,6 +220,11 @@ namespace GoogleARCore.Examples.CloudAnchors
             PhotonRoom.Instance.InstancePlayer();
         }
 
+        public void OnNotNowButtonClicked()
+        {
+            _DoReturnToLobby();
+        }
+
         /// <summary>
         /// Callback handling Learn More Button click event.
         /// </summary>
@@ -238,17 +250,13 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void Start()
         {
             _ResetStatus();
-
             _networkManager = FindObjectOfType<PhotonRoom>();
 
             if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
             else OnEnterResolvingModeClick();
 
             _networkManager.OnPlayerLeft += _OnDisconnectedFromServer;
-            _OnConnectedToServer();
 
-            // A Name is provided to the Game Object so it can be found by other Scripts
-            // instantiated as prefabs in the scene.
             gameObject.name = "CloudAnchorsExampleController";
             ARCoreRoot.SetActive(false);
             ARKitRoot.SetActive(false);
@@ -457,7 +465,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             _anchorAlreadyInstantiated = true;
-            NetworkUIController.OnAnchorInstantiated(isHost);
+            OnAnchorStartInstantiating?.Invoke();
         }
 
         /// <summary>
@@ -469,7 +477,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void OnAnchorHosted(bool success, string response)
         {
             _anchorFinishedHosting = success;
-            NetworkUIController.OnAnchorHosted(success, response);
+            OnAnchorFinishHosting?.Invoke(success, response);
         }
 
         /// <summary>
@@ -481,29 +489,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void OnAnchorResolved(bool success, string response)
         {
             NetworkUIController.OnAnchorResolved(success, response);
-        }
-
-        /// <summary>
-        /// Callback that happens when the client successfully connected to the server.
-        /// </summary>
-        private void _OnConnectedToServer()
-        {
-            if (_currentMode == ApplicationMode.Hosting)
-            {
-                NetworkUIController.ShowDebugMessage(
-                    "Find a plane, tap to create a Cloud Anchor.");
-            }
-            else if (_currentMode == ApplicationMode.Resolving)
-            {
-                NetworkUIController.ShowDebugMessage(
-                    "Look at the same scene as the hosting phone.");
-            }
-            else
-            {
-                _ReturnToLobbyWithReason(
-                    "Connected to server with neither Hosting nor Resolving" +
-                    "mode. Please start the app again.");
-            }
         }
 
         /// <summary>
@@ -678,7 +663,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             NetworkUIController.ShowDebugMessage(reason);
-            Invoke(nameof(_DoReturnToLobby), 3.0f);
+            _DoReturnToLobbyWithError(reason);
         }
 
         /// <summary>
@@ -692,6 +677,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// <summary>
         /// Actually return to lobby scene.
         /// </summary>
+        private void _DoReturnToLobbyWithError(string errorMessage)
+        {
+            PhotonNetwork.LeaveRoom();
+            SceneLoader.Instance.LoadSceneAsyncWithError(settings.mainMenuScene, errorMessage);
+        }
+
         private void _DoReturnToLobby()
         {
             PhotonNetwork.LeaveRoom();
