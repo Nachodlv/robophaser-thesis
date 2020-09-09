@@ -37,8 +37,12 @@ namespace ARCore.Phases
         private void AnchorsHosted(bool success, string response)
         {
             _cloudAnchorsController.OnAnchorStartInstantiating -= StartInstantiating;
+#if UNITY_EDITOR
+            PhaseManager.ChangePhase(_instantiatingPhase);
+#else
             if(!success) _networkUiController.ShowDebugMessage($"Cloud Anchor could not be hosted. {response}");
             else PhaseManager.ChangePhase(_instantiatingPhase);
+#endif
         }
     }
 }
