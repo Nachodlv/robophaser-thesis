@@ -2,7 +2,7 @@
 
 namespace ARCore.Phases
 {
-    public class NonMasterPositioningPhase : IPhase
+    public class NonMasterPositioningPhase : Phase
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchorsController;

@@ -39,10 +39,8 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_AddCharacter
-  - RPC_CreatePlayer
-  - RPC_LoadedGameScene
   - RPC_SetCloudAnchorId
   - RPC_Shoot
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

@@ -2,16 +2,19 @@
 
 namespace ARCore.Phases
 {
-    public class MasterPositioningPhase : IPhase
+    public class MasterPositioningPhase : Phase
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchorsController;
+        private readonly MasterInstantiatingPhase _instantiatingPhase;
 
         public MasterPositioningPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchorController) : base(phaseManager)
+            CloudAnchorsExampleController cloudAnchorsController, MasterInstantiatingPhase instantiatingPhase) : base(
+            phaseManager)
         {
             _networkUiController = networkUiController;
-            _cloudAnchorsController = cloudAnchorController;
+            _cloudAnchorsController = cloudAnchorsController;
+            _instantiatingPhase = instantiatingPhase;
         }
 
         public override void OnEnter()
@@ -34,9 +37,8 @@ namespace ARCore.Phases
         private void AnchorsHosted(bool success, string response)
         {
             _cloudAnchorsController.OnAnchorStartInstantiating -= StartInstantiating;
-            _networkUiController.ShowDebugMessage(success
-                ? "Cloud Anchor successfully hosted! Tap to place more stars."
-                : $"Cloud Anchor could not be hosted. {response}");
+            if(!success) _networkUiController.ShowDebugMessage($"Cloud Anchor could not be hosted. {response}");
+            else PhaseManager.ChangePhase(_instantiatingPhase);
         }
     }
 }
