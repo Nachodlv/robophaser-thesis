@@ -87,9 +87,7 @@ namespace Photon
         {
             base.OnPlayerLeftRoom(otherPlayer);
             Debug.Log($"{otherPlayer.NickName} has left the game");
-            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
-            PhotonNetwork.LeaveRoom();
-            Destroy(gameObject);
+            LeaveRoom();
         }
 
         public override void OnLeftRoom()
@@ -106,7 +104,9 @@ namespace Photon
 
         public void LeaveRoom()
         {
+            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
             PhotonNetwork.LeaveRoom();
+            Destroy(gameObject);
         }
 
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)

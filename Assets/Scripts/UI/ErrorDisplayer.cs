@@ -5,19 +5,17 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Modal))]
     public class ErrorDisplayer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private Button[] hideButtons;
 
-        private Animator _animator;
-        private static readonly int Show = Animator.StringToHash("show");
-        private static readonly int Hide = Animator.StringToHash("hide");
+        private Modal _modal;
 
         private void Awake()
         {
-            _animator = GetComponent<Animator>();
+            _modal = GetComponent<Modal>();
             foreach (var hideButton in hideButtons)
             {
                 hideButton.onClick.AddListener(HideError);
@@ -35,12 +33,12 @@ namespace UI
         public void ShowError(string error)
         {
             errorText.text = error;
-            _animator.SetTrigger(Show);
+            _modal.ShowModal();
         }
 
         private void HideError()
         {
-            _animator.SetTrigger(Hide);
+            _modal.HideModal();
         }
     }
 }
