@@ -23,7 +23,9 @@ namespace Photon.GameControllers
         public void RPC_AddCharacter(int characterTypeToAdd)
         {
             var myTransform = transform;
-            Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], Vector3.zero, Quaternion.identity, myTransform);
+            var position = Vector3.zero;
+            position.y += 0.8f;
+            Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], position, Quaternion.identity, myTransform);
         }
 
         public void DealDamage(int damage)

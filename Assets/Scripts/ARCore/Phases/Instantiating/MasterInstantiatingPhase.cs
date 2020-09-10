@@ -1,4 +1,6 @@
-﻿using GoogleARCore.Examples.CloudAnchors;
+﻿using System.IO;
+using GoogleARCore.Examples.CloudAnchors;
+using Photon.Pun;
 using UnityEngine;
 
 namespace ARCore.Phases
@@ -7,21 +9,19 @@ namespace ARCore.Phases
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchors;
-        private readonly GameArea _gameArea;
+        private GameArea _gameArea;
 
         public MasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchors, GameArea gameArea) : base(phaseManager)
+            CloudAnchorsExampleController cloudAnchors) : base(phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchors = cloudAnchors;
-            _gameArea = gameArea;
         }
 
         public override void OnEnter()
         {
             _networkUiController.ShowDebugMessage("Tap a plane to place the area game");
             _cloudAnchors.OnPlaneTouch += Touch;
-            _gameArea.OnConfirmChanges += GameAreaConfirmed;
         }
 
         public override void OnExit()
@@ -34,6 +34,9 @@ namespace ARCore.Phases
             _cloudAnchors.OnPlaneTouch -= Touch;
             _networkUiController.ShowDebugMessage(
                 $"Touch at: {position.ToString()} with rotation: {rotation.ToString()}");
+            _gameArea = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Game Area"), position, rotation)
+                .GetComponent<GameArea>();
+            _gameArea.OnConfirmChanges += GameAreaConfirmed;
             _gameArea.ShowGameArea(position, rotation);
         }
 

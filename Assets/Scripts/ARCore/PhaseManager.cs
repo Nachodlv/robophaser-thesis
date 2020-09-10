@@ -11,7 +11,6 @@ namespace ARCore
     {
         [SerializeField] private CloudAnchorsExampleController anchorsExampleController;
         [SerializeField] private NetworkUIController networkUi;
-        [SerializeField] private GameArea gameArea;
 
         private Phase _currentState;
 
@@ -29,7 +28,7 @@ namespace ARCore
 
         private void InitializePhases()
         {
-            var masterInstantiatingPhase = new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, gameArea);
+            var masterInstantiatingPhase = new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
             var masterPositioningPhase =
                 new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
             var nonMasterPositioningPhase = new NonMasterPositioningPhase(this, networkUi, anchorsExampleController);
