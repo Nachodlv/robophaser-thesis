@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: fdb9daaf-34a0-4666-9c48-50a84ebb2f46
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -27,7 +27,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: sa
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -39,16 +39,12 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_AddCharacter
-  - RPC_SetCloudAnchorId
-  - RPC_Shoot
-  - HideMesh
-  - ScaleInX
-  - ScaleInZ
-  - SetPositionAndRotation
   - RPC_HideMesh
   - RPC_ScaleInX
   - RPC_ScaleInZ
+  - RPC_SetCloudAnchorId
   - RPC_SetPositionAndRotation
+  - RPC_Shoot
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

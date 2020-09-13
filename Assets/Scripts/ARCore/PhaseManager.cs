@@ -28,13 +28,24 @@ namespace ARCore
 
         private void InitializePhases()
         {
-            var masterInstantiatingPhase = new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
-            var masterPositioningPhase =
-                new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
-            var nonMasterPositioningPhase = new NonMasterPositioningPhase(this, networkUi, anchorsExampleController);
-            var initialPhase = new InitialPhase(this, masterPositioningPhase, nonMasterPositioningPhase);
-
+            var initialPhase = new InitialPhase(
+                this,
+                InstantiateMasterPhases(),
+                InstantiateNonMasterPhases());
             ChangePhase(initialPhase);
+        }
+
+        private NonMasterPositioningPhase InstantiateNonMasterPhases()
+        {
+            var nonMasterInstantiatingPhase = new NonMasterInstantiatingPhase(this, networkUi);
+            return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
+                nonMasterInstantiatingPhase);
+        }
+
+        private MasterPositioningPhase InstantiateMasterPhases()
+        {
+            var masterInstantiatingPhase = new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
+            return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
         }
     }
 }

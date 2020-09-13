@@ -1,14 +1,20 @@
-﻿namespace ARCore.Phases
+﻿using GoogleARCore.Examples.CloudAnchors;
+
+namespace ARCore.Phases
 {
-    public class NonMasterInstantiatingPhase: Phase
+    public class NonMasterInstantiatingPhase : Phase
     {
-        public NonMasterInstantiatingPhase(PhaseManager phaseManager) : base(phaseManager)
+        private readonly NetworkUIController _networkUiController;
+
+        public NonMasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController) : base(
+            phaseManager)
         {
+            _networkUiController = networkUiController;
         }
 
         public override void OnEnter()
         {
-            throw new System.NotImplementedException();
+            _networkUiController.ShowDebugMessage("Waiting for the host to select an area for the game");
         }
     }
 }
