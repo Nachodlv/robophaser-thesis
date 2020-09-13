@@ -8,7 +8,7 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 public class SimpleTiledWFC : MonoBehaviour{
-	
+
 	public TextAsset xml = null;
 	private string subset = "";
 
@@ -26,7 +26,11 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public GameObject output;
 	private Transform group;
 	public Dictionary<string, GameObject> obmap = new Dictionary<string, GameObject>();
-    private bool undrawn = true;
+
+	[NonSerialized]
+	public bool started;
+
+	private bool undrawn = true;
 
 	public void destroyChildren (){
 		foreach (Transform child in this.transform) {
@@ -34,24 +38,18 @@ public class SimpleTiledWFC : MonoBehaviour{
  		}
  	}
 
- 	void Start(){
-		Generate();
-		Run();
-	}
-
 	void Update(){
-		if (incremental){
+		if (started && incremental){
 			Run();
 		}
 	}
 
 
-	public void Run(){
-		if (model == null){return;}
-        if (undrawn == false) { return; }
-        if (model.Run(seed, iterations)){
-			Draw();
-		}
+	public bool Run(){
+		if (model == null || !undrawn){return false;}
+		if (!model.Run(seed, iterations)) return false;
+		Draw();
+        return true;
 	}
 
 	public void OnDrawGizmos(){
@@ -91,7 +89,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 		if (group == null){return;}
         undrawn = false;
 		for (int y = 0; y < depth; y++){
-			for (int x = 0; x < width; x++){ 
+			for (int x = 0; x < width; x++){
 				if (rendering[x,y] == null){
 					string v = model.Sample(x, y);
 					int rot = 0;
@@ -121,7 +119,7 @@ public class SimpleTiledWFC : MonoBehaviour{
                     }
 				}
 			}
-  		}	
+  		}
 	}
 }
 
@@ -135,9 +133,10 @@ public class TileSetEditor : Editor {
 				me.Generate();
 			}
 			if (me.model != null){
-				if(GUILayout.Button("RUN")){
-					me.model.Run(me.seed, me.iterations);
-					me.Draw();
+				if(GUILayout.Button("RUN"))
+				{
+					me.started = true;
+					me.Run();
 				}
 			}
 		}

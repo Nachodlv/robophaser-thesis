@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ARCore.Phases;
+using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
 using UnityEngine;

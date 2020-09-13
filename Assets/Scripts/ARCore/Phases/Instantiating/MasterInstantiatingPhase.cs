@@ -3,7 +3,7 @@ using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
 using UnityEngine;
 
-namespace ARCore.Phases
+namespace ARCore.Phases.Instantiating
 {
     public class MasterInstantiatingPhase : Phase
     {
