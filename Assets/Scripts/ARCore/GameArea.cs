@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UI;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace ARCore
 
         public delegate void OnConfirmCallback(float width, float depth);
         public event OnConfirmCallback OnConfirmChanges;
+        public event Action OnChangePosition;
 
         public Vector3 GameAreaPosition => mesh.transform.position;
         public Quaternion GameAreaRotation => mesh.transform.rotation;
@@ -28,6 +30,7 @@ namespace ARCore
             _slidersMenu.OnZSliderValueChange += scale => photonView.RPC(nameof(RPC_ScaleInZ), RpcTarget.All, scale);
 
             _slidersMenu.OnConfirmChanges += ConfirmChanges;
+            _slidersMenu.OnChangePosition += ChangePositionSelected;
 
             mesh.SetActive(false);
         }
@@ -42,6 +45,17 @@ namespace ARCore
         {
             var localScale = mesh.transform.localScale;
             OnConfirmChanges?.Invoke(localScale.x, localScale.z);
+            HideMeshAndModal();
+        }
+
+        private void ChangePositionSelected()
+        {
+            OnChangePosition?.Invoke();
+            HideMeshAndModal();
+        }
+
+        private void HideMeshAndModal()
+        {
             _slidersMenu.HideModal();
             photonView.RPC(nameof(RPC_HideMesh), RpcTarget.All);
         }

@@ -10,6 +10,7 @@ namespace ARCore.Phases
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchors;
         private GameArea _gameArea;
+        private bool _settingUpGameArea;
 
         public MasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
             CloudAnchorsExampleController cloudAnchors) : base(phaseManager)
@@ -20,7 +21,7 @@ namespace ARCore.Phases
 
         public override void OnEnter()
         {
-            _networkUiController.ShowDebugMessage("Tap a plane to place the area game");
+            SetInitialMessage();
             _cloudAnchors.OnPlaneTouch += Touch;
         }
 
@@ -31,19 +32,36 @@ namespace ARCore.Phases
 
         private void Touch(Vector3 position, Quaternion rotation)
         {
-            _cloudAnchors.OnPlaneTouch -= Touch;
-            _networkUiController.ShowDebugMessage(
-                $"Touch at: {position.ToString()} with rotation: {rotation.ToString()}");
-            _gameArea = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Game Area"), position, rotation)
-                .GetComponent<GameArea>();
-            _gameArea.OnConfirmChanges += GameAreaConfirmed;
+            if (_settingUpGameArea) return;
+            _settingUpGameArea = true;
+            _networkUiController.ShowDebugMessage("Configure the game area");
+
+            if (_gameArea == null)
+            {
+                _gameArea = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Game Area"), position, rotation)
+                    .GetComponent<GameArea>();
+                _gameArea.OnConfirmChanges += GameAreaConfirmed;
+                _gameArea.OnChangePosition += OnChangePosition;
+            }
+
             _gameArea.ShowGameArea(position, rotation);
+        }
+
+        private void SetInitialMessage()
+        {
+            _networkUiController.ShowDebugMessage("Tap a plane to place the area game");
+        }
+
+        private void OnChangePosition()
+        {
+            SetInitialMessage();
+            _settingUpGameArea = false;
         }
 
         private void GameAreaConfirmed(float width, float depth)
         {
             _networkUiController.ShowDebugMessage(
-                $"Position: {_gameArea.GameAreaPosition}, Rotation: {_gameArea.GameAreaRotation}, Width: {width}, Depth: {depth}");
+                $"Game area setup finished! Creating the obstacles.");
         }
     }
 }

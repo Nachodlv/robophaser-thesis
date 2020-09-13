@@ -11,10 +11,12 @@ namespace UI
         [SerializeField] private Slider xSlider;
         [SerializeField] private Slider zSlider;
         [SerializeField] private Button confirmButton;
+        [SerializeField] private Button changePositionButton;
 
         public event Action OnConfirmChanges;
         public event Action<float> OnXSliderValueChange;
         public event Action<float> OnZSliderValueChange;
+        public event Action OnChangePosition;
 
         private Modal _modal;
 
@@ -22,6 +24,7 @@ namespace UI
         {
             _modal = GetComponent<Modal>();
             confirmButton.onClick.AddListener(() => OnConfirmChanges?.Invoke());
+            changePositionButton.onClick.AddListener(() => OnChangePosition?.Invoke());
             xSlider.onValueChanged.AddListener(value => OnXSliderValueChange?.Invoke(value));
             zSlider.onValueChanged.AddListener(value => OnZSliderValueChange?.Invoke(value));
         }
