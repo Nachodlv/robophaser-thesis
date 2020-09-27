@@ -10,7 +10,7 @@ using UnityEditor;
 [RequireComponent(typeof(BoxCollider))]
 public class TilePainter : MonoBehaviour{
 
-	public int gridsize = 1;
+	public float gridsize = 1;
 	public int width = 20;
 	public int height = 20;
 	public GameObject tiles;
@@ -18,14 +18,14 @@ public class TilePainter : MonoBehaviour{
 	public Vector3 cursor;
 	public bool focused = false;
 	public GameObject[,] tileobs;
-	
+
 
 	int colidx = 0;
 	public List<UnityEngine.Object> palette = new List<UnityEngine.Object>();
 	public UnityEngine.Object color = null;
 	Quaternion color_rotation;
 
-	
+
 #if UNITY_EDITOR
 
 	private static bool IsAssetAFolder(UnityEngine.Object obj){
@@ -40,14 +40,14 @@ public class TilePainter : MonoBehaviour{
 		}
 	 	return false;
 	}
- 
+
 
 	public void Encode(){
 
-	} 
+	}
 
-	static GameObject CreatePrefab(UnityEngine.Object fab, Vector3 pos, Quaternion rot) {	
-		GameObject o = PrefabUtility.InstantiatePrefab(fab as GameObject) as GameObject; 
+	static GameObject CreatePrefab(UnityEngine.Object fab, Vector3 pos, Quaternion rot) {
+		GameObject o = PrefabUtility.InstantiatePrefab(fab as GameObject) as GameObject;
 		if (o == null){
 			Debug.Log(IsAssetAFolder(fab));
 			return o;}
@@ -71,7 +71,7 @@ public class TilePainter : MonoBehaviour{
 		pal.transform.rotation = transform.rotation;
 
 
-		
+
 		int palette_folder = -1;
 
 		for (int i = 0; i < palette.Count; i++){
@@ -98,7 +98,7 @@ public class TilePainter : MonoBehaviour{
 			}
 			Restore();
 		}
- 
+
 		tileobs = new GameObject[width, height];
 		if (tiles == null){
 			tiles = new GameObject("tiles");
@@ -113,13 +113,13 @@ public class TilePainter : MonoBehaviour{
 			int X = (int)(tilepos.x / gridsize);
 			int Y = (int)(tilepos.y / gridsize);
 			if (ValidCoords(X, Y)){
-			tileobs[X, Y] = tile; 
+			tileobs[X, Y] = tile;
 			} else {
 				trash.Add(tile);
 			}
 		}
 		for (int i = 0; i < trash.Count; i++){
-			if (Application.isPlaying){Destroy(trash[i]);} else {DestroyImmediate(trash[i]);}}	
+			if (Application.isPlaying){Destroy(trash[i]);} else {DestroyImmediate(trash[i]);}}
 
 		if (color == null){
 			if (palette.Count > 0){
@@ -132,7 +132,7 @@ public class TilePainter : MonoBehaviour{
 		transform.localScale = new Vector3(1,1,1);
 		if (_changed){
 			_changed = false;
-			Restore(); 
+			Restore();
 		}
 	}
 
@@ -158,7 +158,7 @@ public class TilePainter : MonoBehaviour{
 
 	public bool ValidCoords(int x, int y){
 		if (tileobs == null) {return false;}
-		
+
 		return (x >= 0 && y >= 0 && x < tileobs.GetLength(0) && y < tileobs.GetLength(1));
 	}
 
@@ -213,7 +213,7 @@ public class TilePainter : MonoBehaviour{
 					color_rotation = tileobs[(int)cursor.x, (int)cursor.y].transform.localRotation;
 				}
 			} else {
-				DestroyImmediate(tileobs[(int)cursor.x, (int)cursor.y]); 
+				DestroyImmediate(tileobs[(int)cursor.x, (int)cursor.y]);
 				if (op == TileLayerEditor.TileOperation.Drawing){
 					if (color == null){return;}
 					GameObject o = CreatePrefab(color, new Vector3() , color_rotation);
@@ -257,7 +257,7 @@ public class TilePainter : MonoBehaviour{
 	}
 	#endif
 }
- 
+
 
 #if UNITY_EDITOR
  [CustomEditor(typeof(TilePainter))]
@@ -267,7 +267,7 @@ public class TilePainter : MonoBehaviour{
 
 	public override void OnInspectorGUI () {
 		TilePainter me = (TilePainter)target;
-		GUILayout.Label("Assign a prefab to the color property"); 
+		GUILayout.Label("Assign a prefab to the color property");
 		GUILayout.Label("or the pallete array.");
 		GUILayout.Label("drag        : paint tiles");
 		GUILayout.Label("[s]+click  : sample tile color");
@@ -281,7 +281,7 @@ public class TilePainter : MonoBehaviour{
 	private bool AmHovering(Event e){
 		TilePainter me = (TilePainter)target;
 		RaycastHit hit;
-		if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(Event.current.mousePosition), out hit, Mathf.Infinity) && 
+		if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(Event.current.mousePosition), out hit, Mathf.Infinity) &&
 				hit.collider.GetComponentInParent<TilePainter>() == me)
 		{
 			me.cursor = me.GridV3(hit.point);
@@ -334,7 +334,7 @@ public class TilePainter : MonoBehaviour{
 							me.Drag(current.mousePosition, operation);
 							current.Use();
 						}
-						
+
 						return;
 					}
 					break;
@@ -358,7 +358,7 @@ public class TilePainter : MonoBehaviour{
 			}
 		}
 	}
-	
+
 	void OnSceneGUI (){
 		ProcessEvents();
 	}

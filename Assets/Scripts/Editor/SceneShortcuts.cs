@@ -11,13 +11,13 @@ namespace Editor
             EditorSceneManager.OpenScene("Assets/Scenes/CloudAnchors.unity");
         }
 
-        [MenuItem("Tools/Go to Quick Start Scene _F2")]
+        [MenuItem("Tools/Go to Quick Start Scene _F3")]
         public static void GoToQuickStartScene()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/QuickStart Scene.unity");
         }
 
-        [MenuItem("Tools/Go to Initial Scene _F3")]
+        [MenuItem("Tools/Go to Initial Scene _F4")]
         public static void GoToInitialScreen()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/Initial Screens.unity");

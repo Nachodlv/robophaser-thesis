@@ -12,7 +12,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public TextAsset xml = null;
 	private string subset = "";
 
-	public int gridsize = 1;
+	public float gridsize = 1;
 	public int width = 20;
 	public int depth = 20;
 
@@ -136,7 +136,8 @@ public class TileSetEditor : Editor {
 				if(GUILayout.Button("RUN"))
 				{
 					me.started = true;
-					me.Run();
+					me.model.Run(me.seed, me.iterations);
+					me.Draw();
 				}
 			}
 		}
