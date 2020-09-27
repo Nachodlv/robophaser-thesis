@@ -9,24 +9,26 @@ namespace WFC
         [SerializeField] private SimpleTiledWFC wfcTile;
         [SerializeField] private int tries;
         [SerializeField] private int tilesPerFrame;
-        [SerializeField] private float width;
-        [SerializeField] private float depth;
+        [SerializeField, Min(1)] private float obstacleQuantityWidth;
+        [SerializeField, Min(1)] private float obstacleQuantityDepth;
+        // [SerializeField] private float width;
+        // [SerializeField] private float depth;
 
         private Func<IEnumerator> _generateObstaclesCoroutine;
 
         private void Awake()
         {
             _generateObstaclesCoroutine = GenerateObstacles;
-            CreateObstacles(Vector3.zero, Quaternion.identity, width, depth);
+            // CreateObstacles(Vector3.zero, Quaternion.identity, width, depth);
         }
 
         public void CreateObstacles(Vector3 position, Quaternion rotation, float width, float depth)
         {
-            var transform1 = transform;
-            transform1.position = position;
-            transform1.rotation = rotation;
-            wfcTile.width = (int) Math.Round(width);
-            wfcTile.depth = (int) Math.Round(depth);
+            var myTransform = transform;
+            myTransform.position = position;
+            myTransform.rotation = rotation;
+            CenterWfcTile();
+            SetUpScale(width, depth);
             StartCoroutine(_generateObstaclesCoroutine());
         }
 
@@ -61,6 +63,24 @@ namespace WFC
             }
 
             return true;
+        }
+
+        private void SetUpScale(float width, float depth)
+        {
+            var myTransform = transform;
+            var scale = myTransform.localScale;
+            var xScale = width / wfcTile.gridsize / obstacleQuantityWidth;
+            var zScale = depth / wfcTile.gridsize / obstacleQuantityDepth;
+            myTransform.localScale = new Vector3(xScale, scale.y, zScale);
+        }
+
+        private void CenterWfcTile()
+        {
+            var wfcTransform = wfcTile.transform;
+            var wfcTilePosition = wfcTransform.position;
+            wfcTilePosition.x -= obstacleQuantityWidth / wfcTile.gridsize / 2;
+            wfcTilePosition.z -= obstacleQuantityDepth / wfcTile.gridsize / 2;
+            wfcTransform.position = wfcTilePosition;
         }
     }
 }

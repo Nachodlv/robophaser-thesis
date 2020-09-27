@@ -2,6 +2,7 @@
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
 using UnityEngine;
+using WFC;
 
 namespace ARCore.Phases.Instantiating
 {
@@ -9,14 +10,16 @@ namespace ARCore.Phases.Instantiating
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchors;
+        private readonly ObstacleGenerator _obstacleGenerator;
         private GameArea _gameArea;
         private bool _settingUpGameArea;
 
         public MasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchors) : base(phaseManager)
+            CloudAnchorsExampleController cloudAnchors, ObstacleGenerator obstacleGenerator) : base(phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchors = cloudAnchors;
+            _obstacleGenerator = obstacleGenerator;
         }
 
         public override void OnEnter()
@@ -62,6 +65,7 @@ namespace ARCore.Phases.Instantiating
         {
             _networkUiController.ShowDebugMessage(
                 $"Game area setup finished! Creating the obstacles.");
+            _obstacleGenerator.CreateObstacles(_gameArea.GameAreaPosition, _gameArea.GameAreaRotation, width, depth);
         }
     }
 }

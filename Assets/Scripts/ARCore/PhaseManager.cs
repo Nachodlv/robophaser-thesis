@@ -5,6 +5,7 @@ using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
 using UnityEngine;
+using WFC;
 
 namespace ARCore
 {
@@ -12,6 +13,7 @@ namespace ARCore
     {
         [SerializeField] private CloudAnchorsExampleController anchorsExampleController;
         [SerializeField] private NetworkUIController networkUi;
+        [SerializeField] private ObstacleGenerator obstacleGenerator;
 
         private Phase _currentState;
 
@@ -45,7 +47,8 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var masterInstantiatingPhase = new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
+            var masterInstantiatingPhase =
+                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, obstacleGenerator);
             return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
         }
     }
