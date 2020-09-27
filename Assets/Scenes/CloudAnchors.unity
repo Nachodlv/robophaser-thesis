@@ -4382,6 +4382,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7930615068493742368, guid: 5065565c97edf8849818ab068439d902,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7930615068493742368, guid: 5065565c97edf8849818ab068439d902,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8618327869996745913, guid: 5065565c97edf8849818ab068439d902,
         type: 3}
       propertyPath: m_Name
@@ -4506,6 +4516,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BlocksRaycasts
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618327870123681953, guid: 5065565c97edf8849818ab068439d902,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8618327870123681953, guid: 5065565c97edf8849818ab068439d902,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8618327870413861448, guid: 5065565c97edf8849818ab068439d902,
         type: 3}

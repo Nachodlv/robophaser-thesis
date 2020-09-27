@@ -12,7 +12,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public TextAsset xml = null;
 	private string subset = "";
 
-	public float gridsize = 1;
+	[SerializeField] protected float gridsize = 1;
 	public int width = 20;
 	public int depth = 20;
 
@@ -93,20 +93,11 @@ public class SimpleTiledWFC : MonoBehaviour{
 				if (rendering[x,y] == null){
 					string v = model.Sample(x, y);
 					int rot = 0;
-					GameObject fab = null;
 					if (v != "?"){
 						rot = int.Parse(v.Substring(0,1));
-						v = v.Substring(1);
-						if (!obmap.ContainsKey(v)){
-							fab = (GameObject)Resources.Load(v, typeof(GameObject));
-							obmap[v] = fab;
-						} else {
-							fab = obmap[v];
-						}
-						if (fab == null){
-							continue;}
 						Vector3 pos = new Vector3(x*gridsize, y*gridsize, 0f);
-						GameObject tile = (GameObject)Instantiate(fab, new Vector3() , Quaternion.identity);
+						GameObject tile = InstantiateGameObject(v);
+						if(tile == null) continue;
 						Vector3 fscale = tile.transform.localScale;
 						tile.transform.parent = group;
 						tile.transform.localPosition = pos;
@@ -120,6 +111,20 @@ public class SimpleTiledWFC : MonoBehaviour{
 				}
 			}
   		}
+	}
+
+
+	protected virtual GameObject InstantiateGameObject(string v)
+	{
+		v = v.Substring(1);
+		GameObject fab;
+		if (!obmap.ContainsKey(v)){
+			fab = (GameObject)Resources.Load(v, typeof(GameObject));
+			obmap[v] = fab;
+		} else {
+			fab = obmap[v];
+		}
+		return fab == null ? null : Instantiate(fab, new Vector3() , Quaternion.identity);
 	}
 }
 

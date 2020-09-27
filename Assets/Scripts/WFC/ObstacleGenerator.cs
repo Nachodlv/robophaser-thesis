@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using WFC;
 
 namespace WFC
 {
     public class ObstacleGenerator: MonoBehaviour
     {
-        [SerializeField] private SimpleTiledWFC wfcTile;
+        [SerializeField] private NetworkSimpleTileWFC wfcTile;
         [SerializeField] private int tries;
         [SerializeField] private int tilesPerFrame;
-        [SerializeField, Min(1)] private float obstacleQuantityWidth;
-        [SerializeField, Min(1)] private float obstacleQuantityDepth;
-        // [SerializeField] private float width;
-        // [SerializeField] private float depth;
+        [SerializeField, Min(1)] private float width;
+        [SerializeField, Min(1)] private float depth;
+
+        public float Width => width;
+        public float Depth => depth;
 
         private Func<IEnumerator> _generateObstaclesCoroutine;
 
@@ -22,14 +25,20 @@ namespace WFC
             // CreateObstacles(Vector3.zero, Quaternion.identity, width, depth);
         }
 
-        public void CreateObstacles(Vector3 position, Quaternion rotation, float width, float depth)
+        public void CreateObstacles(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
         {
             var myTransform = transform;
             myTransform.position = position;
             myTransform.rotation = rotation;
+            SetUpScale(newWidth, newDepth);
             CenterWfcTile();
-            SetUpScale(width, depth);
+            if (_generateObstaclesCoroutine == null) _generateObstaclesCoroutine = GenerateObstacles;
             StartCoroutine(_generateObstaclesCoroutine());
+        }
+
+        public void ResetWfcTilePosition()
+        {
+            wfcTile.transform.localPosition = Vector3.zero;
         }
 
         private IEnumerator GenerateObstacles()
@@ -67,20 +76,36 @@ namespace WFC
 
         private void SetUpScale(float width, float depth)
         {
-            var myTransform = transform;
-            var scale = myTransform.localScale;
-            var xScale = width / wfcTile.gridsize / obstacleQuantityWidth;
-            var zScale = depth / wfcTile.gridsize / obstacleQuantityDepth;
-            myTransform.localScale = new Vector3(xScale, scale.y, zScale);
+            var widthSize = Mathf.Max(1, Mathf.RoundToInt(width / wfcTile.GridSize ));
+            var depthSize = Mathf.Max(1, Mathf.RoundToInt(depth / wfcTile.GridSize));
+            wfcTile.width = widthSize;
+            wfcTile.depth = depthSize;
         }
 
         private void CenterWfcTile()
         {
             var wfcTransform = wfcTile.transform;
             var wfcTilePosition = wfcTransform.position;
-            wfcTilePosition.x -= obstacleQuantityWidth / wfcTile.gridsize / 2;
-            wfcTilePosition.z -= obstacleQuantityDepth / wfcTile.gridsize / 2;
+            wfcTilePosition.x -= (wfcTile.width * wfcTile.GridSize) / 2;
+            wfcTilePosition.z -= (wfcTile.depth * wfcTile.GridSize) / 2;
             wfcTransform.position = wfcTilePosition;
         }
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(ObstacleGenerator))]
+public class ObstacleGeneratorEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        var me = (ObstacleGenerator) target;
+        if(GUILayout.Button("generate"))
+        {
+            me.ResetWfcTilePosition();
+            me.CreateObstacles(me.transform.position, me.transform.rotation, me.Width, me.Depth);
+        }
+    }
+}
+#endif
