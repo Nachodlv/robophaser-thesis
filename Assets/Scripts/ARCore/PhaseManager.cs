@@ -13,7 +13,6 @@ namespace ARCore
     {
         [SerializeField] private CloudAnchorsExampleController anchorsExampleController;
         [SerializeField] private NetworkUIController networkUi;
-        [SerializeField] private ObstacleGenerator obstacleGenerator;
 
         private Phase _currentState;
 
@@ -48,7 +47,7 @@ namespace ARCore
         private MasterPositioningPhase InstantiateMasterPhases()
         {
             var masterInstantiatingPhase =
-                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, obstacleGenerator);
+                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
             return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
         }
     }

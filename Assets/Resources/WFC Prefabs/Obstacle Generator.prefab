@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 786254078487497014}
   - component: {fileID: 786254078487497015}
+  - component: {fileID: 2935203920097606168}
   m_Layer: 0
   m_Name: Obstacle Generator
   m_TagString: Untagged
@@ -49,6 +50,28 @@ MonoBehaviour:
   tilesPerFrame: 5
   width: 20
   depth: 20
+--- !u!114 &2935203920097606168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786254078487497012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &1683620589312024049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +93,29 @@ MonoBehaviour:
   iterations: 1
   incremental: 1
   output: {fileID: 3694895226488974427}
-  scale: 0.4
+  scale: 0.35
+--- !u!114 &2943710820158531177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694895226208703772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &786254078104590562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -141,17 +186,17 @@ PrefabInstance:
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4156737015554280956, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa, type: 3}

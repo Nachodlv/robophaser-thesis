@@ -26,7 +26,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public GameObject output;
 	private Transform group;
 	public Dictionary<string, GameObject> obmap = new Dictionary<string, GameObject>();
-
+	public Transform ObstacleParent => group;
 	[NonSerialized]
 	public bool started;
 
@@ -96,13 +96,8 @@ public class SimpleTiledWFC : MonoBehaviour{
 					if (v != "?"){
 						rot = int.Parse(v.Substring(0,1));
 						Vector3 pos = new Vector3(x*gridsize, y*gridsize, 0f);
-						GameObject tile = InstantiateGameObject(v);
+						GameObject tile = InstantiateGameObject(v, pos, new Vector3(0, 0, 360-(rot*90)));
 						if(tile == null) continue;
-						Vector3 fscale = tile.transform.localScale;
-						tile.transform.parent = group;
-						tile.transform.localPosition = pos;
-						tile.transform.localEulerAngles = new Vector3(0, 0, 360-(rot*90));
-						tile.transform.localScale = fscale;
 						rendering[x,y] = tile;
 					} else
                     {
@@ -114,7 +109,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 	}
 
 
-	protected virtual GameObject InstantiateGameObject(string v)
+	protected virtual GameObject InstantiateGameObject(string v, Vector3 position, Vector3 localEulerAngles)
 	{
 		v = v.Substring(1);
 		GameObject fab;
@@ -124,7 +119,13 @@ public class SimpleTiledWFC : MonoBehaviour{
 		} else {
 			fab = obmap[v];
 		}
-		return fab == null ? null : Instantiate(fab, new Vector3() , Quaternion.identity);
+
+		if (fab == null) return null;
+		var newGameObject = Instantiate(fab, position, Quaternion.identity, group);
+		var fscale = newGameObject.transform.localScale;
+		newGameObject.transform.localEulerAngles = localEulerAngles;
+		newGameObject.transform.localScale = fscale;
+		return newGameObject;
 	}
 }
 

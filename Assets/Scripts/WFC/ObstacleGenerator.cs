@@ -17,6 +17,9 @@ namespace WFC
         public float Width => width;
         public float Depth => depth;
 
+
+        public Transform ObstacleParent => wfcTile.ObstacleParent;
+
         private Func<IEnumerator> _generateObstaclesCoroutine;
 
         private void Awake()
