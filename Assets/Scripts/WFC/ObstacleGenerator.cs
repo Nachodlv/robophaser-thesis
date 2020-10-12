@@ -1,0 +1,114 @@
+﻿using System;
+using System.Collections;
+using UnityEditor;
+using UnityEngine;
+using WFC;
+
+namespace WFC
+{
+    public class ObstacleGenerator: MonoBehaviour
+    {
+        [SerializeField] private NetworkSimpleTileWFC wfcTile;
+        [SerializeField] private int tries;
+        [SerializeField] private int tilesPerFrame;
+        [SerializeField, Min(1)] private float width;
+        [SerializeField, Min(1)] private float depth;
+
+        public float Width => width;
+        public float Depth => depth;
+
+
+        public Transform ObstacleParent => wfcTile.ObstacleParent;
+
+        private Func<IEnumerator> _generateObstaclesCoroutine;
+
+        private void Awake()
+        {
+            _generateObstaclesCoroutine = GenerateObstacles;
+            // CreateObstacles(Vector3.zero, Quaternion.identity, width, depth);
+        }
+
+        public void CreateObstacles(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
+        {
+            var myTransform = transform;
+            myTransform.position = position;
+            myTransform.rotation = rotation;
+            SetUpScale(newWidth, newDepth);
+            CenterWfcTile();
+            if (_generateObstaclesCoroutine == null) _generateObstaclesCoroutine = GenerateObstacles;
+            StartCoroutine(_generateObstaclesCoroutine());
+        }
+
+        public void ResetWfcTilePosition()
+        {
+            wfcTile.transform.localPosition = Vector3.zero;
+        }
+
+        private IEnumerator GenerateObstacles()
+        {
+            var currentTries = 0;
+            while (currentTries < tries)
+            {
+                var currentTiles = 0;
+                wfcTile.Generate();
+                while (wfcTile.Run())
+                {
+                    currentTiles++;
+                    if (currentTiles <= tilesPerFrame) continue;
+                    currentTiles = 0;
+                    yield return null;
+                }
+                if(IsCompleted()) yield break;
+                currentTries++;
+                Debug.Log($"Tries: {currentTries}");
+            }
+        }
+
+        private bool IsCompleted()
+        {
+            for (var i = 0; i < wfcTile.rendering.GetLength(0); i++)
+            {
+                for (var j = 0; j < wfcTile.rendering.GetLength(1); j++)
+                {
+                    if (wfcTile.rendering[i, j] == null) return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void SetUpScale(float width, float depth)
+        {
+            var widthSize = Mathf.Max(1, Mathf.RoundToInt(width / wfcTile.GridSize ));
+            var depthSize = Mathf.Max(1, Mathf.RoundToInt(depth / wfcTile.GridSize));
+            wfcTile.width = widthSize;
+            wfcTile.depth = depthSize;
+        }
+
+        private void CenterWfcTile()
+        {
+            var wfcTransform = wfcTile.transform;
+            var wfcTilePosition = wfcTransform.position;
+            wfcTilePosition.x -= (wfcTile.width * wfcTile.GridSize) / 2;
+            wfcTilePosition.z -= (wfcTile.depth * wfcTile.GridSize) / 2;
+            wfcTransform.position = wfcTilePosition;
+        }
+    }
+}
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(ObstacleGenerator))]
+public class ObstacleGeneratorEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        var me = (ObstacleGenerator) target;
+        if(GUILayout.Button("generate"))
+        {
+            me.ResetWfcTilePosition();
+            me.CreateObstacles(me.transform.position, me.transform.rotation, me.Width, me.Depth);
+        }
+    }
+}
+#endif

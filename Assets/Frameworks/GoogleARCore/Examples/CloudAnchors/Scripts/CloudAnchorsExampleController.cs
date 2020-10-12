@@ -93,10 +93,12 @@ namespace GoogleARCore.Examples.CloudAnchors
         public GameObject StatusScreen;
 
         public delegate void CloudAnchorCallback(bool success, string response);
+        public delegate void TouchCallback(Vector3 position, Quaternion rotation);
 
         public event Action OnAnchorStartInstantiating;
         public event CloudAnchorCallback OnAnchorFinishHosting;
         public event CloudAnchorCallback OnAnchorFinishResolving;
+        public event TouchCallback OnPlaneTouch;
 
         /// <summary>
         /// The key name used in PlayerPrefs which indicates whether
@@ -290,8 +292,6 @@ namespace GoogleARCore.Examples.CloudAnchors
                 if (_timeSinceStart > ResolvingPrepareTime)
                 {
                     _passedResolvingPreparedTime = true;
-                    NetworkUIController.ShowDebugMessage(
-                        "Waiting for Cloud Anchor to be hosted...");
                 }
             }
 
@@ -340,13 +340,7 @@ namespace GoogleARCore.Examples.CloudAnchors
             // If there was an anchor placed, then instantiate the corresponding object.
             if (_lastHitPose != null)
             {
-                // The first touch on the Hosting mode will instantiate the origin anchor. Any
-                // subsequent touch will instantiate a star, both in Hosting and Resolving modes.
-                if (_CanPlaceStars())
-                {
-                    _InstantiateStar();
-                }
-                else if (!IsOriginPlaced && _currentMode == ApplicationMode.Hosting)
+                if (!IsOriginPlaced && _currentMode == ApplicationMode.Hosting)
                 {
                     if (Application.platform != RuntimePlatform.IPhonePlayer)
                     {
@@ -361,6 +355,10 @@ namespace GoogleARCore.Examples.CloudAnchors
                     SetWorldOrigin(_worldOriginAnchor.transform);
                     _InstantiateAnchor();
                     OnAnchorInstantiated(true);
+                }
+                else
+                {
+                    OnPlaneTouch?.Invoke(_lastHitPose.Value.position, _lastHitPose.Value.rotation);
                 }
             }
         }
@@ -489,6 +487,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void OnAnchorResolved(bool success, string response)
         {
             NetworkUIController.OnAnchorResolved(success, response);
+            OnAnchorFinishResolving?.Invoke(success, response);
         }
 
         /// <summary>
@@ -512,16 +511,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         }
 
         /// <summary>
-        /// Instantiates a star object that will be synchronized over the network to other clients.
-        /// </summary>
-        private void _InstantiateStar()
-        {
-            // Star must be spawned in the server so a networking Command is used.
-            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>()
-                .SpawnStar(_lastHitPose.Value.position, _lastHitPose.Value.rotation);
-        }
-
-        /// <summary>
         /// Sets the corresponding platform active.
         /// </summary>
         private void _SetPlatformActive()
@@ -536,25 +525,6 @@ namespace GoogleARCore.Examples.CloudAnchors
                 ARCoreRoot.SetActive(false);
                 ARKitRoot.SetActive(true);
             }
-        }
-
-        /// <summary>
-        /// Indicates whether a star can be placed.
-        /// </summary>
-        /// <returns><c>true</c>, if stars can be placed, <c>false</c> otherwise.</returns>
-        private bool _CanPlaceStars()
-        {
-            if (_currentMode == ApplicationMode.Resolving)
-            {
-                return IsOriginPlaced;
-            }
-
-            if (_currentMode == ApplicationMode.Hosting)
-            {
-                return IsOriginPlaced && _anchorFinishedHosting;
-            }
-
-            return false;
         }
 
         /// <summary>

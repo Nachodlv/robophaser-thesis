@@ -2,17 +2,21 @@
 
 namespace ARCore.Phases
 {
-    public class NonMasterPositioningPhase : IPhase
+    public class NonMasterPositioningPhase : Phase
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchorsController;
+        private readonly NonMasterInstantiatingPhase _instantiatingPhase;
+        private readonly PhaseManager _phaseManager;
 
         public NonMasterPositioningPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchorsController) : base(
-            phaseManager)
+            CloudAnchorsExampleController cloudAnchorsController, NonMasterInstantiatingPhase instantiatingPhase) :
+            base(phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchorsController = cloudAnchorsController;
+            _instantiatingPhase = instantiatingPhase;
+            _phaseManager = phaseManager;
         }
 
         public override void OnEnter()
@@ -36,9 +40,15 @@ namespace ARCore.Phases
 
         private void FinishResolving(bool success, string response)
         {
-            _networkUiController.ShowDebugMessage(success
-                ? "Cloud Anchor successfully resolved! Tap to place more stars."
-                : $"Cloud Anchor could not be resolved. Will attempt again. {response}");
+            if (!success)
+            {
+                _networkUiController.ShowDebugMessage(
+                    $"Cloud Anchor could not be resolved. Will attempt again. {response}");
+            }
+            else
+            {
+                _phaseManager.ChangePhase(_instantiatingPhase);
+            }
         }
     }
 }

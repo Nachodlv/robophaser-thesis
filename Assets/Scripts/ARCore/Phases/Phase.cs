@@ -1,10 +1,10 @@
 ﻿namespace ARCore.Phases
 {
-    public abstract class IPhase
+    public abstract class Phase
     {
         private readonly PhaseManager _phaseManager;
 
-        protected IPhase(PhaseManager phaseManager)
+        protected Phase(PhaseManager phaseManager)
         {
             _phaseManager = phaseManager;
         }

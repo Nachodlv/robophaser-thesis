@@ -8,11 +8,11 @@ using UnityEditor;
 
 [ExecuteInEditMode]
 public class SimpleTiledWFC : MonoBehaviour{
-	
+
 	public TextAsset xml = null;
 	private string subset = "";
 
-	public int gridsize = 1;
+	[SerializeField] protected float gridsize = 1;
 	public int width = 20;
 	public int depth = 20;
 
@@ -26,7 +26,11 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public GameObject output;
 	private Transform group;
 	public Dictionary<string, GameObject> obmap = new Dictionary<string, GameObject>();
-    private bool undrawn = true;
+	public Transform ObstacleParent => group;
+	[NonSerialized]
+	public bool started;
+
+	private bool undrawn = true;
 
 	public void destroyChildren (){
 		foreach (Transform child in this.transform) {
@@ -34,24 +38,18 @@ public class SimpleTiledWFC : MonoBehaviour{
  		}
  	}
 
- 	void Start(){
-		Generate();
-		Run();
-	}
-
 	void Update(){
-		if (incremental){
+		if (started && incremental){
 			Run();
 		}
 	}
 
 
-	public void Run(){
-		if (model == null){return;}
-        if (undrawn == false) { return; }
-        if (model.Run(seed, iterations)){
-			Draw();
-		}
+	public bool Run(){
+		if (model == null || !undrawn){return false;}
+		if (!model.Run(seed, iterations)) return false;
+		Draw();
+        return true;
 	}
 
 	public void OnDrawGizmos(){
@@ -91,29 +89,15 @@ public class SimpleTiledWFC : MonoBehaviour{
 		if (group == null){return;}
         undrawn = false;
 		for (int y = 0; y < depth; y++){
-			for (int x = 0; x < width; x++){ 
+			for (int x = 0; x < width; x++){
 				if (rendering[x,y] == null){
 					string v = model.Sample(x, y);
 					int rot = 0;
-					GameObject fab = null;
 					if (v != "?"){
 						rot = int.Parse(v.Substring(0,1));
-						v = v.Substring(1);
-						if (!obmap.ContainsKey(v)){
-							fab = (GameObject)Resources.Load(v, typeof(GameObject));
-							obmap[v] = fab;
-						} else {
-							fab = obmap[v];
-						}
-						if (fab == null){
-							continue;}
 						Vector3 pos = new Vector3(x*gridsize, y*gridsize, 0f);
-						GameObject tile = (GameObject)Instantiate(fab, new Vector3() , Quaternion.identity);
-						Vector3 fscale = tile.transform.localScale;
-						tile.transform.parent = group;
-						tile.transform.localPosition = pos;
-						tile.transform.localEulerAngles = new Vector3(0, 0, 360-(rot*90));
-						tile.transform.localScale = fscale;
+						GameObject tile = InstantiateGameObject(v, pos, new Vector3(0, 0, 360-(rot*90)));
+						if(tile == null) continue;
 						rendering[x,y] = tile;
 					} else
                     {
@@ -121,7 +105,27 @@ public class SimpleTiledWFC : MonoBehaviour{
                     }
 				}
 			}
-  		}	
+  		}
+	}
+
+
+	protected virtual GameObject InstantiateGameObject(string v, Vector3 position, Vector3 localEulerAngles)
+	{
+		v = v.Substring(1);
+		GameObject fab;
+		if (!obmap.ContainsKey(v)){
+			fab = (GameObject)Resources.Load(v, typeof(GameObject));
+			obmap[v] = fab;
+		} else {
+			fab = obmap[v];
+		}
+
+		if (fab == null) return null;
+		var newGameObject = Instantiate(fab, position, Quaternion.identity, group);
+		var fscale = newGameObject.transform.localScale;
+		newGameObject.transform.localEulerAngles = localEulerAngles;
+		newGameObject.transform.localScale = fscale;
+		return newGameObject;
 	}
 }
 
@@ -135,7 +139,9 @@ public class TileSetEditor : Editor {
 				me.Generate();
 			}
 			if (me.model != null){
-				if(GUILayout.Button("RUN")){
+				if(GUILayout.Button("RUN"))
+				{
+					me.started = true;
 					me.model.Run(me.seed, me.iterations);
 					me.Draw();
 				}

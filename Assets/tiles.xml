@@ -1,20 +1,9 @@
 <set>
   <tiles>
-
-    <tile name="WFC Prefabs/Circuits/bridge" symmetry="I" weight="1,0"/>
-    <tile name="WFC Prefabs/Circuits/component" symmetry="X" weight="20,0"/>
-    <tile name="WFC Prefabs/Circuits/connection" symmetry="T" weight="10,0"/>
-    <tile name="WFC Prefabs/Circuits/corner" symmetry="L" weight="10,0"/>
-    <tile name="WFC Prefabs/Circuits/substrate" symmetry="X" weight="2,0"/>
-    <tile name="WFC Prefabs/Circuits/t" symmetry="T" weight="0,1"/>
-    <tile name="WFC Prefabs/Circuits/track" symmetry="I" weight="2,0"/>
-    <tile name="WFC Prefabs/Circuits/transition" symmetry="T" weight="0,4"/>
-    <tile name="WFC Prefabs/Circuits/turn" symmetry="L" weight="1,0"/>
-    <tile name="WFC Prefabs/Circuits/vias" symmetry="T" weight="0,3"/>
-    <tile name="WFC Prefabs/Circuits/viad" symmetry="I" weight="0,1"/>
-    <tile name="WFC Prefabs/Circuits/skew" symmetry="L" weight="2,0"/>
-    <tile name="WFC Prefabs/Circuits/dskew" symmetry="D" weight="2,0"/>
-    <tile name="WFC Prefabs/Circuits/wire" symmetry="I" weight="0.5"/>
+<tile name="Assets/PolygonStarter/Prefabs/SM_Bld_Door_01" symmetry="X" weight="1,0"/>
+<tile name="Assets/PolygonStarter/Prefabs/SM_Generic_Tree_02" symmetry="X" weight="1,0"/>
+<tile name="Assets/PolygonStarter/Prefabs/SM_Generic_Tree_03" symmetry="X" weight="1,0"/>
+<tile name="Assets/PolygonStarter/Prefabs/SM_Generic_Tree_04" symmetry="X" weight="1,0"/>
 	</tiles>
 <neighbors>	</neighbors>
 </set>

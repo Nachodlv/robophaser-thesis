@@ -39,8 +39,6 @@ namespace Photon.GameControllers
 
         private void SetUpPosition(Transform cameraTransform)
         {
-            Debug.Log($"Camera position {cameraTransform.localPosition}");
-            Debug.Log($"Player avatar position: {_playerAvatar.position}");
             var cameraPosition = cameraTransform.localPosition;
             var position = _playerAvatar.position;
             _playerAvatar.position = new Vector3(cameraPosition.x, position.y, cameraPosition.z);

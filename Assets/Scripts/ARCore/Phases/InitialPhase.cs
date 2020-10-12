@@ -3,7 +3,7 @@ using Photon.Pun;
 
 namespace ARCore.Phases
 {
-    public class InitialPhase : IPhase
+    public class InitialPhase : Phase
     {
         private readonly MasterPositioningPhase _masterPositioningPhase;
         private readonly NonMasterPositioningPhase _nonMasterPositioningPhase;
