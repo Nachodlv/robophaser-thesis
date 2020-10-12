@@ -12,6 +12,8 @@ namespace Photon.GameControllers
         private TrackedPoseDriver _camera;
         private Transform _playerAvatar;
 
+        public Shooter Shooter { get; private set; }
+
         private void Awake()
         {
             if (!photonView.IsMine) return;
@@ -21,6 +23,10 @@ namespace Photon.GameControllers
 
             _camera = FindObjectOfType<TrackedPoseDriver>();
             if (_camera == null) Debug.LogError("First person camera not found!");
+
+            Shooter = _playerAvatar.GetComponent<Shooter>();
+
+            PhotonRoom.Instance.PhotonPlayers.Add(this);
         }
 
         private void Update()

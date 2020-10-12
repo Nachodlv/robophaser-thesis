@@ -14,11 +14,10 @@ namespace WFC
         [SerializeField, Min(1)] private float width;
         [SerializeField, Min(1)] private float depth;
 
+        public event Action OnFinishPlacingObstacles;
+
         public float Width => width;
         public float Depth => depth;
-
-
-        public Transform ObstacleParent => wfcTile.ObstacleParent;
 
         private Func<IEnumerator> _generateObstaclesCoroutine;
 
@@ -58,10 +57,15 @@ namespace WFC
                     currentTiles = 0;
                     yield return null;
                 }
-                if(IsCompleted()) yield break;
+
+                if (IsCompleted())
+                {
+                    OnFinishPlacingObstacles?.Invoke();
+                    yield break;
+                }
                 currentTries++;
-                Debug.Log($"Tries: {currentTries}");
             }
+            OnFinishPlacingObstacles?.Invoke();
         }
 
         private bool IsCompleted()

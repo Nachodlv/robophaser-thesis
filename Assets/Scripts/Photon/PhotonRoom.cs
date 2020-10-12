@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Photon.GameControllers;
 using Photon.Pun;
 using Photon.Realtime;
 using UI;
@@ -27,6 +29,20 @@ namespace Photon
         private bool _readyToStart;
         private float _timeToStart;
 
+        public List<PhotonPlayer> PhotonPlayers { get; private set; }
+
+        public PhotonPlayer LocalPlayer
+        {
+            get
+            {
+                foreach (var photonPlayer in PhotonPlayers)
+                {
+                    if (photonPlayer.photonView.IsMine) return photonPlayer;
+                }
+                return null;
+            }
+        }
+
         private void Awake()
         {
             if (Instance == null)
@@ -40,8 +56,8 @@ namespace Photon
             }
 
             DontDestroyOnLoad(gameObject);
-
             RestartTimer();
+            PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
         }
 
         private void Update()
