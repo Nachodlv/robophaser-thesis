@@ -10,16 +10,21 @@ namespace ARCore.Phases
         private readonly CombatPhase _combatPhase;
 
         public NonMasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CombatPhase combatPhase, ObstacleGenerator obstacleGenerator) : base(phaseManager)
+            CombatPhase combatPhase) : base(phaseManager)
         {
             _networkUiController = networkUiController;
             _combatPhase = combatPhase;
-            obstacleGenerator.OnFinishPlacingObstacles += FinishPlacingObstacle;
         }
 
         public override void OnEnter()
         {
+            PhaseManager.ObstacleGenerator.OnFinishPlacingObstacles += FinishPlacingObstacle;
             _networkUiController.ShowDebugMessage("Waiting for the host to select an area for the game");
+        }
+
+        public override void OnExit()
+        {
+            PhaseManager.ObstacleGenerator.OnFinishPlacingObstacles -= FinishPlacingObstacle;
         }
 
         private void FinishPlacingObstacle()

@@ -19,12 +19,18 @@ namespace ARCore
         [SerializeField] private PlayerUI playerUI;
 
         private Phase _currentState;
-        private ObstacleGenerator _obstacleGenerator;
+        public ObstacleGenerator ObstacleGenerator { get; private set; }
 
         private void Awake()
         {
-            if (PhotonNetwork.IsMasterClient) InstantiateObstacleGenerator();
+            if (PhotonNetwork.IsMasterClient)
+                InstantiateObstacleGenerator();
+        }
+
+        private void Start()
+        {
             InitializePhases();
+            // ChangePhase(new CombatPhase(this, playerUI));
         }
 
         public void ChangePhase(Phase newPhase)
@@ -36,16 +42,20 @@ namespace ARCore
 
         private void InitializePhases()
         {
-            var initialPhase = new InitialPhase(
-                this,
-                InstantiateMasterPhases(),
-                InstantiateNonMasterPhases());
-            ChangePhase(initialPhase);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                InstantiateObstacleGenerator();
+                ChangePhase(InstantiateMasterPhases());
+            }
+            else
+            {
+                ChangePhase(InstantiateNonMasterPhases());
+            }
         }
 
         private void InstantiateObstacleGenerator()
         {
-            _obstacleGenerator = PhotonNetwork
+            ObstacleGenerator = PhotonNetwork
                 .Instantiate(Path.Combine("WFC Prefabs", "Obstacle Generator"), Vector3.zero, Quaternion.identity)
                 .GetComponent<ObstacleGenerator>();
         }
@@ -54,7 +64,7 @@ namespace ARCore
         {
             var combatPhase = new CombatPhase(this, playerUI);
             var nonMasterInstantiatingPhase =
-                new NonMasterInstantiatingPhase(this, networkUi, combatPhase, _obstacleGenerator);
+                new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
                 nonMasterInstantiatingPhase);
         }
@@ -63,7 +73,7 @@ namespace ARCore
         {
             var combatPhase = new CombatPhase(this, playerUI);
             var masterInstantiatingPhase =
-                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, _obstacleGenerator,
+                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase);
             return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
         }

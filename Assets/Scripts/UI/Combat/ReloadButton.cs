@@ -1,21 +1,24 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Photon;
-using Photon.GameControllers;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
-using Random = UnityEngine.Random;
 
 namespace UI.Combat
 {
-    public class ShootButton : MonoBehaviour
+    public class ReloadButton : MonoBehaviour
     {
         [SerializeField] private Button button;
+        [SerializeField] private Animator animator;
+        private static readonly int Reloading = Animator.StringToHash("reloading");
 
         private void Awake()
         {
-            button.onClick.AddListener(Shoot);
+            button.onClick.AddListener(Reload);
+        }
+
+        private void OnDestroy()
+        {
+            button.onClick.RemoveListener(Reload);
         }
 
         public void Show()
@@ -26,15 +29,14 @@ namespace UI.Combat
             shooter.OnStopReloading += StopReloading;
         }
 
-        private void Shoot()
+        private void Reload()
         {
-            var shooter = PhotonRoom.Instance.LocalPlayer.Shooter;
-            shooter.Shoot(Random.Range(shooter.MinForce, shooter.MaxForce));
+            PhotonRoom.Instance.LocalPlayer.Shooter.Reload();
         }
 
         private void AmmoChange(int newAmmo)
         {
-            if (newAmmo == 0)
+            if (!PhotonRoom.Instance.LocalPlayer.Shooter.CanReload())
             {
                 button.interactable = false;
             } else if (!button.interactable)
@@ -45,12 +47,12 @@ namespace UI.Combat
 
         private void StartReloading()
         {
-            button.interactable = false;
+            animator.SetBool(Reloading, true);
         }
 
         private void StopReloading()
         {
-            button.interactable = true;
+            animator.SetBool(Reloading, false);
         }
     }
 }

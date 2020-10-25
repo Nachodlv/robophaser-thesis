@@ -28,18 +28,21 @@ namespace Photon
 
         private bool _readyToStart;
         private float _timeToStart;
-
+        private PhotonPlayer _localPlayer;
         public List<PhotonPlayer> PhotonPlayers { get; private set; }
 
         public PhotonPlayer LocalPlayer
         {
             get
             {
+                if (_localPlayer != null) return _localPlayer;
                 foreach (var photonPlayer in PhotonPlayers)
                 {
-                    if (photonPlayer.photonView.IsMine) return photonPlayer;
+                    if (!photonPlayer.photonView.IsMine) continue;
+                    _localPlayer = photonPlayer;
+                    break;
                 }
-                return null;
+                return _localPlayer;
             }
         }
 
@@ -142,14 +145,14 @@ namespace Photon
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
 
-        private void StartGame()
+        private async void StartGame()
         {
             _isGameLoaded = true;
             _timeToStart = waitTimeWhenFull;
             if (!PhotonNetwork.IsMasterClient)
                 return;
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            SceneLoader.Instance.LoadSceneAsync(settings.multiplayerScene);
+            await SceneLoader.Instance.LoadSceneAsync(settings.multiplayerScene);
         }
 
         private void RestartTimer()
