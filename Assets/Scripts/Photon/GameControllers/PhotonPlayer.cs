@@ -22,6 +22,7 @@ namespace Photon.GameControllers
             }
         }
 
+        public Transform CameraTransform => _camera.transform;
 
         private void Awake()
         {

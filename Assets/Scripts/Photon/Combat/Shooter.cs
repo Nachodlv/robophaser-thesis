@@ -51,10 +51,10 @@ namespace Photon.GameControllers
             _lastShoot = now;
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
-            Transform myTransform;
-            var bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), (myTransform = transform).position,
-                myTransform.rotation).GetComponent<Bullet>();
-            bullet.Rigidbody.AddForce(myTransform.forward * force, ForceMode.Impulse);
+            var cameraTransform = PhotonRoom.Instance.LocalPlayer.CameraTransform;
+            var bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), cameraTransform.position,
+                cameraTransform.rotation).GetComponent<Bullet>();
+            bullet.Rigidbody.AddForce(cameraTransform.forward * force, ForceMode.Impulse);
             bullet.OnOpponentHit += _opponentHit;
         }
 
