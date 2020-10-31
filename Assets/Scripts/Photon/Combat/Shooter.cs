@@ -12,6 +12,7 @@ namespace Photon.GameControllers
     {
         [SerializeField] private float maxForce;
         [SerializeField] private float minForce;
+        [SerializeField] private float addForceVelocity;
         [SerializeField] private float timeBetweenShoots = 0.5f;
         [SerializeField] private float reloadingTime = 2f;
         [SerializeField] private int maxClipAmmo = 3;
@@ -24,12 +25,16 @@ namespace Photon.GameControllers
         private Action _opponentHit;
         private int _currentClipAmmo;
         private float _lastShoot;
+        private float _currentForce;
+        private bool _applyingForce;
         private bool _reloading;
         private WaitForSeconds _reloadingWaitTime;
         private Func<IEnumerator> _startReloadingCoroutine;
 
         public float MaxForce => maxForce;
         public float MinForce => minForce;
+
+        public float AddForceVelocity => addForceVelocity;
 
         private void Awake()
         {
