@@ -34,7 +34,7 @@ namespace Photon.GameControllers
             _camera = FindObjectOfType<TrackedPoseDriver>();
             if (_camera == null) Debug.LogError("First person camera not found!");
 
-            PhotonRoom.Instance.PhotonPlayers.Add(this);
+            PhotonRoom.Instance.AddPhotonPlayer(this);
         }
 
         private void Update()

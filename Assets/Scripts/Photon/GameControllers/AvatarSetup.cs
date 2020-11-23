@@ -15,12 +15,18 @@ namespace Photon.GameControllers
         {
             if (photonView.IsMine)
             {
-                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType); // TODO change to RpcTarget.OthersBuffered,
+                PhotonRoom.Instance.OnAllPlayersReady += AddCharacter;
             }
         }
 
+        private void AddCharacter()
+        {
+            PhotonRoom.Instance.OnAllPlayersReady -= AddCharacter;
+            photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType);
+        }
+
         [PunRPC]
-        public void RPC_AddCharacter(int characterTypeToAdd)
+        private void RPC_AddCharacter(int characterTypeToAdd)
         {
             var myTransform = transform;
             var position = Vector3.zero;
