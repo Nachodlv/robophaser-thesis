@@ -905,7 +905,7 @@ MonoBehaviour:
   ARCoreWorldOriginHelper: {fileID: 635649539}
   ARKitRoot: {fileID: 1943188169}
   ARKitFirstPersonCamera: {fileID: 1443761023}
-  settings: {fileID: 0}
+  settings: {fileID: 11400000, guid: d9c4a7cf457b2c44c848f7fae7d6d505, type: 2}
   NetworkUIController: {fileID: 1077067569}
   StartScreen: {fileID: 489292718}
   ARScreen: {fileID: 620220164}

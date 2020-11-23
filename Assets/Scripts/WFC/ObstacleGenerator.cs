@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using Photon.Pun;
 using UnityEditor;
 using UnityEngine;
 using WFC;
 
 namespace WFC
 {
-    public class ObstacleGenerator: MonoBehaviour
+    public class ObstacleGenerator: MonoBehaviourPun
     {
         [SerializeField] private NetworkSimpleTileWFC wfcTile;
         [SerializeField] private int tries;
@@ -24,7 +25,6 @@ namespace WFC
         private void Awake()
         {
             _generateObstaclesCoroutine = GenerateObstacles;
-            // CreateObstacles(Vector3.zero, Quaternion.identity, width, depth);
         }
 
         public void CreateObstacles(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
@@ -60,12 +60,12 @@ namespace WFC
 
                 if (IsCompleted())
                 {
-                    OnFinishPlacingObstacles?.Invoke();
+                    photonView.RPC(nameof(FinishPlacingObjects), RpcTarget.All);
                     yield break;
                 }
                 currentTries++;
             }
-            OnFinishPlacingObstacles?.Invoke();
+            photonView.RPC(nameof(FinishPlacingObjects), RpcTarget.All);
         }
 
         private bool IsCompleted()
@@ -96,6 +96,12 @@ namespace WFC
             wfcTilePosition.x -= (wfcTile.width * wfcTile.GridSize) / 2;
             wfcTilePosition.z -= (wfcTile.depth * wfcTile.GridSize) / 2;
             wfcTransform.position = wfcTilePosition;
+        }
+
+        [PunRPC]
+        private void FinishPlacingObjects()
+        {
+            OnFinishPlacingObstacles?.Invoke();
         }
     }
 }

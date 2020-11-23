@@ -19,7 +19,9 @@ namespace ARCore
         [SerializeField] private PlayerUI playerUI;
 
         private Phase _currentState;
-        public ObstacleGenerator ObstacleGenerator { get; private set; }
+        private ObstacleGenerator _obstacleGenerator;
+        public ObstacleGenerator ObstacleGenerator =>
+            _obstacleGenerator ? _obstacleGenerator : _obstacleGenerator = FindObjectOfType<ObstacleGenerator>();
 
         private void Awake()
         {
@@ -44,7 +46,6 @@ namespace ARCore
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                InstantiateObstacleGenerator();
                 ChangePhase(InstantiateMasterPhases());
             }
             else
@@ -55,7 +56,7 @@ namespace ARCore
 
         private void InstantiateObstacleGenerator()
         {
-            ObstacleGenerator = PhotonNetwork
+            _obstacleGenerator = PhotonNetwork
                 .Instantiate(Path.Combine("WFC Prefabs", "Obstacle Generator"), Vector3.zero, Quaternion.identity)
                 .GetComponent<ObstacleGenerator>();
         }
