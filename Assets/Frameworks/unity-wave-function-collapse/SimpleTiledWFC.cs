@@ -26,7 +26,7 @@ public class SimpleTiledWFC : MonoBehaviour{
 	public GameObject output;
 	private Transform group;
 	public Dictionary<string, GameObject> obmap = new Dictionary<string, GameObject>();
-	public Transform ObstacleParent => group;
+	protected Transform ObstacleParent => group ? group : group = transform.Find("output-tiled");
 	[NonSerialized]
 	public bool started;
 

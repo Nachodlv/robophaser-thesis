@@ -2,11 +2,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
     [RequireComponent(typeof(Modal))]
-    public class ErrorDisplayer : MonoBehaviour
+    public class ErrorDisplayer : Singleton<ErrorDisplayer>
     {
         [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private Button[] hideButtons;

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ARCore.Phases.Combat;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
 using UnityEngine;
@@ -10,14 +11,19 @@ namespace ARCore.Phases.Instantiating
     {
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchors;
+        private readonly ObstacleGenerator _obstacleGenerator;
+        private readonly CombatPhase _combatPhase;
         private GameArea _gameArea;
         private bool _settingUpGameArea;
 
         public MasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchors) : base(phaseManager)
+            CloudAnchorsExampleController cloudAnchors, ObstacleGenerator obstacleGenerator, CombatPhase combatPhase) : base(phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchors = cloudAnchors;
+            _obstacleGenerator = obstacleGenerator;
+            _combatPhase = combatPhase;
+            _obstacleGenerator.OnFinishPlacingObstacles += FinishPlacingObstacles;
         }
 
         public override void OnEnter()
@@ -63,10 +69,12 @@ namespace ARCore.Phases.Instantiating
         {
             _networkUiController.ShowDebugMessage(
                 $"Game area setup finished! Creating the obstacles.");
-            var obstacleGenerator = PhotonNetwork
-                .Instantiate(Path.Combine("WFC Prefabs", "Obstacle Generator"), Vector3.zero, Quaternion.identity)
-                .GetComponent<ObstacleGenerator>();
-            obstacleGenerator.CreateObstacles(_gameArea.GameAreaPosition, _gameArea.GameAreaRotation, width, depth);
+            _obstacleGenerator.CreateObstacles(_gameArea.GameAreaPosition, _gameArea.GameAreaRotation, width, depth);
+        }
+
+        private void FinishPlacingObstacles()
+        {
+            PhaseManager.ChangePhase(_combatPhase);
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ARCore.Phases;
+using ARCore.Phases.Combat;
 using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
+using UI.Combat;
 using UnityEngine;
 using WFC;
 
@@ -13,12 +16,23 @@ namespace ARCore
     {
         [SerializeField] private CloudAnchorsExampleController anchorsExampleController;
         [SerializeField] private NetworkUIController networkUi;
+        [SerializeField] private PlayerUI playerUI;
 
         private Phase _currentState;
+        private ObstacleGenerator _obstacleGenerator;
+        public ObstacleGenerator ObstacleGenerator =>
+            _obstacleGenerator ? _obstacleGenerator : _obstacleGenerator = FindObjectOfType<ObstacleGenerator>();
 
         private void Awake()
         {
+            if (PhotonNetwork.IsMasterClient)
+                InstantiateObstacleGenerator();
+        }
+
+        private void Start()
+        {
             InitializePhases();
+            // ChangePhase(new CombatPhase(this, playerUI));
         }
 
         public void ChangePhase(Phase newPhase)
@@ -30,24 +44,38 @@ namespace ARCore
 
         private void InitializePhases()
         {
-            var initialPhase = new InitialPhase(
-                this,
-                InstantiateMasterPhases(),
-                InstantiateNonMasterPhases());
-            ChangePhase(initialPhase);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                ChangePhase(InstantiateMasterPhases());
+            }
+            else
+            {
+                ChangePhase(InstantiateNonMasterPhases());
+            }
+        }
+
+        private void InstantiateObstacleGenerator()
+        {
+            _obstacleGenerator = PhotonNetwork
+                .Instantiate(Path.Combine("WFC Prefabs", "Obstacle Generator"), Vector3.zero, Quaternion.identity)
+                .GetComponent<ObstacleGenerator>();
         }
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var nonMasterInstantiatingPhase = new NonMasterInstantiatingPhase(this, networkUi);
+            var combatPhase = new CombatPhase(this, playerUI);
+            var nonMasterInstantiatingPhase =
+                new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
                 nonMasterInstantiatingPhase);
         }
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
+            var combatPhase = new CombatPhase(this, playerUI);
             var masterInstantiatingPhase =
-                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController);
+                new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
+                    combatPhase);
             return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
         }
     }

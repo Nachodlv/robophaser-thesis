@@ -15,7 +15,7 @@ namespace Photon.GameControllers
         {
             if (photonView.IsMine)
             {
-                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType);
+                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType); // TODO change to RpcTarget.OthersBuffered,
             }
         }
 

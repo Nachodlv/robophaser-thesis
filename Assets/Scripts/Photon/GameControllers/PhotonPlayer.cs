@@ -11,6 +11,18 @@ namespace Photon.GameControllers
     {
         private TrackedPoseDriver _camera;
         private Transform _playerAvatar;
+        private Shooter _shooter;
+
+        public Shooter Shooter
+        {
+            get
+            {
+                if(_shooter == null) _shooter = _playerAvatar.GetComponentInChildren<Shooter>();
+                return _shooter;
+            }
+        }
+
+        public Transform CameraTransform => _camera.transform;
 
         private void Awake()
         {
@@ -21,6 +33,8 @@ namespace Photon.GameControllers
 
             _camera = FindObjectOfType<TrackedPoseDriver>();
             if (_camera == null) Debug.LogError("First person camera not found!");
+
+            PhotonRoom.Instance.PhotonPlayers.Add(this);
         }
 
         private void Update()
@@ -33,13 +47,13 @@ namespace Photon.GameControllers
 
         private void SetUpRotation(Transform cameraTransform)
         {
-            var rotation = _playerAvatar.localRotation;
-            _playerAvatar.localRotation = new Quaternion(rotation.x, cameraTransform.localRotation.y, rotation.z, rotation.w);
+            var rotation = _playerAvatar.rotation;
+            _playerAvatar.rotation = new Quaternion(rotation.x, cameraTransform.rotation.y, rotation.z, rotation.w);
         }
 
         private void SetUpPosition(Transform cameraTransform)
         {
-            var cameraPosition = cameraTransform.localPosition;
+            var cameraPosition = cameraTransform.position;
             var position = _playerAvatar.position;
             _playerAvatar.position = new Vector3(cameraPosition.x, position.y, cameraPosition.z);
         }

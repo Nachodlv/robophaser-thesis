@@ -130,6 +130,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         [PunRPC]
         private void RPC_SetCloudAnchorId(string cloudAnchorId)
         {
+            Debug.Log($"##### Cloud anchor received {cloudAnchorId}");
             if (cloudAnchorId != string.Empty)
             {
                 m_CloudAnchorId = cloudAnchorId;
@@ -176,7 +177,7 @@ namespace GoogleARCore.Examples.CloudAnchors
 
                 Debug.Log(string.Format(
                     "Cloud Anchor {0} was created and saved.", result.Anchor.CloudId));
-                photonView.RPC("RPC_SetCloudAnchorId", RpcTarget.AllBuffered, result.Anchor.CloudId);
+                photonView.RPC(nameof(RPC_SetCloudAnchorId), RpcTarget.AllBuffered, result.Anchor.CloudId);
 
                 m_CloudAnchorsExampleController.OnAnchorHosted(true, result.Response.ToString());
             });
@@ -198,14 +199,14 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
 
             m_ShouldResolve = false;
-
+            Debug.Log("###### resolving anchor");
             XPSession.ResolveCloudAnchor(cloudAnchorId).ThenAction(
                 (System.Action<CloudAnchorResult>)(result =>
                     {
                         if (result.Response != CloudServiceResponse.Success)
                         {
                             Debug.LogError(string.Format(
-                                "Client could not resolve Cloud Anchor {0}: {1}",
+                                "##### Client could not resolve Cloud Anchor {0}: {1}",
                                 cloudAnchorId, result.Response));
 
                             m_CloudAnchorsExampleController.OnAnchorResolved(
@@ -215,7 +216,7 @@ namespace GoogleARCore.Examples.CloudAnchors
                         }
 
                         Debug.Log(string.Format(
-                            "Client successfully resolved Cloud Anchor {0}.",
+                            "##### Client successfully resolved Cloud Anchor {0}.",
                             cloudAnchorId));
 
                         m_CloudAnchorsExampleController.OnAnchorResolved(

@@ -35,17 +35,17 @@ MonoBehaviour:
   RpcList:
   - ClickRpc
   - DestroyRpc
-  - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
   - RPC_AddCharacter
   - RPC_HideMesh
+  - RPC_InitializeObstacle
   - RPC_ScaleInX
   - RPC_ScaleInZ
   - RPC_SetCloudAnchorId
   - RPC_SetPositionAndRotation
   - RPC_Shoot
-  - RPC_InitializeObstacle
+  - FinishPlacingObjects
+  - RPC_FinishPlacingObjects
+  - RPC_SetPositionAndScale
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
