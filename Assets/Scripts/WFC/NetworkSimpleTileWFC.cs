@@ -11,7 +11,6 @@ namespace WFC
 
         private PhotonView _photonView;
 
-        public float Scale => scale;
         public float GridSize => gridsize * scale;
 
         private void Awake()
@@ -38,12 +37,12 @@ namespace WFC
 
             var obstacle = PhotonView.Find(obstacleViewId);
             var parent = ObstacleParent;
-            Transform obstacleTransofrm;
-            (obstacleTransofrm = obstacle.transform).SetParent(parent);
-            obstacleTransofrm.localPosition = localPosition;
-            var fscale = obstacleTransofrm.localScale;
-            obstacleTransofrm.localEulerAngles = localEulerAngles;
-            obstacleTransofrm.localScale = fscale;
+            Transform obstacleTransform;
+            (obstacleTransform = obstacle.transform).SetParent(parent);
+            obstacleTransform.localPosition = localPosition;
+            var fscale = obstacleTransform.localScale;
+            obstacleTransform.localEulerAngles = localEulerAngles;
+            obstacleTransform.localScale = fscale;
         }
     }
 }

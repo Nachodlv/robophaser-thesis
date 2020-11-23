@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
 using Photon.Pun;
+using UI;
 using UnityEditor;
 using UnityEngine;
 using WFC;
 
 namespace WFC
 {
-    public class ObstacleGenerator: MonoBehaviourPun
+    public class ObstacleGenerator : MonoBehaviourPun
     {
         [SerializeField] private NetworkSimpleTileWFC wfcTile;
         [SerializeField] private int tries;
@@ -21,21 +22,13 @@ namespace WFC
         public float Depth => depth;
 
         private Func<IEnumerator> _generateObstaclesCoroutine;
-
-        private void Awake()
-        {
-            _generateObstaclesCoroutine = GenerateObstacles;
-        }
+        private Func<IEnumerator> GenerateObstaclesCoroutine =>
+            _generateObstaclesCoroutine ?? (_generateObstaclesCoroutine = GenerateObstacles);
 
         public void CreateObstacles(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
         {
-            var myTransform = transform;
-            myTransform.position = position;
-            myTransform.rotation = rotation;
-            SetUpScale(newWidth, newDepth);
-            CenterWfcTile();
-            if (_generateObstaclesCoroutine == null) _generateObstaclesCoroutine = GenerateObstacles;
-            StartCoroutine(_generateObstaclesCoroutine());
+            photonView.RPC(nameof(RPC_SetPositionAndScale), RpcTarget.All, position, rotation, newWidth, newDepth);
+            StartCoroutine(GenerateObstaclesCoroutine());
         }
 
         public void ResetWfcTilePosition()
@@ -60,12 +53,14 @@ namespace WFC
 
                 if (IsCompleted())
                 {
-                    photonView.RPC(nameof(FinishPlacingObjects), RpcTarget.All);
+                    photonView.RPC(nameof(RPC_FinishPlacingObjects), RpcTarget.All);
                     yield break;
                 }
+
                 currentTries++;
             }
-            photonView.RPC(nameof(FinishPlacingObjects), RpcTarget.All);
+
+            photonView.RPC(nameof(RPC_FinishPlacingObjects), RpcTarget.All);
         }
 
         private bool IsCompleted()
@@ -83,7 +78,7 @@ namespace WFC
 
         private void SetUpScale(float width, float depth)
         {
-            var widthSize = Mathf.Max(1, Mathf.RoundToInt(width / wfcTile.GridSize ));
+            var widthSize = Mathf.Max(1, Mathf.RoundToInt(width / wfcTile.GridSize));
             var depthSize = Mathf.Max(1, Mathf.RoundToInt(depth / wfcTile.GridSize));
             wfcTile.width = widthSize;
             wfcTile.depth = depthSize;
@@ -99,9 +94,21 @@ namespace WFC
         }
 
         [PunRPC]
-        private void FinishPlacingObjects()
+        private void RPC_FinishPlacingObjects()
         {
             OnFinishPlacingObstacles?.Invoke();
+        }
+
+        [PunRPC]
+        private void RPC_SetPositionAndScale(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
+        {
+            var myTransform = transform;
+            myTransform.position = position;
+            myTransform.rotation = rotation;
+            SetUpScale(newWidth, newDepth);
+            CenterWfcTile();
+            ErrorDisplayer.Instance.ShowError(
+                $"Position: {position}, rotation: {rotation}, width: {newWidth}, depth: {newDepth}");
         }
     }
 }
@@ -114,7 +121,7 @@ public class ObstacleGeneratorEditor : Editor
     {
         DrawDefaultInspector();
         var me = (ObstacleGenerator) target;
-        if(GUILayout.Button("generate"))
+        if (GUILayout.Button("generate"))
         {
             me.ResetWfcTilePosition();
             me.CreateObstacles(me.transform.position, me.transform.rotation, me.Width, me.Depth);
