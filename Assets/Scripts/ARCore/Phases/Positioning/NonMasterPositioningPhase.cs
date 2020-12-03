@@ -1,4 +1,5 @@
 ﻿using GoogleARCore.Examples.CloudAnchors;
+using Photon;
 
 namespace ARCore.Phases
 {
@@ -40,15 +41,23 @@ namespace ARCore.Phases
 
         private void FinishResolving(bool success, string response)
         {
+#if !UNITY_EDITOR
+
             if (!success)
             {
                 _networkUiController.ShowDebugMessage(
                     $"Cloud Anchor could not be resolved. Will attempt again. {response}");
+                return;
             }
-            else
-            {
-                _phaseManager.ChangePhase(_instantiatingPhase);
-            }
+#endif
+            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
+            PhotonRoom.Instance.PlayerReady(PhotonRoom.Instance.LocalPlayer);
+        }
+
+        private void AllPlayersReady()
+        {
+            PhotonRoom.Instance.OnAllPlayersReady -= AllPlayersReady;
+            _phaseManager.ChangePhase(_instantiatingPhase);
         }
     }
 }

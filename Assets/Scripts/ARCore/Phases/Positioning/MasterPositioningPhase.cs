@@ -1,5 +1,6 @@
 ﻿using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
+using Photon;
 
 namespace ARCore.Phases
 {
@@ -37,13 +38,21 @@ namespace ARCore.Phases
 
         private void AnchorsHosted(bool success, string response)
         {
-            _cloudAnchorsController.OnAnchorStartInstantiating -= StartInstantiating;
-#if UNITY_EDITOR
-            PhaseManager.ChangePhase(_instantiatingPhase);
-#else
-            if(!success) _networkUiController.ShowDebugMessage($"Cloud Anchor could not be hosted. {response}");
-            else PhaseManager.ChangePhase(_instantiatingPhase);
+#if !UNITY_EDITOR
+            if (!success)
+            {
+                _networkUiController.ShowDebugMessage($"Cloud Anchor could not be hosted. {response}");
+                return;
+            }
 #endif
+            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
+            PhotonRoom.Instance.PlayerReady(PhotonRoom.Instance.LocalPlayer);
+        }
+
+        private void AllPlayersReady()
+        {
+            PhotonRoom.Instance.OnAllPlayersReady -= AllPlayersReady;
+            PhaseManager.ChangePhase(_instantiatingPhase);
         }
     }
 }
