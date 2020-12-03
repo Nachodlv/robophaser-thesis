@@ -9,9 +9,12 @@ namespace Photon.GameControllers
 {
     public class PhotonPlayer : MonoBehaviourPun
     {
+        [SerializeField] private int maxHealth;
+
         private TrackedPoseDriver _camera;
         private Transform _playerAvatar;
         private Shooter _shooter;
+        private int _currentHealth;
 
         public Shooter Shooter
         {
@@ -24,10 +27,14 @@ namespace Photon.GameControllers
 
         public Transform CameraTransform => _camera.transform;
 
+        public delegate void HealthUpdateCallback(int currentHealth);
+        public event HealthUpdateCallback OnHealthUpdate;
+
         private void Awake()
         {
             if (!photonView.IsMine) return;
 
+            _currentHealth = maxHealth;
             _playerAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
                 Vector3.zero, Quaternion.identity).transform;
 
@@ -43,6 +50,12 @@ namespace Photon.GameControllers
             var cameraTransform = _camera.transform;
             SetUpRotation(cameraTransform);
             SetUpPosition(cameraTransform);
+        }
+
+        public void ReceiveDamage(int damage)
+        {
+            _currentHealth -= damage;
+            OnHealthUpdate?.Invoke(_currentHealth);
         }
 
         private void SetUpRotation(Transform cameraTransform)

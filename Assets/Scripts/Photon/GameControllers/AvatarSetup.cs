@@ -6,16 +6,11 @@ namespace Photon.GameControllers
 {
     public class AvatarSetup : MonoBehaviourPun
     {
-        [SerializeField] private int playerHealth;
-        [SerializeField] private int playerDamage;
-
-        public int PlayerDamage => playerDamage;
-
         private void Start()
         {
             if (photonView.IsMine)
             {
-                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType); // TODO change to RpcTarget.OthersBuffered,
+                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType);
             }
         }
 
@@ -26,11 +21,6 @@ namespace Photon.GameControllers
             var position = Vector3.zero;
             position.y += 0.8f;
             Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], position, Quaternion.identity, myTransform);
-        }
-
-        public void DealDamage(int damage)
-        {
-            playerHealth -= damage;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Photon.GameControllers;
 using UnityEngine;
 
 namespace Photon
