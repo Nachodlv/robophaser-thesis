@@ -25,6 +25,8 @@ namespace Photon.GameControllers
             }
         }
 
+        public int MaxHealth => maxHealth;
+
         public Transform CameraTransform => _camera.transform;
 
         public delegate void HealthUpdateCallback(int currentHealth);
