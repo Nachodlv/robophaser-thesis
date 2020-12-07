@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Photon.GameControllers;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using UI;
 using UnityEngine;
@@ -11,7 +12,6 @@ using Utils;
 
 namespace Photon
 {
-    [RequireComponent(typeof(PhotonView))]
     public class PhotonRoom : MonoBehaviourPunCallbacks
     {
         [SerializeField] private MultiplayerSettings settings;
@@ -29,6 +29,8 @@ namespace Photon
         private bool _readyToStart;
         private float _timeToStart;
         private PhotonPlayer _localPlayer;
+        private PlayerNumbering _playerNumbering;
+
         public List<PhotonPlayer> PhotonPlayers { get; private set; }
 
         public PhotonPlayer LocalPlayer
@@ -42,6 +44,7 @@ namespace Photon
                     _localPlayer = photonPlayer;
                     break;
                 }
+
                 return _localPlayer;
             }
         }
@@ -70,7 +73,6 @@ namespace Photon
             _timeToStart -= Time.deltaTime;
             Debug.Log($"Time to start the game: {_timeToStart}");
             if (_timeToStart <= 0) StartGame();
-
         }
 
         public override void OnEnable()
@@ -161,6 +163,5 @@ namespace Photon
             _isGameLoaded = false;
             _timeToStart = waitTimeWhenFull;
         }
-
     }
 }

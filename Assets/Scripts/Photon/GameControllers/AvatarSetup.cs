@@ -1,5 +1,6 @@
 ﻿using System;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 
 namespace Photon.GameControllers
@@ -15,17 +16,18 @@ namespace Photon.GameControllers
         {
             if (photonView.IsMine)
             {
-                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered, PlayerInfo.Instance.CharacterType); // TODO change to RpcTarget.OthersBuffered,
+                photonView.RPC(nameof(RPC_AddCharacter), RpcTarget.OthersBuffered);
             }
         }
 
         [PunRPC]
-        public void RPC_AddCharacter(int characterTypeToAdd)
+        public void RPC_AddCharacter()
         {
+            var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
             var myTransform = transform;
             var position = Vector3.zero;
             position.y += 0.8f;
-            Instantiate(PlayerInfo.Instance.AllCharacters[characterTypeToAdd], position, Quaternion.identity, myTransform);
+            Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), position, Quaternion.identity, myTransform);
         }
 
         public void DealDamage(int damage)
