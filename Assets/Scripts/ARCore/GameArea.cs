@@ -41,7 +41,7 @@ namespace ARCore
             photonView.RPC(nameof(RPC_SetPositionAndRotation), RpcTarget.All, position, rotation);
         }
 
-        private void ConfirmChanges()
+        public void ConfirmChanges()
         {
             var localScale = mesh.transform.localScale;
             OnConfirmChanges?.Invoke(localScale.x, localScale.z);

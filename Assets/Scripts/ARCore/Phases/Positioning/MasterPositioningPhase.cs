@@ -1,6 +1,8 @@
-﻿using ARCore.Phases.Instantiating;
+﻿using System.Collections;
+using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon;
+using UnityEngine;
 
 namespace ARCore.Phases
 {
@@ -9,26 +11,34 @@ namespace ARCore.Phases
         private readonly NetworkUIController _networkUiController;
         private readonly CloudAnchorsExampleController _cloudAnchorsController;
         private readonly MasterInstantiatingPhase _instantiatingPhase;
+        private readonly bool _skipAR;
 
         public MasterPositioningPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchorsController, MasterInstantiatingPhase instantiatingPhase) : base(
+            CloudAnchorsExampleController cloudAnchorsController, MasterInstantiatingPhase instantiatingPhase, bool skipAR) : base(
             phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchorsController = cloudAnchorsController;
             _instantiatingPhase = instantiatingPhase;
+            _skipAR = skipAR;
         }
 
         public override void OnEnter()
         {
+
             _cloudAnchorsController.OnAnchorFinishHosting += AnchorsHosted;
             _cloudAnchorsController.OnAnchorStartInstantiating += StartInstantiating;
             _networkUiController.ShowDebugMessage("Find a plane, tap to create a Cloud Anchor.");
+            if (_skipAR)
+            {
+                PhaseManager.StartCoroutine(WaitInitializationsAndHostAnchor());
+            }
         }
 
         public override void OnExit()
         {
             _cloudAnchorsController.OnAnchorFinishHosting -= AnchorsHosted;
+            _cloudAnchorsController.OnAnchorStartInstantiating -= StartInstantiating;
         }
 
         private void StartInstantiating()
@@ -53,6 +63,13 @@ namespace ARCore.Phases
         {
             PhotonRoom.Instance.OnAllPlayersReady -= AllPlayersReady;
             PhaseManager.ChangePhase(_instantiatingPhase);
+        }
+
+        // TODO local player may not be awake. This is the easiest solution. It might need to be upgraded later.
+        private IEnumerator WaitInitializationsAndHostAnchor()
+        {
+            yield return new WaitUntil(() => PhotonRoom.Instance.LocalPlayer != null);
+            _cloudAnchorsController.SetWorldOriginWithoutHosting(PhaseManager.transform);
         }
     }
 }

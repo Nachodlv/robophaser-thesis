@@ -48,10 +48,11 @@ namespace Photon.GameControllers
 
         private void Update()
         {
-            if (!photonView.IsMine) return;
-            var cameraTransform = _camera.transform;
-            SetUpRotation(cameraTransform);
-            SetUpPosition(cameraTransform);
+            // TODO remove theses methods when player movement is tested
+            // if (!photonView.IsMine) return;
+            // var cameraTransform = _camera.transform;
+            // SetUpRotation(cameraTransform);
+            // SetUpPosition(cameraTransform);
         }
 
         public void ReceiveDamage(int damage)
@@ -62,15 +63,12 @@ namespace Photon.GameControllers
 
         private void SetUpRotation(Transform cameraTransform)
         {
-            var rotation = _playerAvatar.rotation;
-            _playerAvatar.rotation = new Quaternion(rotation.x, cameraTransform.rotation.y, rotation.z, rotation.w);
+            _playerAvatar.rotation = cameraTransform.rotation;
         }
 
         private void SetUpPosition(Transform cameraTransform)
         {
-            var cameraPosition = cameraTransform.position;
-            var position = _playerAvatar.position;
-            _playerAvatar.position = new Vector3(cameraPosition.x, position.y, cameraPosition.z);
+            _playerAvatar.position = cameraTransform.position;
         }
     }
 }

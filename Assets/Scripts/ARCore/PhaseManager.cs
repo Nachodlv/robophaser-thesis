@@ -18,6 +18,10 @@ namespace ARCore
         [SerializeField] private NetworkUIController networkUi;
         [SerializeField] private PlayerUI playerUI;
 
+        [Header("Test parameters")]
+        [SerializeField] private bool skipAR;
+        [SerializeField] private bool skipGameArea;
+
         private Phase _currentState;
         private ObstacleGenerator _obstacleGenerator;
         public ObstacleGenerator ObstacleGenerator =>
@@ -75,8 +79,8 @@ namespace ARCore
             var combatPhase = new CombatPhase(this, playerUI);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
-                    combatPhase);
-            return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase);
+                    combatPhase, skipAR);
+            return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase, skipGameArea);
         }
     }
 }

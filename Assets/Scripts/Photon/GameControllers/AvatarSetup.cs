@@ -7,7 +7,7 @@ namespace Photon.GameControllers
 {
     public class AvatarSetup : MonoBehaviourPun
     {
-        [SerializeField] private Vector3 characterOffset = new Vector3(0, -1.22f, 0.5f);
+        [SerializeField] private Vector3 characterOffset = new Vector3(0, -1.22f, 1f);
 
         private void Start()
         {
@@ -28,15 +28,19 @@ namespace Photon.GameControllers
         private void RPC_AddNetworkCharacter()
         {
             var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), characterOffset, Quaternion.identity,
+            var character = Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), Vector3.zero, Quaternion.identity,
                 transform);
+            var localPosition = character.transform.localPosition;
+            character.transform.localPosition = new Vector3(localPosition.x, characterOffset.y, localPosition.z);
         }
 
         private void AddLocalCharacter()
         {
+            if (Camera.main != null) transform.parent = Camera.main.transform;
             var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            Instantiate(PlayerInfo.Instance.GetLocalCharacter(playerNumber), characterOffset, Quaternion.identity,
+            var character = Instantiate(PlayerInfo.Instance.GetLocalCharacter(playerNumber), Vector3.zero, Quaternion.identity,
                 transform);
+            character.transform.localPosition = characterOffset;
         }
     }
 }

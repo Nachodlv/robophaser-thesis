@@ -401,6 +401,13 @@ namespace GoogleARCore.Examples.CloudAnchors
             }
         }
 
+        public void SetWorldOriginWithoutHosting(Transform anchorTransform)
+        {
+            SetWorldOrigin(anchorTransform);
+            OnAnchorFinishHosting?.Invoke(true, "");
+            OnAnchorFinishResolving?.Invoke(true, "");
+        }
+
         /// <summary>
         /// Callback called when the resolving timeout is passed.
         /// </summary>

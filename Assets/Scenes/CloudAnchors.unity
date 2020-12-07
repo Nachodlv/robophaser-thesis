@@ -206,7 +206,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 29.45
+  m_fontSize: 30.2
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2067,7 +2067,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 18
+  m_fontSize: 21.45
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2084,7 +2084,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -2592,6 +2592,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 675184866}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &675184868 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8342002825553109274, guid: a750c44392ada0b4298b1a4a83caf224,
+    type: 3}
+  m_PrefabInstance: {fileID: 675184866}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c549920270054c7d9cfe811abbe80a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &678424364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2817,7 +2829,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 18
+  m_fontSize: 19.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2834,7 +2846,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 55
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -3294,6 +3306,8 @@ MonoBehaviour:
   anchorsExampleController: {fileID: 265054090}
   networkUi: {fileID: 1077067569}
   playerUI: {fileID: 1934697694}
+  skipAR: 1
+  skipGameArea: 1
 --- !u!4 &881141471
 Transform:
   m_ObjectHideFlags: 0
@@ -3302,7 +3316,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881141469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 505.02493, y: 265.3558, z: -811.3125}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3399,7 +3413,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 25.05
+  m_fontSize: 30.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5464,7 +5478,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 24.75
+  m_fontSize: 29.95
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5677,8 +5691,8 @@ MonoBehaviour:
   secondaryButtonSection: {fileID: 1106108489}
   shootButton: {fileID: 587392490}
   reloadButton: {fileID: 855330070}
-  localPlayerHealth: {fileID: 0}
-  remotePlayerHealth: {fileID: 0}
+  localPlayerHealth: {fileID: 675184868}
+  remotePlayerHealth: {fileID: 8342002824697883762}
   fader: {fileID: 1934697699}
 --- !u!114 &1934697695
 MonoBehaviour:
@@ -6670,3 +6684,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a750c44392ada0b4298b1a4a83caf224, type: 3}
+--- !u!114 &8342002824697883762 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8342002825553109274, guid: a750c44392ada0b4298b1a4a83caf224,
+    type: 3}
+  m_PrefabInstance: {fileID: 8342002824697883761}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c549920270054c7d9cfe811abbe80a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
