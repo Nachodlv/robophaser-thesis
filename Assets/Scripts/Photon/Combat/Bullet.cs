@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Photon.Pun;
 using UnityEngine;
 
@@ -6,11 +7,12 @@ namespace Photon.GameControllers
 {
     public class Bullet : MonoBehaviourPun
     {
-        [SerializeField] private float damage;
+        [SerializeField] private int damage;
         [SerializeField] private float timeToLive;
         public event Action OnOpponentHit;
 
         private Rigidbody _rigidbody;
+        private Coroutine _timeToLiveCoroutine;
         public Rigidbody Rigidbody
         {
             get
@@ -23,7 +25,17 @@ namespace Photon.GameControllers
         private void Awake()
         {
             Invoke(nameof(OpponentHit), 5);
-            if(photonView.IsMine) Invoke(nameof(DestroyBullet), timeToLive);
+            if (photonView.IsMine) _timeToLiveCoroutine = StartCoroutine(DestroyBullet());
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            StopCoroutine(_timeToLiveCoroutine);
+            if (other.gameObject.TryGetComponent<PhotonPlayer>(out var photonPlayer))
+            {
+                photonPlayer.ReceiveDamage(damage);
+            }
+            PhotonNetwork.Destroy(gameObject);
         }
 
         private void OpponentHit()
@@ -31,8 +43,9 @@ namespace Photon.GameControllers
             OnOpponentHit?.Invoke();
         }
 
-        private void DestroyBullet()
+        private IEnumerator DestroyBullet()
         {
+            yield return new WaitForSeconds(timeToLive);
             PhotonNetwork.Destroy(gameObject);
         }
     }

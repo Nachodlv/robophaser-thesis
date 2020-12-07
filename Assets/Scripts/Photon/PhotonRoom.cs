@@ -191,7 +191,7 @@ namespace Photon
         [PunRPC]
         private void RPC_PlayerReady(int viewId)
         {
-            foreach (var photonPlayer in _photonPlayersReady.Keys)
+            foreach (var photonPlayer in _photonPlayersReady.Keys.ToList())
             {
                 if (photonPlayer == viewId)
                 {

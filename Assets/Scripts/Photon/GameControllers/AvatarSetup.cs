@@ -7,11 +7,6 @@ namespace Photon.GameControllers
 {
     public class AvatarSetup : MonoBehaviourPun
     {
-        [SerializeField] private int playerHealth;
-        [SerializeField] private int playerDamage;
-
-        public int PlayerDamage => playerDamage;
-
         private void Start()
         {
             if (photonView.IsMine)
@@ -45,11 +40,6 @@ namespace Photon.GameControllers
             if (cameraMain == null) return;
             Instantiate(PlayerInfo.Instance.GetLocalCharacter(playerNumber), new Vector3(0, -1.22f, 0.5f),
                 Quaternion.identity, cameraMain.transform);
-        }
-
-        public void DealDamage(int damage)
-        {
-            playerHealth -= damage;
         }
     }
 }
