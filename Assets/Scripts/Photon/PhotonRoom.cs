@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Photon.GameControllers;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
@@ -29,9 +30,8 @@ namespace Photon
         private bool _readyToStart;
         private float _timeToStart;
         private PhotonPlayer _localPlayer;
-        private PlayerNumbering _playerNumbering;
-
-        public List<PhotonPlayer> PhotonPlayers { get; private set; }
+        private Dictionary<int, bool> _photonPlayersReady;
+        private List<PhotonPlayer> PhotonPlayers { get; set; }
 
         public PhotonPlayer LocalPlayer
         {
@@ -49,6 +49,8 @@ namespace Photon
             }
         }
 
+        public event Action OnAllPlayersReady;
+
         private void Awake()
         {
             if (Instance == null)
@@ -63,6 +65,7 @@ namespace Photon
 
             DontDestroyOnLoad(gameObject);
             RestartTimer();
+            _photonPlayersReady = new Dictionary<int, bool>(settings.maxPlayers);
             PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
         }
 
@@ -130,6 +133,27 @@ namespace Photon
             Destroy(gameObject);
         }
 
+        public void AddPhotonPlayer(PhotonPlayer photonPlayer)
+        {
+            PhotonPlayers.Add(photonPlayer);
+            photonView.RPC(nameof(RPC_AddPlayer), RpcTarget.All, photonPlayer.photonView.ViewID);
+        }
+
+        private bool AllPlayersReady()
+        {
+            foreach (var keyValuePair in _photonPlayersReady)
+            {
+                if (!keyValuePair.Value) return false;
+            }
+
+            return true;
+        }
+
+        public void PlayerReady(PhotonPlayer photonPlayer)
+        {
+            photonView.RPC(nameof(RPC_PlayerReady), RpcTarget.All, photonPlayer.photonView.ViewID);
+        }
+
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
@@ -162,6 +186,25 @@ namespace Photon
             _readyToStart = false;
             _isGameLoaded = false;
             _timeToStart = waitTimeWhenFull;
+        }
+
+        [PunRPC]
+        private void RPC_PlayerReady(int viewId)
+        {
+            foreach (var photonPlayer in _photonPlayersReady.Keys)
+            {
+                if (photonPlayer == viewId)
+                {
+                    _photonPlayersReady[photonPlayer] = true;
+                }
+            }
+            if(AllPlayersReady()) OnAllPlayersReady?.Invoke();
+        }
+
+        [PunRPC]
+        private void RPC_AddPlayer(int viewId)
+        {
+            _photonPlayersReady.Add(viewId, false);
         }
     }
 }
