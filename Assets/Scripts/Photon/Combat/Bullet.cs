@@ -13,14 +13,7 @@ namespace Photon.GameControllers
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
-        public Rigidbody Rigidbody
-        {
-            get
-            {
-                if (_rigidbody == null) _rigidbody = GetComponentInChildren<Rigidbody>();
-                return _rigidbody;
-            }
-        }
+        public Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
         private void Awake()
         {

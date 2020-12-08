@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using JetBrains.Annotations;
 using Photon.Pun;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Photon.GameControllers
 {
@@ -18,6 +16,7 @@ namespace Photon.GameControllers
         [SerializeField] private int maxClipAmmo = 3;
 
         public delegate void AmmoChangeCallback(int currentClipAmmo);
+
         public event Action OnStartReloading;
         public event Action OnStopReloading;
         public event AmmoChangeCallback OnAmmoChange;
@@ -31,9 +30,14 @@ namespace Photon.GameControllers
         private WaitForSeconds _reloadingWaitTime;
         private Func<IEnumerator> _startReloadingCoroutine;
 
+        private int _currentShootingPoint;
+        private ShootingPoint[] _shootingPoints;
+
+        private ShootingPoint[] ShootingPoints =>
+            _shootingPoints ?? (_shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>());
+
         public float MaxForce => maxForce;
         public float MinForce => minForce;
-
         public float AddForceVelocity => addForceVelocity;
 
         private void Awake()
@@ -51,16 +55,12 @@ namespace Photon.GameControllers
             _lastShoot = now;
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
-            var cameraTransform = PhotonRoom.Instance.LocalPlayer.CameraTransform;
-            var bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Bullet"), cameraTransform.position,
-                cameraTransform.rotation).GetComponent<Bullet>();
-            bullet.Rigidbody.AddForce(cameraTransform.forward * force, ForceMode.Impulse);
-            bullet.OnOpponentHit += _opponentHit;
+            SpawnBullet(force);
         }
 
         public void Reload()
         {
-            if(CanReload()) StartCoroutine(_startReloadingCoroutine());
+            if (CanReload()) StartCoroutine(_startReloadingCoroutine());
         }
 
         public bool CanReload()
@@ -88,5 +88,30 @@ namespace Photon.GameControllers
             OnAmmoChange?.Invoke(_currentClipAmmo);
             _reloading = false;
         }
+
+        private void SpawnBullet(float force)
+        {
+            var direction = GetShootingDirection();
+            var bullet = PhotonNetwork.Instantiate(
+                Path.Combine("PhotonPrefabs", "Blue Bullet"),
+                ShootingPoints[_currentShootingPoint].Transform.position,
+                Quaternion.identity).GetComponent<Bullet>();
+            bullet.transform.rotation = Quaternion.LookRotation(direction);
+            bullet.Rigidbody.AddForce(direction * force, ForceMode.Impulse);
+            bullet.OnOpponentHit += _opponentHit;
+
+            _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
+        }
+
+        private Vector3 GetShootingDirection()
+        {
+            var shootingPoint = ShootingPoints[_currentShootingPoint].Transform;
+            var shootingPointPosition = shootingPoint.position;
+            var ray = new Ray(shootingPointPosition, shootingPoint.forward);
+            var target = Physics.Raycast(ray, out var hit) ? hit.transform.position : ray.GetPoint(10);
+            var direction = (target - shootingPointPosition).normalized;
+            return direction;
+        }
     }
 }
+
