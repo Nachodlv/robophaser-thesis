@@ -31,7 +31,7 @@ namespace Photon
         private float _timeToStart;
         private PhotonPlayer _localPlayer;
         private Dictionary<int, bool> _photonPlayersReady;
-        private List<PhotonPlayer> PhotonPlayers { get; set; }
+        public List<PhotonPlayer> PhotonPlayers { get; private set; } = new List<PhotonPlayer>();
 
         public PhotonPlayer LocalPlayer
         {
@@ -66,7 +66,6 @@ namespace Photon
             DontDestroyOnLoad(gameObject);
             RestartTimer();
             _photonPlayersReady = new Dictionary<int, bool>(settings.maxPlayers);
-            PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
         }
 
         private void Update()
@@ -198,7 +197,12 @@ namespace Photon
                     _photonPlayersReady[photonPlayer] = true;
                 }
             }
-            if(AllPlayersReady()) OnAllPlayersReady?.Invoke();
+
+            if (AllPlayersReady())
+            {
+                PhotonPlayers = FindObjectsOfType<PhotonPlayer>().ToList();
+                OnAllPlayersReady?.Invoke();
+            }
         }
 
         [PunRPC]

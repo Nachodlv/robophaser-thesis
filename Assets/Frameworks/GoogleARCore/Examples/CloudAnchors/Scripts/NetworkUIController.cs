@@ -34,6 +34,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         /// The snackbar text.
         /// </summary>
         public TextMeshProUGUI snackbarText;
+        public GameObject screen;
 
 
         /// <summary>
@@ -64,6 +65,10 @@ namespace GoogleARCore.Examples.CloudAnchors
             snackbarText.text = debugMessage;
         }
 
+        public void HideMessage()
+        {
+            screen.SetActive(false);
+        }
 
     }
 }

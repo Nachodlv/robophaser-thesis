@@ -85,6 +85,7 @@ namespace ARCore.Phases.Instantiating
 
         private void FinishPlacingObstacles()
         {
+            _networkUiController.HideMessage();
             PhaseManager.ChangePhase(_combatPhase);
         }
     }

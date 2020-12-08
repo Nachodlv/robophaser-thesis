@@ -29,6 +29,7 @@ namespace ARCore.Phases
 
         private void FinishPlacingObstacle()
         {
+            _networkUiController.HideMessage();
             PhaseManager.ChangePhase(_combatPhase);
         }
     }

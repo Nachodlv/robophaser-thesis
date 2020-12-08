@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using Photon.Pun;
 using UnityEngine;
@@ -34,9 +35,10 @@ namespace Photon.GameControllers
 
         private void Awake()
         {
+            _currentHealth = maxHealth;
+
             if (!photonView.IsMine) return;
 
-            _currentHealth = maxHealth;
             _playerAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
                 Vector3.zero, Quaternion.identity).transform;
 
@@ -57,8 +59,15 @@ namespace Photon.GameControllers
 
         public void ReceiveDamage(int damage)
         {
+            photonView.RPC(nameof(RPC_ReceiveDamage), RpcTarget.All, damage);
+        }
+
+        [PunRPC]
+        private void RPC_ReceiveDamage(int damage)
+        {
             _currentHealth -= damage;
             OnHealthUpdate?.Invoke(_currentHealth);
+            Debug.Log($"##### New {(photonView.IsMine ? "Own" : "Enemy")} Health: {_currentHealth}");
         }
 
         private void SetUpRotation(Transform cameraTransform)

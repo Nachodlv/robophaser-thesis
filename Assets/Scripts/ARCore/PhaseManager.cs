@@ -15,8 +15,11 @@ namespace ARCore
     public class PhaseManager : MonoBehaviour
     {
         [SerializeField] private CloudAnchorsExampleController anchorsExampleController;
+
+        [Header("UI")]
         [SerializeField] private NetworkUIController networkUi;
         [SerializeField] private PlayerUI playerUI;
+        [SerializeField] private GameObject defeatScreen;
 
         [Header("Test parameters")]
         [SerializeField] private bool skipAR;
@@ -67,7 +70,7 @@ namespace ARCore
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI);
+            var combatPhase = new CombatPhase(this, playerUI, defeatScreen);
             var nonMasterInstantiatingPhase =
                 new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
@@ -76,7 +79,7 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI);
+            var combatPhase = new CombatPhase(this, playerUI, defeatScreen);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase, skipAR);
