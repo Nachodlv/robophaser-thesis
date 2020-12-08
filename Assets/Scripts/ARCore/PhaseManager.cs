@@ -6,6 +6,7 @@ using ARCore.Phases.Combat;
 using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon.Pun;
+using UI;
 using UI.Combat;
 using UnityEngine;
 using WFC;
@@ -19,7 +20,7 @@ namespace ARCore
         [Header("UI")]
         [SerializeField] private NetworkUIController networkUi;
         [SerializeField] private PlayerUI playerUI;
-        [SerializeField] private GameObject defeatScreen;
+        [SerializeField] private EndGameScreen defeatScreen;
 
         [Header("Test parameters")]
         [SerializeField] private bool skipAR;

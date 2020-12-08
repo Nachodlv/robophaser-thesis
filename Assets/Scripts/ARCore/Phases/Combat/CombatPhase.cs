@@ -1,5 +1,6 @@
 ﻿using Photon;
 using Photon.GameControllers;
+using UI;
 using UI.Combat;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ namespace ARCore.Phases.Combat
     public class CombatPhase: Phase
     {
         private readonly PlayerUI _playerUI;
-        private readonly GameObject _defeatScreen;
+        private readonly EndGameScreen _defeatScreen;
         private bool _gameEnded;
 
-        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, GameObject defeatScreen) : base(phaseManager)
+        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, EndGameScreen defeatScreen) : base(phaseManager)
         {
             _playerUI = playerUI;
             _defeatScreen = defeatScreen;
@@ -34,7 +35,11 @@ namespace ARCore.Phases.Combat
             _gameEnded = true;
             if (player.photonView.IsMine)
             {
-                _defeatScreen.SetActive(true);
+                _defeatScreen.ShowDefeat();
+            }
+            else
+            {
+                _defeatScreen.ShowVictory();
             }
             // else show win screen
         }
