@@ -39,6 +39,7 @@ namespace Photon.GameControllers
         public float MaxForce => maxForce;
         public float MinForce => minForce;
         public float AddForceVelocity => addForceVelocity;
+        public int MaxClipAmmo => maxClipAmmo;
 
         private void Awake()
         {

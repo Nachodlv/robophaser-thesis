@@ -48,7 +48,7 @@ MonoBehaviour:
   addForceVelocity: 5
   timeBetweenShoots: 0.5
   reloadingTime: 2
-  maxClipAmmo: 3
+  maxClipAmmo: 4
 --- !u!1 &8951429683785024791
 GameObject:
   m_ObjectHideFlags: 0
