@@ -1,17 +1,23 @@
-﻿namespace ARCore.Phases
+﻿using UI;
+
+namespace ARCore.Phases
 {
     public abstract class Phase
     {
-        private readonly PhaseManager _phaseManager;
-
         protected Phase(PhaseManager phaseManager)
         {
-            _phaseManager = phaseManager;
+            PhaseManager = phaseManager;
         }
 
-        public PhaseManager PhaseManager => _phaseManager;
+        protected PhaseManager PhaseManager { get; }
 
         public abstract void OnEnter();
         public virtual void OnExit(){}
+
+        public virtual void OpponentLeft()
+        {
+            PhaseManager.EndGameScreen.ShowVictory(EndGameReason.PlayerDisconnect);
+            PhaseManager.EndGameScreen.DisableRematch();
+        }
     }
 }

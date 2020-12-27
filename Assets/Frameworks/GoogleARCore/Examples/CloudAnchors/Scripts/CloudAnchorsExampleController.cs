@@ -257,8 +257,6 @@ namespace GoogleARCore.Examples.CloudAnchors
             if (PhotonNetwork.IsMasterClient) OnEnterHostingModeClick();
             else OnEnterResolvingModeClick();
 
-            _networkManager.OnPlayerLeft += _OnDisconnectedFromServer;
-
             gameObject.name = "CloudAnchorsExampleController";
             ARCoreRoot.SetActive(false);
             ARKitRoot.SetActive(false);
@@ -495,15 +493,6 @@ namespace GoogleARCore.Examples.CloudAnchors
         {
             NetworkUIController.OnAnchorResolved(success, response);
             OnAnchorFinishResolving?.Invoke(success, response);
-        }
-
-        /// <summary>
-        /// Callback that happens when the client disconnected from the server.
-        /// </summary>
-        private void _OnDisconnectedFromServer()
-        {
-            _ReturnToLobbyWithReason("Network session disconnected! " +
-                "Please start the app again and try another room.");
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Photon
         [SerializeField] private MultiplayerSettings settings;
         [SerializeField] private float waitTimeWhenFull;
 
-        public event Action OnPlayerLeft;
+        public event Action OnOpponentDisconnect;
 
         public static PhotonRoom Instance;
 
@@ -110,13 +110,12 @@ namespace Photon
         {
             base.OnPlayerLeftRoom(otherPlayer);
             Debug.Log($"{otherPlayer.NickName} has left the game");
-            LeaveRoom();
+            OnOpponentDisconnect?.Invoke();
         }
 
         public override void OnLeftRoom()
         {
             base.OnLeftRoom();
-            OnPlayerLeft?.Invoke();
             RestartTimer();
         }
 
@@ -127,7 +126,7 @@ namespace Photon
 
         public void LeaveRoom()
         {
-            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
+            SceneLoader.Instance.LoadSceneWithoutSync(settings.mainMenuScene);
             PhotonNetwork.LeaveRoom();
             Destroy(gameObject);
         }

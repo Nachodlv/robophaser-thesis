@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using ARCore.Phases;
 using ARCore.Phases.Combat;
 using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
+using Photon;
 using Photon.Pun;
 using UI;
 using UI.Combat;
@@ -20,7 +19,7 @@ namespace ARCore
         [Header("UI")]
         [SerializeField] private NetworkUIController networkUi;
         [SerializeField] private PlayerUI playerUI;
-        [SerializeField] private EndGameScreen defeatScreen;
+        [SerializeField] private EndGameScreen endGameScreen;
 
         [Header("Test parameters")]
         [SerializeField] private bool skipAR;
@@ -31,6 +30,8 @@ namespace ARCore
         public ObstacleGenerator ObstacleGenerator =>
             _obstacleGenerator ? _obstacleGenerator : _obstacleGenerator = FindObjectOfType<ObstacleGenerator>();
 
+        public EndGameScreen EndGameScreen => endGameScreen;
+
         private void Awake()
         {
             if (PhotonNetwork.IsMasterClient)
@@ -39,8 +40,8 @@ namespace ARCore
 
         private void Start()
         {
+            PhotonRoom.Instance.OnOpponentDisconnect += OpponentDisconnect;
             InitializePhases();
-            // ChangePhase(new CombatPhase(this, playerUI));
         }
 
         public void ChangePhase(Phase newPhase)
@@ -71,7 +72,7 @@ namespace ARCore
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, defeatScreen);
+            var combatPhase = new CombatPhase(this, playerUI);
             var nonMasterInstantiatingPhase =
                 new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
@@ -80,11 +81,16 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, defeatScreen);
+            var combatPhase = new CombatPhase(this, playerUI);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase, skipAR);
             return new MasterPositioningPhase(this, networkUi, anchorsExampleController, masterInstantiatingPhase, skipGameArea);
+        }
+
+        private void OpponentDisconnect()
+        {
+            _currentState.OpponentLeft();
         }
     }
 }

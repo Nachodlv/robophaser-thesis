@@ -12,10 +12,10 @@ namespace ARCore.Phases.Combat
         private readonly EndGameScreen _defeatScreen;
         private bool _gameEnded;
 
-        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, EndGameScreen defeatScreen) : base(phaseManager)
+        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI) : base(phaseManager)
         {
             _playerUI = playerUI;
-            _defeatScreen = defeatScreen;
+            _defeatScreen = phaseManager.EndGameScreen;
         }
 
         public override void OnEnter()
@@ -41,7 +41,16 @@ namespace ARCore.Phases.Combat
             {
                 _defeatScreen.ShowVictory();
             }
-            // else show win screen
+        }
+
+        public override void OpponentLeft()
+        {
+            if (!_gameEnded)
+            {
+                base.OpponentLeft();
+                return;
+            }
+            _defeatScreen.DisableRematch();
         }
     }
 }

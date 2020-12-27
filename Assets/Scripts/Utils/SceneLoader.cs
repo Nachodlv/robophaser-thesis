@@ -45,5 +45,11 @@ namespace Utils
             }
             await _fader.FadeOut();
         }
+
+        public async Task LoadSceneWithoutSync(int sceneIndex)
+        {
+            PhotonNetwork.AutomaticallySyncScene = false;
+            await LoadSceneAsync(sceneIndex);
+        }
     }
 }
