@@ -107,8 +107,6 @@ namespace WFC
             myTransform.rotation = rotation;
             SetUpScale(newWidth, newDepth);
             CenterWfcTile();
-            ErrorDisplayer.Instance.ShowError(
-                $"Position: {position}, rotation: {rotation}, width: {newWidth}, depth: {newDepth}");
         }
     }
 }

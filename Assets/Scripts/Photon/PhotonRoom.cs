@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Photon.GameControllers;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using UI;
 using UnityEngine;
@@ -11,7 +13,6 @@ using Utils;
 
 namespace Photon
 {
-    [RequireComponent(typeof(PhotonView))]
     public class PhotonRoom : MonoBehaviourPunCallbacks
     {
         [SerializeField] private MultiplayerSettings settings;
@@ -29,7 +30,8 @@ namespace Photon
         private bool _readyToStart;
         private float _timeToStart;
         private PhotonPlayer _localPlayer;
-        public List<PhotonPlayer> PhotonPlayers { get; private set; }
+        private Dictionary<int, bool> _photonPlayersReady;
+        public List<PhotonPlayer> PhotonPlayers { get; private set; } = new List<PhotonPlayer>();
 
         public PhotonPlayer LocalPlayer
         {
@@ -42,9 +44,12 @@ namespace Photon
                     _localPlayer = photonPlayer;
                     break;
                 }
+
                 return _localPlayer;
             }
         }
+
+        public event Action OnAllPlayersReady;
 
         private void Awake()
         {
@@ -60,7 +65,7 @@ namespace Photon
 
             DontDestroyOnLoad(gameObject);
             RestartTimer();
-            PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
+            _photonPlayersReady = new Dictionary<int, bool>(settings.maxPlayers);
         }
 
         private void Update()
@@ -70,7 +75,6 @@ namespace Photon
             _timeToStart -= Time.deltaTime;
             Debug.Log($"Time to start the game: {_timeToStart}");
             if (_timeToStart <= 0) StartGame();
-
         }
 
         public override void OnEnable()
@@ -128,6 +132,27 @@ namespace Photon
             Destroy(gameObject);
         }
 
+        public void AddPhotonPlayer(PhotonPlayer photonPlayer)
+        {
+            PhotonPlayers.Add(photonPlayer);
+            photonView.RPC(nameof(RPC_AddPlayer), RpcTarget.All, photonPlayer.photonView.ViewID);
+        }
+
+        private bool AllPlayersReady()
+        {
+            foreach (var keyValuePair in _photonPlayersReady)
+            {
+                if (!keyValuePair.Value) return false;
+            }
+
+            return true;
+        }
+
+        public void PlayerReady(PhotonPlayer photonPlayer)
+        {
+            photonView.RPC(nameof(RPC_PlayerReady), RpcTarget.All, photonPlayer.photonView.ViewID);
+        }
+
         private void OnSceneFinishLoading(Scene scene, LoadSceneMode mode)
         {
             _currentScene = scene.buildIndex;
@@ -162,5 +187,28 @@ namespace Photon
             _timeToStart = waitTimeWhenFull;
         }
 
+        [PunRPC]
+        private void RPC_PlayerReady(int viewId)
+        {
+            foreach (var photonPlayer in _photonPlayersReady.Keys.ToList())
+            {
+                if (photonPlayer == viewId)
+                {
+                    _photonPlayersReady[photonPlayer] = true;
+                }
+            }
+
+            if (AllPlayersReady())
+            {
+                PhotonPlayers = FindObjectsOfType<PhotonPlayer>().ToList();
+                OnAllPlayersReady?.Invoke();
+            }
+        }
+
+        [PunRPC]
+        private void RPC_AddPlayer(int viewId)
+        {
+            _photonPlayersReady.Add(viewId, false);
+        }
     }
 }

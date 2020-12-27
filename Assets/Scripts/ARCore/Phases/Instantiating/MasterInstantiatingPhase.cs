@@ -15,21 +15,32 @@ namespace ARCore.Phases.Instantiating
         private readonly CombatPhase _combatPhase;
         private GameArea _gameArea;
         private bool _settingUpGameArea;
+        private bool _skipGameArea;
 
         public MasterInstantiatingPhase(PhaseManager phaseManager, NetworkUIController networkUiController,
-            CloudAnchorsExampleController cloudAnchors, ObstacleGenerator obstacleGenerator, CombatPhase combatPhase) : base(phaseManager)
+            CloudAnchorsExampleController cloudAnchors, ObstacleGenerator obstacleGenerator, CombatPhase combatPhase,
+            bool skipGameArea) : base(phaseManager)
         {
             _networkUiController = networkUiController;
             _cloudAnchors = cloudAnchors;
             _obstacleGenerator = obstacleGenerator;
             _combatPhase = combatPhase;
             _obstacleGenerator.OnFinishPlacingObstacles += FinishPlacingObstacles;
+            _skipGameArea = skipGameArea;
         }
 
         public override void OnEnter()
         {
             SetInitialMessage();
-            _cloudAnchors.OnPlaneTouch += Touch;
+            if (_skipGameArea)
+            {
+                Touch(Vector3.zero, Quaternion.identity);
+                _gameArea.ConfirmChanges();
+            }
+            else
+            {
+                _cloudAnchors.OnPlaneTouch += Touch;
+            }
         }
 
         public override void OnExit()
@@ -74,6 +85,7 @@ namespace ARCore.Phases.Instantiating
 
         private void FinishPlacingObstacles()
         {
+            _networkUiController.HideMessage();
             PhaseManager.ChangePhase(_combatPhase);
         }
     }
