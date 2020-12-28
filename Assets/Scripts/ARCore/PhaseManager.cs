@@ -21,9 +21,10 @@ namespace ARCore
         [SerializeField] private PlayerUI playerUI;
         [SerializeField] private EndGameScreen endGameScreen;
 
-        [Header("Test parameters")]
+        [Header("Test flags")]
         [SerializeField] private bool skipAR;
         [SerializeField] private bool skipGameArea;
+        [SerializeField] private bool skipCombat;
 
         private Phase _currentState;
         private ObstacleGenerator _obstacleGenerator;
@@ -72,7 +73,7 @@ namespace ARCore
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat);
             var nonMasterInstantiatingPhase =
                 new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
@@ -81,7 +82,7 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase, skipAR);

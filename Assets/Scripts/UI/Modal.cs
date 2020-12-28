@@ -11,6 +11,8 @@ namespace UI
 
         private Animator _animator;
 
+        public bool Open { get; private set; }
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -19,11 +21,13 @@ namespace UI
         public void ShowModal()
         {
             _animator.SetTrigger(Show);
+            Open = true;
         }
 
         public void HideModal()
         {
             _animator.SetTrigger(Hide);
+            Open = false;
         }
     }
 }

@@ -33,8 +33,11 @@ namespace GoogleARCore.Examples.CloudAnchors
     /// </summary>
     public class LocalPlayerController : MonoBehaviourPun
     {
+        private CloudAnchorsExampleController _controller;
+
         private void Awake()
         {
+            _controller = FindObjectOfType<CloudAnchorsExampleController>();
             if (photonView.IsMine) gameObject.name = "LocalPlayer";
         }
 
@@ -52,6 +55,12 @@ namespace GoogleARCore.Examples.CloudAnchors
             anchorPrefab.GetComponent<AnchorController>().HostLastPlacedAnchor(anchor);
         }
 
+        public void SpawnAnchorWithoutHosting()
+        {
+            PhotonNetwork.Instantiate(Path.Combine("ARCorePrefabs", "Anchor"), Vector3.zero, Quaternion.identity);
+            photonView.RPC(nameof(RPC_FinishHosting), RpcTarget.All);
+        }
+
         /// <summary>
         /// A command run on the server that will spawn the Star prefab in all clients.
         /// </summary>
@@ -62,6 +71,13 @@ namespace GoogleARCore.Examples.CloudAnchors
             // Instantiate Star model at the hit pose.
             // Spawn the object in all clients.
             PhotonNetwork.Instantiate(Path.Combine("ARCorePrefabs", "Star"), position, rotation);
+        }
+
+        [PunRPC]
+        private void RPC_FinishHosting()
+        {
+            _controller.OnAnchorHosted(true, default);
+            _controller.OnAnchorResolved(true, default);
         }
     }
 }

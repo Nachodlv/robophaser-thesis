@@ -402,8 +402,7 @@ namespace GoogleARCore.Examples.CloudAnchors
         public void SetWorldOriginWithoutHosting(Transform anchorTransform)
         {
             SetWorldOrigin(anchorTransform);
-            OnAnchorFinishHosting?.Invoke(true, "");
-            OnAnchorFinishResolving?.Invoke(true, "");
+            GameObject.Find("LocalPlayer").GetComponent<LocalPlayerController>().SpawnAnchorWithoutHosting();
         }
 
         /// <summary>

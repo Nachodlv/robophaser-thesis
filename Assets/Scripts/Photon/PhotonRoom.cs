@@ -49,6 +49,8 @@ namespace Photon
             }
         }
 
+        public MultiplayerSettings Settings => settings;
+
         public event Action OnAllPlayersReady;
 
         private void Awake()
@@ -137,8 +139,17 @@ namespace Photon
             photonView.RPC(nameof(RPC_AddPlayer), RpcTarget.All, photonPlayer.photonView.ViewID);
         }
 
+        public void RestartRoom()
+        {
+            _localPlayer = null;
+            _photonPlayersReady = new Dictionary<int, bool>(settings.maxPlayers);
+            PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
+        }
+
         private bool AllPlayersReady()
         {
+            Debug.Log($"##### Max players: {settings.maxPlayers}, players ready: {_photonPlayersReady.Count}");
+            if (settings.maxPlayers > _photonPlayersReady.Count) return false;
             foreach (var keyValuePair in _photonPlayersReady)
             {
                 if (!keyValuePair.Value) return false;
@@ -189,17 +200,19 @@ namespace Photon
         [PunRPC]
         private void RPC_PlayerReady(int viewId)
         {
-            foreach (var photonPlayer in _photonPlayersReady.Keys.ToList())
+            if (_photonPlayersReady.ContainsKey(viewId))
             {
-                if (photonPlayer == viewId)
-                {
-                    _photonPlayersReady[photonPlayer] = true;
-                }
+                _photonPlayersReady[viewId] = true;
+            }
+            else
+            {
+                Debug.LogError("Player not added is trying to get ready");
             }
 
             if (AllPlayersReady())
             {
                 PhotonPlayers = FindObjectsOfType<PhotonPlayer>().ToList();
+                Debug.Log("##### All players ready");
                 OnAllPlayersReady?.Invoke();
             }
         }

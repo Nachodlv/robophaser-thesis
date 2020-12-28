@@ -1,4 +1,5 @@
 ﻿using System;
+using Photon;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,7 @@ namespace UI
         [SerializeField] private GameObject victoryTitle;
         [SerializeField] private GameObject defeatTitle;
         [SerializeField] private Button rematchButton;
+        [SerializeField] private WaitRematchResponseModal waitResponseModal;
         [SerializeField] private EndGameMessage[] victoryMessages;
         [SerializeField] private EndGameMessage[] defeatMessages;
 
@@ -46,6 +48,13 @@ namespace UI
         public void DisableRematch()
         {
             rematchButton.interactable = false;
+        }
+
+        public void Rematch()
+        {
+            rematchButton.interactable = false;
+            RematchManager.Instance.Rematch();
+            waitResponseModal.ShowModal();
         }
 
         private void ShowMessage(EndGameMessage[] messages, EndGameReason endGameReason)

@@ -1,8 +1,8 @@
 ﻿using Photon;
 using Photon.GameControllers;
+using Photon.Pun;
 using UI;
 using UI.Combat;
-using UnityEngine;
 
 namespace ARCore.Phases.Combat
 {
@@ -10,12 +10,14 @@ namespace ARCore.Phases.Combat
     {
         private readonly PlayerUI _playerUI;
         private readonly EndGameScreen _defeatScreen;
+        private readonly bool _skipCombat;
         private bool _gameEnded;
 
-        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI) : base(phaseManager)
+        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, bool skipCombat) : base(phaseManager)
         {
             _playerUI = playerUI;
             _defeatScreen = phaseManager.EndGameScreen;
+            _skipCombat = skipCombat;
         }
 
         public override void OnEnter()
@@ -25,6 +27,8 @@ namespace ARCore.Phases.Combat
             {
                 player.OnHealthUpdate += health => PlayerHealthUpdated(player, health);
             }
+
+            if (_skipCombat && PhotonNetwork.IsMasterClient) KillRandomPlayer();
         }
 
         private void PlayerHealthUpdated(PhotonPlayer player, int newHealth)
@@ -51,6 +55,13 @@ namespace ARCore.Phases.Combat
                 return;
             }
             _defeatScreen.DisableRematch();
+        }
+
+        private void KillRandomPlayer()
+        {
+            var players = PhotonRoom.Instance.PhotonPlayers;
+            var randomIndex = UnityEngine.Random.Range(0, players.Count);
+            players[randomIndex].ReceiveDamage(players[randomIndex].MaxHealth);
         }
     }
 }
