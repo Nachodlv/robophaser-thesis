@@ -4280,6 +4280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initializeRematchManager: 1
+  initializeParticleEffectPooler: 1
 --- !u!224 &889834857 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8342002825553109272, guid: a750c44392ada0b4298b1a4a83caf224,
