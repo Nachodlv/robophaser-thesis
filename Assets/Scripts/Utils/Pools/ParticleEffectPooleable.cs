@@ -41,6 +41,7 @@ namespace Utils.Pools
             PhotonView.RPC(nameof(RPC_SetPosition), RpcTarget.All, position, rotation);
         }
 
+        [PunRPC]
         private void RPC_SetPosition(Vector3 position, Quaternion rotation)
         {
             var myTransform = transform;

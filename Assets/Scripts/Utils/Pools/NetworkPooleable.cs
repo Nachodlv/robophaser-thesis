@@ -7,23 +7,17 @@ namespace Utils.Pools
     public class NetworkPooleable: Pooleable
     {
         private PhotonView _photonView;
-
-        protected PhotonView PhotonView => _photonView;
-
-        private void Awake()
-        {
-            _photonView = GetComponent<PhotonView>();
-        }
+        protected PhotonView PhotonView => _photonView != null ? _photonView : _photonView = GetComponent<PhotonView>();
 
         public override void Activate()
         {
-            _photonView.RPC(nameof(RPC_Activate), RpcTarget.Others);
+            PhotonView.RPC(nameof(RPC_Activate), RpcTarget.Others);
             base.Activate();
         }
 
         public override void Deactivate()
         {
-            _photonView.RPC(nameof(RPC_Deactivate), RpcTarget.Others);
+            PhotonView.RPC(nameof(RPC_Deactivate), RpcTarget.Others);
             base.Deactivate();
         }
 

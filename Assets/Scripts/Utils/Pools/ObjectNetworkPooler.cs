@@ -14,7 +14,9 @@ namespace Utils.Pools
 
         protected override T InstantiateObject(T objectToPool, Transform parent)
         {
-            return PhotonNetwork.Instantiate(_prefabPath, Vector3.zero, Quaternion.identity).GetComponent<T>();
+            var pooleable = PhotonNetwork.Instantiate(_prefabPath, Vector3.zero, Quaternion.identity).GetComponent<T>();
+            pooleable.transform.parent = parent; // this will only work on the master client, I think it will be ok because it's only for the editor
+            return pooleable;
         }
     }
 }

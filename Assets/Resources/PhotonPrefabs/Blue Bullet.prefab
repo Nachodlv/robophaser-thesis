@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 5
   timeToLive: 5
+  cue: {fileID: 11400000, guid: 0d76d937b09ec7a43b9c0e942667f3b4, type: 2}
 --- !u!114 &3084623030988263253
 MonoBehaviour:
   m_ObjectHideFlags: 0

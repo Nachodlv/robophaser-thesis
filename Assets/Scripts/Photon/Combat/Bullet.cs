@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Cues;
 using Photon.Pun;
 using UnityEngine;
 
@@ -9,10 +10,13 @@ namespace Photon.GameControllers
     {
         [SerializeField] private int damage;
         [SerializeField] private float timeToLive;
+        [SerializeField] private Cue cue;
         public event Action OnOpponentHit;
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
+        private ContactPoint[] _hitContacts = new ContactPoint[5];
+
         public Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
         private void Awake()
@@ -23,10 +27,19 @@ namespace Photon.GameControllers
 
         private void OnCollisionEnter(Collision other)
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+
             StopCoroutine(_timeToLiveCoroutine);
             if (other.gameObject.TryGetComponent<PhotonPlayer>(out var photonPlayer))
             {
                 photonPlayer.ReceiveDamage(damage);
+            }
+
+            if (other.GetContacts(_hitContacts) > 0)
+            {
+                var contactPoint = _hitContacts[0];
+                var rotation = Quaternion.LookRotation(contactPoint.normal);
+                cue.Execute(contactPoint.point, rotation);
             }
             PhotonNetwork.Destroy(gameObject);
         }
