@@ -10,7 +10,7 @@ namespace Cues
 
         public override void Execute(Vector3 position, Quaternion rotation)
         {
-            ParticleEffectPooler.Instance.GetParticleEffect(particleType, position, rotation);
+            ParticleEffectPooler.Instance.PlayParticleEffect(particleType, position, rotation);
         }
     }
 }

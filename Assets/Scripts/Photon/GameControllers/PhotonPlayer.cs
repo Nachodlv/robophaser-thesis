@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using Cues.Animations;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
@@ -16,21 +17,21 @@ namespace Photon.GameControllers
         private Transform _playerAvatar;
         private Shooter _shooter;
         private int _currentHealth;
+        private RobotOrbAnimator _animator;
 
-        public Shooter Shooter
-        {
-            get
-            {
-                if(_shooter == null) _shooter = _playerAvatar.GetComponentInChildren<Shooter>();
-                return _shooter;
-            }
-        }
+        public Shooter Shooter => _shooter != null
+            ? _shooter
+            : _shooter = _playerAvatar.GetComponentInChildren<Shooter>();
+
+        public RobotOrbAnimator Animator => _animator != null
+            ? _animator
+            : _animator = _playerAvatar.GetComponentInChildren<RobotOrbAnimator>();
 
         public int MaxHealth => maxHealth;
-
         public Transform CameraTransform => _camera.transform;
 
         public delegate void HealthUpdateCallback(int currentHealth);
+
         public event HealthUpdateCallback OnHealthUpdate;
 
         private void Awake()
@@ -48,15 +49,6 @@ namespace Photon.GameControllers
             PhotonRoom.Instance.AddPhotonPlayer(this);
         }
 
-        private void Update()
-        {
-            // TODO remove theses methods when player movement is tested
-            // if (!photonView.IsMine) return;
-            // var cameraTransform = _camera.transform;
-            // SetUpRotation(cameraTransform);
-            // SetUpPosition(cameraTransform);
-        }
-
         public void ReceiveDamage(int damage)
         {
             photonView.RPC(nameof(RPC_ReceiveDamage), RpcTarget.All, damage);
@@ -66,18 +58,9 @@ namespace Photon.GameControllers
         private void RPC_ReceiveDamage(int damage)
         {
             _currentHealth -= damage;
+            Animator.TakeDamage();
             OnHealthUpdate?.Invoke(_currentHealth);
             Debug.Log($"##### New {(photonView.IsMine ? "Own" : "Enemy")} Health: {_currentHealth}");
-        }
-
-        private void SetUpRotation(Transform cameraTransform)
-        {
-            _playerAvatar.rotation = cameraTransform.rotation;
-        }
-
-        private void SetUpPosition(Transform cameraTransform)
-        {
-            _playerAvatar.position = cameraTransform.position;
         }
     }
 }

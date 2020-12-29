@@ -211,7 +211,10 @@ namespace GoogleARCore.Examples.CloudAnchors
 
                             m_CloudAnchorsExampleController.OnAnchorResolved(
                                 false, result.Response.ToString());
+                            // The response will rail in the editor. There is no need to try to resolve it again.
+#if !UNITY_EDITOR
                             m_ShouldResolve = true;
+#endif
                             return;
                         }
 

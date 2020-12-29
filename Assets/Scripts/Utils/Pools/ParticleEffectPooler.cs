@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Utils.Pools
@@ -14,43 +15,38 @@ namespace Utils.Pools
     public class ParticleReferences
     {
         public ParticleType type;
-        public string particleEffect;
+        public ParticleEffectPooleable particleEffect;
         public int quantity = 10;
     }
     public class ParticleEffectPooler: PunSingleton<ParticleEffectPooler>
     {
         [SerializeField] private ParticleReferences[] particles;
 
-        public static ParticleEffectPooler Instance;
+        private Dictionary<ParticleType, ObjectPooler<ParticleEffectPooleable>> _pools;
 
-        private Dictionary<ParticleType, ObjectNetworkPooler<ParticleEffectPooleable>> _pools;
-
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance != null)
-            {
-                Destroy(this);
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            _pools = new Dictionary<ParticleType, ObjectNetworkPooler<ParticleEffectPooleable>>();
+            base.Awake();
+            _pools = new Dictionary<ParticleType, ObjectPooler<ParticleEffectPooleable>>();
             foreach (var particle in particles)
             {
-                var pooler = new ObjectNetworkPooler<ParticleEffectPooleable>(particle.particleEffect);
-                pooler.InstantiateObjects(particle.quantity, null,
-                    $"Pool of {particle.particleEffect.Split('/').Last()}");
+                var pooler = new ObjectPooler<ParticleEffectPooleable>();
+                pooler.InstantiateObjects(particle.quantity, particle.particleEffect,
+                    $"Pool of {particle.particleEffect.name}");
                 _pools.Add(particle.type, pooler);
             }
         }
 
-        public ParticleEffectPooleable GetParticleEffect(ParticleType type, Vector3 position, Quaternion rotation)
+        public void PlayParticleEffect(ParticleType type, Vector3 position, Quaternion rotation)
+        {
+            photonView.RPC(nameof(RPC_PlayParticleEffect), RpcTarget.All, type, position, rotation);
+        }
+
+        [PunRPC]
+        private void RPC_PlayParticleEffect(ParticleType type, Vector3 position, Quaternion rotation)
         {
             var particle = _pools[type]?.GetNextObject();
-            if (particle == null) return null;
-            particle.SetPosition(position, rotation);
-            return particle;
+            if (particle != null) particle.transform.SetPositionAndRotation(position, rotation);
         }
 
     }

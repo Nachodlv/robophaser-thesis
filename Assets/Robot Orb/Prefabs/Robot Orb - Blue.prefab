@@ -246,6 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497256}
   - component: {fileID: 9500488}
+  - component: {fileID: 59080976232845858}
   m_Layer: 0
   m_Name: Robot Orb - Blue
   m_TagString: Untagged
@@ -282,9 +283,9 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151508}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ff6fbe3488e562543bf847d180b9e950, type: 3}
-  m_Controller: {fileID: 9100000, guid: 02386867f79c2d648807222ee1ef5897, type: 2}
+  m_Controller: {fileID: 9100000, guid: 53676e8e7dcd0c24b863afaee1e6e933, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -293,6 +294,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &59080976232845858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde152a7d9f04c159c706067ca17d511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 9500488}
 --- !u!1 &161438
 GameObject:
   m_ObjectHideFlags: 0

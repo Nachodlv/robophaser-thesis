@@ -109,7 +109,7 @@ namespace Photon.GameControllers
             var shootingPoint = ShootingPoints[_currentShootingPoint].Transform;
             var shootingPointPosition = shootingPoint.position;
             var ray = new Ray(shootingPointPosition, shootingPoint.forward);
-            var target = Physics.Raycast(ray, out var hit) ? hit.transform.position : ray.GetPoint(10);
+            var target = Physics.Raycast(ray, out var hit) ? hit.point : ray.GetPoint(10);
             var direction = (target - shootingPointPosition).normalized;
             return direction;
         }

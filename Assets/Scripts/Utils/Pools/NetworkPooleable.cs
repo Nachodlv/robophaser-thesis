@@ -11,14 +11,12 @@ namespace Utils.Pools
 
         public override void Activate()
         {
-            PhotonView.RPC(nameof(RPC_Activate), RpcTarget.Others);
-            base.Activate();
+            PhotonView.RPC(nameof(RPC_Activate), RpcTarget.All);
         }
 
         public override void Deactivate()
         {
-            PhotonView.RPC(nameof(RPC_Deactivate), RpcTarget.Others);
-            base.Deactivate();
+            PhotonView.RPC(nameof(RPC_Deactivate), RpcTarget.All);
         }
 
         [PunRPC]

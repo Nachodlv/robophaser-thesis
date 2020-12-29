@@ -46,7 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particles:
   - type: 0
-    particleEffect: FX/Combat/FX - Impact Blue
+    particleEffect: {fileID: -3484566694782645178, guid: 8f8668abefeefa748a8a590ca6a52003,
+      type: 3}
     quantity: 5
 --- !u!114 &3427068496798022402
 MonoBehaviour:

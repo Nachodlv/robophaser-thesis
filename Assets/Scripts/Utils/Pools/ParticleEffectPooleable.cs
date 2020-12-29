@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Utils.Pools
 {
     [RequireComponent(typeof(ParticleSystem))]
-    public class ParticleEffectPooleable: NetworkPooleable
+    public class ParticleEffectPooleable: Pooleable
     {
         private ParticleSystem _particleSystem;
         private Func<IEnumerator> _waitParticleToStop;
@@ -34,11 +34,6 @@ namespace Utils.Pools
             while (Time.time - now < clipLength)
                 yield return null;
             Deactivate();
-        }
-
-        public void SetPosition(Vector3 position, Quaternion rotation)
-        {
-            PhotonView.RPC(nameof(RPC_SetPosition), RpcTarget.All, position, rotation);
         }
 
         [PunRPC]

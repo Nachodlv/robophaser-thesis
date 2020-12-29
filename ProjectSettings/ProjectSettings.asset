@@ -755,6 +755,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 1
     UNet: 1
   luminIcon:
     m_Name: 
@@ -768,10 +769,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: 
+  cloudProjectId: 4df2d082-c7e7-4565-ac22-d3fc60da2ec3
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: CloudAnchors U3D
+  organizationId: unity_zngif3xw13zx_q
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

@@ -11,17 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: fdb9daaf-34a0-4666-9c48-50a84ebb2f46
-    AppIdChat:
-    AppIdVoice:
-    AppVersion:
+    AppIdChat: 
+    AppIdVoice: 
+    AppVersion: 
     UseNameServer: 1
-    FixedRegion:
-    Server:
+    FixedRegion: 
+    Server: 
     Port: 0
-    ProxyServer:
+    ProxyServer: 
     Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
@@ -54,6 +54,8 @@ MonoBehaviour:
   - RPC_SetPositionAndScale
   - RPC_Activate
   - RPC_Deactivate
+  - RPC_SetPosition
+  - RPC_PlayParticleEffect
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
