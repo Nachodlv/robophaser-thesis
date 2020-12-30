@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using Photon.CustomPunPool;
 using Photon.Pun;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace Photon.GameControllers
 
         private int _currentShootingPoint;
         private ShootingPoint[] _shootingPoints;
+        private string _bulletId = Path.Combine("PhotonPrefabs", "Blue Bullet");
 
         private ShootingPoint[] ShootingPoints =>
             _shootingPoints ?? (_shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>());
@@ -43,10 +45,14 @@ namespace Photon.GameControllers
 
         private void Awake()
         {
-            _opponentHit = OpponentHit;
             _currentClipAmmo = maxClipAmmo;
             _reloadingWaitTime = new WaitForSeconds(reloadingTime);
             _startReloadingCoroutine = StartReloadingCoroutine;
+
+            // Initialize the first bullets
+            if (PhotonNetwork.IsMasterClient)
+                PunPool.Instance.CreateInstances(_bulletId,
+                    (int) (maxClipAmmo * PhotonRoom.Instance.Settings.maxPlayers * 1.5));
         }
 
         public void Shoot(float force)
@@ -56,7 +62,12 @@ namespace Photon.GameControllers
             _lastShoot = now;
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
-            SpawnBullet(force);
+            photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
+                force,
+                ShootingPoints[_currentShootingPoint].Transform.position,
+                GetShootingDirection()
+            );
+            _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
         }
 
         public void Reload()
@@ -67,11 +78,6 @@ namespace Photon.GameControllers
         public bool CanReload()
         {
             return _currentClipAmmo < maxClipAmmo && !_reloading;
-        }
-
-        private static void OpponentHit()
-        {
-            Debug.Log("Opponent Hit");
         }
 
         private bool CanShoot(float now)
@@ -90,18 +96,15 @@ namespace Photon.GameControllers
             _reloading = false;
         }
 
-        private void SpawnBullet(float force)
+        [PunRPC]
+        private void RPC_SpawnBullet(float force, Vector3 position, Vector3 direction)
         {
-            var direction = GetShootingDirection();
-            var bullet = PhotonNetwork.Instantiate(
-                Path.Combine("PhotonPrefabs", "Blue Bullet"),
-                ShootingPoints[_currentShootingPoint].Transform.position,
+            var bullet = PunPool.Instance.Instantiate(
+                _bulletId,
+                position,
                 Quaternion.identity).GetComponent<Bullet>();
             bullet.transform.rotation = Quaternion.LookRotation(direction);
             bullet.Rigidbody.AddForce(direction * force, ForceMode.Impulse);
-            bullet.OnOpponentHit += _opponentHit;
-
-            _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
         }
 
         private Vector3 GetShootingDirection()
@@ -115,4 +118,3 @@ namespace Photon.GameControllers
         }
     }
 }
-

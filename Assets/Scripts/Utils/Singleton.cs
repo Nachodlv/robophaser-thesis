@@ -9,7 +9,7 @@ namespace Utils
         private static T _instance;
         public static T Instance => _instance ? _instance : FindObjectOfType<T>();
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (_instance != null)
             {
