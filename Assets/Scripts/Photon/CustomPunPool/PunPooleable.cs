@@ -5,11 +5,10 @@ namespace Photon.CustomPunPool
 {
     public class PunPooleable : MonoBehaviourPun
     {
-        private bool _isActive;
 
         public bool IsActive
         {
-            get => _isActive;
+            get => gameObject.activeSelf;
             set => photonView.RPC(nameof(RPC_SetIsActive), RpcTarget.All, value);
         }
 
@@ -18,21 +17,21 @@ namespace Photon.CustomPunPool
             photonView.RPC(nameof(RPC_SetParent), RpcTarget.All, viewId);
         }
 
-        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        public void SetPositionAndRotationAndActivate(Vector3 position, Quaternion rotation)
         {
-            photonView.RPC(nameof(RPC_SetPositionAndRotation), RpcTarget.All, position, rotation);
+            photonView.RPC(nameof(RPC_SetPositionAndRotationAndActivate), RpcTarget.All, position, rotation);
         }
 
         [PunRPC]
-        private void RPC_SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        private void RPC_SetPositionAndRotationAndActivate(Vector3 position, Quaternion rotation)
         {
+            if(!gameObject.activeSelf) gameObject.SetActive(true);
             transform.SetPositionAndRotation(position, rotation);
         }
 
         [PunRPC]
         private void RPC_SetIsActive(bool isActive)
         {
-            _isActive = isActive;
             gameObject.SetActive(isActive);
         }
 

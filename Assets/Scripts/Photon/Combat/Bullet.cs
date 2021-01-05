@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Cues;
 using Photon.CustomPunPool;
@@ -18,6 +18,14 @@ namespace Photon.GameControllers
         private ContactPoint[] _hitContacts = new ContactPoint[5];
 
         public Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
+
+        private void Awake()
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            _rigidbody = gameObject.AddComponent<Rigidbody>();
+            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+            _rigidbody.useGravity = false;
+        }
 
         private void OnEnable()
         {
@@ -48,11 +56,16 @@ namespace Photon.GameControllers
             PunPool.Instance.Destroy(gameObject);
         }
 
+        public void AddForce(Vector3 force)
+        {
+            Rigidbody.AddForce(force, ForceMode.Impulse);
+        }
 
         private IEnumerator DestroyBullet()
         {
             yield return new WaitForSeconds(timeToLive);
             PunPool.Instance.Destroy(gameObject);
         }
+
     }
 }

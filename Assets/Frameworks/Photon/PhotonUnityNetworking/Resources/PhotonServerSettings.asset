@@ -60,6 +60,8 @@ MonoBehaviour:
   - RPC_SetIsActive
   - RPC_SetParent
   - RPC_SpawnBullet
+  - RPC_SetPositionAndRotationAndActivate
+  - RPC_AddForce
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

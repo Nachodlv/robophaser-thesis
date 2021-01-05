@@ -42,8 +42,7 @@ namespace Photon.CustomPunPool
                 {
                     if (!pooleable.IsActive)
                     {
-                        pooleable.SetPositionAndRotation(position, rotation);
-                        pooleable.IsActive = true;
+                        pooleable.SetPositionAndRotationAndActivate(position, rotation);
                         return pooleable.gameObject;
                     }
                 }

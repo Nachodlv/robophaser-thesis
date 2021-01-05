@@ -102,9 +102,9 @@ namespace Photon.GameControllers
             var bullet = PunPool.Instance.Instantiate(
                 _bulletId,
                 position,
-                Quaternion.identity).GetComponent<Bullet>();
-            bullet.transform.rotation = Quaternion.LookRotation(direction);
-            bullet.Rigidbody.AddForce(direction * force, ForceMode.Impulse);
+                Quaternion.LookRotation(direction)).GetComponent<Bullet>();
+            Debug.Log($"##### Bullet: {bullet.name}");
+            bullet.AddForce(direction * force);
         }
 
         private Vector3 GetShootingDirection()
