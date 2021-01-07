@@ -623,7 +623,8 @@ PrefabInstance:
         type: 3}
       propertyPath: networkPlayerCharacters.Array.data[1]
       value: 
-      objectReference: {fileID: 192868, guid: c1bc0406135b47840aefde1f6b12133c, type: 3}
+      objectReference: {fileID: 308537461919781223, guid: fcac8a8267cada74c8172400475dc550,
+        type: 3}
     - target: {fileID: 9118384148094594822, guid: 91685fef85047f642897490bdb473da6,
         type: 3}
       propertyPath: localPlayerCharacters.Array.data[0]
@@ -633,7 +634,8 @@ PrefabInstance:
         type: 3}
       propertyPath: localPlayerCharacters.Array.data[1]
       value: 
-      objectReference: {fileID: 192868, guid: f66285e511dbddc45b772ea0606ade4f, type: 3}
+      objectReference: {fileID: 4119252026748978294, guid: 62f38bd60605f214caafb76d5b02b0fc,
+        type: 3}
     - target: {fileID: 9118384148094594823, guid: 91685fef85047f642897490bdb473da6,
         type: 3}
       propertyPath: m_Name

@@ -48,7 +48,9 @@ namespace Photon.CustomPunPool
                 }
             }
 
-            return InstantiateNewGameObject(prefabId, position, rotation, pooleableGroup);
+            var newGameObject = InstantiateNewGameObject(prefabId, position, rotation, pooleableGroup);
+            newGameObject.IsActive = true;
+            return newGameObject.gameObject;
         }
 
         public void Destroy(GameObject gameObject)
@@ -81,7 +83,7 @@ namespace Photon.CustomPunPool
             return false;
         }
 
-        private GameObject InstantiateNewGameObject(string prefabId, Vector3 position, Quaternion rotation,
+        private PunPooleable InstantiateNewGameObject(string prefabId, Vector3 position, Quaternion rotation,
             PooleableGroup pooleableGroup = null)
         {
             var currentPooleableGroup = pooleableGroup;
@@ -102,12 +104,12 @@ namespace Photon.CustomPunPool
             var newGameObject = PhotonNetwork.Instantiate(prefabId, position, rotation);
             if (newGameObject.TryGetComponent<PunPooleable>(out var punPooleable))
             {
-                punPooleable.IsActive = true;
                 punPooleable.SetParent(pooleableGroup.ParentViewId);
                 pooleableGroup.Pooleables.Add(punPooleable);
+                return punPooleable;
             }
 
-            return newGameObject;
+            return default;
         }
     }
 }

@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa24d8e387f4f63b66f663942373a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 1
   timeToLive: 5
   cue: {fileID: 11400000, guid: 0d76d937b09ec7a43b9c0e942667f3b4, type: 2}
 --- !u!136 &8569030564437021620

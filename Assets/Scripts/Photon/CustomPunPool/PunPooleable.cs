@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Photon.CustomPunPool
@@ -10,6 +11,11 @@ namespace Photon.CustomPunPool
         {
             get => gameObject.activeSelf;
             set => photonView.RPC(nameof(RPC_SetIsActive), RpcTarget.All, value);
+        }
+
+        private void Awake()
+        {
+            gameObject.SetActive(false);
         }
 
         public void SetParent(int viewId)

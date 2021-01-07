@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using Cues;
 using Photon.CustomPunPool;
+using Photon.GameControllers;
 using Photon.Pun;
 using UnityEngine;
 
-namespace Photon.GameControllers
+namespace Photon.Combat
 {
     public class Bullet : MonoBehaviourPun
     {
@@ -16,6 +16,7 @@ namespace Photon.GameControllers
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
         private ContactPoint[] _hitContacts = new ContactPoint[5];
+        private string _shootBy;
 
         public Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
@@ -41,23 +42,35 @@ namespace Photon.GameControllers
         {
             if (!PhotonNetwork.IsMasterClient) return;
 
-            StopCoroutine(_timeToLiveCoroutine);
-            if (other.gameObject.TryGetComponent<PhotonPlayer>(out var photonPlayer))
+            if (CheckCollisionAndApplyDamage(other.gameObject))
             {
-                photonPlayer.ReceiveDamage(damage);
-            }
+                if (other.GetContacts(_hitContacts) > 0)
+                {
+                    ExecuteCue(_hitContacts[0].point, _hitContacts[0].normal);
+                }
 
-            if (other.GetContacts(_hitContacts) > 0)
-            {
-                var contactPoint = _hitContacts[0];
-                var rotation = Quaternion.LookRotation(contactPoint.normal);
-                cue.Execute(contactPoint.point, rotation);
+                PunPool.Instance.Destroy(gameObject);
             }
-            PunPool.Instance.Destroy(gameObject);
         }
 
-        public void AddForce(Vector3 force)
+        private void OnTriggerEnter(Collider other)
         {
+            if (!PhotonNetwork.IsMasterClient) return;
+            if (CheckCollisionAndApplyDamage(other.gameObject))
+            {
+                var position = transform.position;
+                var ray = new Ray(position, position - other.transform.position);
+                if (Physics.Raycast(ray, out var hit))
+                {
+                    ExecuteCue(hit.point, hit.normal);
+                }
+                PunPool.Instance.Destroy(gameObject);
+            }
+        }
+
+        public void Shoot(string userId, Vector3 force)
+        {
+            _shootBy = userId;
             Rigidbody.AddForce(force, ForceMode.Impulse);
         }
 
@@ -65,6 +78,30 @@ namespace Photon.GameControllers
         {
             yield return new WaitForSeconds(timeToLive);
             PunPool.Instance.Destroy(gameObject);
+        }
+
+        private bool CheckCollisionAndApplyDamage(GameObject collidedWith)
+        {
+            StopCoroutine(_timeToLiveCoroutine);
+            var avatarSetup = collidedWith.GetComponentInParent<AvatarSetup>();
+            if (avatarSetup != null)
+            {
+                Debug.Log($"##### Hitting {avatarSetup.Id} by {_shootBy}");
+                if (avatarSetup.Id == _shootBy)
+                {
+                    return false;
+                }
+                Debug.Log($"##### Hitting another player by {damage}");
+                avatarSetup.TakeDamage(damage);
+            }
+
+            return true;
+        }
+
+        private void ExecuteCue(Vector3 contactPoint, Vector3 normal)
+        {
+            var rotation = Quaternion.LookRotation(normal);
+            cue.Execute(contactPoint, rotation);
         }
 
     }

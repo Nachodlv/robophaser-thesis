@@ -2,10 +2,11 @@
 using System.Collections;
 using System.IO;
 using Photon.CustomPunPool;
+using Photon.GameControllers;
 using Photon.Pun;
 using UnityEngine;
 
-namespace Photon.GameControllers
+namespace Photon.Combat
 {
     public class Shooter : MonoBehaviourPun
     {
@@ -63,6 +64,7 @@ namespace Photon.GameControllers
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
             photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
+                PhotonNetwork.LocalPlayer.UserId,
                 force,
                 ShootingPoints[_currentShootingPoint].Transform.position,
                 GetShootingDirection()
@@ -97,14 +99,14 @@ namespace Photon.GameControllers
         }
 
         [PunRPC]
-        private void RPC_SpawnBullet(float force, Vector3 position, Vector3 direction)
+        private void RPC_SpawnBullet(string shooterId, float force, Vector3 position, Vector3 direction)
         {
             var bullet = PunPool.Instance.Instantiate(
                 _bulletId,
                 position,
                 Quaternion.LookRotation(direction)).GetComponent<Bullet>();
             Debug.Log($"##### Bullet: {bullet.name}");
-            bullet.AddForce(direction * force);
+            bullet.Shoot(shooterId, direction * force);
         }
 
         private Vector3 GetShootingDirection()
