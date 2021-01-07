@@ -14,11 +14,13 @@ namespace Photon.GameControllers
         private PhotonPlayer _photonPlayer;
         private RobotOrbAnimator _animator;
 
+        private RobotOrbAnimator Animator =>
+            _animator != null ? _animator : _animator = GetComponentInChildren<RobotOrbAnimator>();
+
         public string Id { get; private set; }
 
         private void Start()
         {
-            _animator = GetComponentInChildren<RobotOrbAnimator>();
             if (photonView.IsMine)
             {
                 PhotonRoom.Instance.OnAllPlayersReady += AddCharacter;
@@ -50,7 +52,8 @@ namespace Photon.GameControllers
             myTransform.localPosition = Vector3.zero;
             myTransform.localRotation = Quaternion.identity;
             var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            var character = Instantiate(PlayerInfo.Instance.GetLocalCharacter(playerNumber), Vector3.zero, Quaternion.identity,
+            var character = Instantiate(PlayerInfo.Instance.GetLocalCharacter(playerNumber), Vector3.zero,
+                Quaternion.identity,
                 myTransform);
             character.transform.localPosition = characterPositionOffset;
             character.transform.localRotation = characterRotationOffset;
@@ -60,10 +63,12 @@ namespace Photon.GameControllers
         private void RPC_AddNetworkCharacter()
         {
             var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            var character = Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), Vector3.zero, Quaternion.identity,
+            var character = Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), Vector3.zero,
+                Quaternion.identity,
                 transform);
             var localPosition = character.transform.localPosition;
-            character.transform.localPosition = new Vector3(localPosition.x, characterPositionOffset.y, localPosition.z); // Why only on the y axis?
+            character.transform.localPosition =
+                new Vector3(localPosition.x, characterPositionOffset.y, localPosition.z); // Why only on the y axis?
             character.transform.localRotation = characterRotationOffset;
         }
 
@@ -77,7 +82,7 @@ namespace Photon.GameControllers
         [PunRPC]
         private void RPC_TakeDamage()
         {
-            _animator.TakeDamage();
+            Animator.TakeDamage();
         }
     }
 }
