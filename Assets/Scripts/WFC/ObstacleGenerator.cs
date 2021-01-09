@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using Photon.Pun;
-using UI;
 using UnityEditor;
 using UnityEngine;
 using WFC;
+using Random = UnityEngine.Random;
 
 namespace WFC
 {
@@ -15,11 +15,16 @@ namespace WFC
         [SerializeField] private int tilesPerFrame;
         [SerializeField, Min(1)] private float width;
         [SerializeField, Min(1)] private float depth;
+        [SerializeField] private Material[] customMaterials;
 
         public event Action OnFinishPlacingObstacles;
 
         public float Width => width;
         public float Depth => depth;
+        private int _materialSelected;
+        private NetworkSimpleTileWFC.GameObjectInstantiatedCallback _addMaterialToObstacleCached;
+        private NetworkSimpleTileWFC.GameObjectInstantiatedCallback AddMaterialToObstacleCached =>
+            _addMaterialToObstacleCached ?? (_addMaterialToObstacleCached = AddMaterialToObstacle);
 
         private Func<IEnumerator> _generateObstaclesCoroutine;
         private Func<IEnumerator> GenerateObstaclesCoroutine =>
@@ -28,6 +33,8 @@ namespace WFC
         public void CreateObstacles(Vector3 position, Quaternion rotation, float newWidth, float newDepth)
         {
             photonView.RPC(nameof(RPC_SetPositionAndScale), RpcTarget.All, position, rotation, newWidth, newDepth);
+            SelectRandomMaterialForObstacles();
+            wfcTile.OnGameObjectInstantiated = AddMaterialToObstacleCached;
             StartCoroutine(GenerateObstaclesCoroutine());
         }
 
@@ -93,6 +100,20 @@ namespace WFC
             wfcTransform.position = wfcTilePosition;
         }
 
+        private void SelectRandomMaterialForObstacles()
+        {
+            var randomMaterial = Random.Range(0, customMaterials.Length);
+            photonView.RPC(nameof(SetSelectedMaterial), RpcTarget.All, randomMaterial);
+        }
+
+        private void AddMaterialToObstacle(GameObject obstacleCreated)
+        {
+            if (obstacleCreated.TryGetComponent<Obstacle>(out var obstacleComponent))
+            {
+                obstacleComponent.SetMaterial(customMaterials[_materialSelected]);
+            }
+        }
+
         [PunRPC]
         private void RPC_FinishPlacingObjects()
         {
@@ -107,6 +128,12 @@ namespace WFC
             myTransform.rotation = rotation;
             SetUpScale(newWidth, newDepth);
             CenterWfcTile();
+        }
+
+        [PunRPC]
+        private void SetSelectedMaterial(int material)
+        {
+            _materialSelected = material;
         }
     }
 }

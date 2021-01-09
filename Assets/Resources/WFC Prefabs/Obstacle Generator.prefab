@@ -50,6 +50,11 @@ MonoBehaviour:
   tilesPerFrame: 5
   width: 20
   depth: 20
+  customMaterials:
+  - {fileID: 2100000, guid: dd41db2cdb4e66e4985303e1287ab101, type: 2}
+  - {fileID: 2100000, guid: 2d9674097da42b2448220c5e2805bb27, type: 2}
+  - {fileID: 2100000, guid: c6a5181c39f2ce4408030b9c2d1b47e2, type: 2}
+  - {fileID: 2100000, guid: 382781f3eb846ba4992cfb4e635c76ed, type: 2}
 --- !u!114 &2935203920097606168
 MonoBehaviour:
   m_ObjectHideFlags: 0

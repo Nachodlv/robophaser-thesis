@@ -23,6 +23,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2231453100373032167}
   - component: {fileID: 2334896329360447816}
+  - component: {fileID: -4322158455152987246}
   m_Layer: 9
   m_Name: Box_Blue_X
   m_TagString: Untagged
@@ -67,6 +68,20 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &-4322158455152987246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442282234214888352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f76ed876ee094fb2985bae00333ec054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshes:
+  - {fileID: 245205311645211221}
 --- !u!1001 &231051725529170197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,6 +153,12 @@ GameObject:
 --- !u!4 &232650957728371833 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4035765028099436, guid: 5527826a6315a224d850675a730c4f62,
+    type: 3}
+  m_PrefabInstance: {fileID: 231051725529170197}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &245205311645211221 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23635924190403392, guid: 5527826a6315a224d850675a730c4f62,
     type: 3}
   m_PrefabInstance: {fileID: 231051725529170197}
   m_PrefabAsset: {fileID: 0}

@@ -11,17 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   AppSettings:
     AppIdRealtime: fdb9daaf-34a0-4666-9c48-50a84ebb2f46
-    AppIdChat: 
-    AppIdVoice: 
-    AppVersion: 
+    AppIdChat:
+    AppIdVoice:
+    AppVersion:
     UseNameServer: 1
-    FixedRegion: 
-    Server: 
+    FixedRegion:
+    Server:
     Port: 0
-    ProxyServer: 
+    ProxyServer:
     Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
@@ -35,13 +35,18 @@ MonoBehaviour:
   RpcList:
   - ClickRpc
   - DestroyRpc
+  - RPC_Activate
   - RPC_AddNetworkCharacter
   - RPC_AddPlayer
+  - RPC_ChangeName
+  - RPC_Deactivate
   - RPC_FinishHosting
   - RPC_FinishPlacingObjects
   - RPC_HideMesh
   - RPC_InitializeObstacle
   - RPC_PlayerReady
+  - RPC_PlayParticleEffect
+  - RPC_RaycastHelper
   - RPC_ReceiveDamage
   - RPC_Rematch
   - RPC_RematchAccepted
@@ -50,23 +55,16 @@ MonoBehaviour:
   - RPC_ScaleInX
   - RPC_ScaleInZ
   - RPC_SetCloudAnchorId
-  - RPC_SetPositionAndRotation
-  - RPC_SetPositionAndScale
-  - RPC_Activate
-  - RPC_Deactivate
-  - RPC_SetPosition
-  - RPC_PlayParticleEffect
-  - RPC_ChangeName
   - RPC_SetIsActive
   - RPC_SetParent
-  - RPC_SpawnBullet
-  - RPC_SetPositionAndRotationAndActivate
-  - RPC_AddForce
-  - SetId
-  - RPC_SetId
-  - RPC_TakeDamage
   - RPC_SetPhotonPlayer
-  - RPC_RaycastHelper
+  - RPC_SetPosition
+  - RPC_SetPositionAndRotation
+  - RPC_SetPositionAndRotationAndActivate
+  - RPC_SetPositionAndScale
+  - RPC_SpawnBullet
+  - RPC_TakeDamage
+  - SetSelectedMaterial
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
-  DevRegionSetOnce: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0

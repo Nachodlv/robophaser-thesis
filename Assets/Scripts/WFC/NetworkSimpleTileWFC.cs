@@ -10,6 +10,10 @@ namespace WFC
 
         private PhotonView _photonView;
 
+        public delegate void GameObjectInstantiatedCallback(GameObject gameObject);
+
+        public GameObjectInstantiatedCallback OnGameObjectInstantiated { private get; set; }
+
         public float GridSize => gridsize * scale;
 
         private void Awake()
@@ -40,6 +44,7 @@ namespace WFC
             obstacleTransform.localPosition = localPosition;
             obstacleTransform.localEulerAngles = localEulerAngles;
             obstacleTransform.localScale = Vector3.one;
+            OnGameObjectInstantiated?.Invoke(obstacle.gameObject);
         }
     }
 }
