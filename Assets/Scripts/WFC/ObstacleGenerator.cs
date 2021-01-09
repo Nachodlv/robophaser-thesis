@@ -16,6 +16,7 @@ namespace WFC
         [SerializeField, Min(1)] private float width;
         [SerializeField, Min(1)] private float depth;
         [SerializeField] private Material[] customMaterials;
+        [SerializeField] private MapLimits mapLimits;
 
         public event Action OnFinishPlacingObstacles;
 
@@ -117,6 +118,7 @@ namespace WFC
         [PunRPC]
         private void RPC_FinishPlacingObjects()
         {
+            mapLimits.SetMapLimits(wfcTile.GridSize, wfcTile.width, wfcTile.depth);
             OnFinishPlacingObstacles?.Invoke();
         }
 

@@ -13,9 +13,13 @@ namespace Photon.GameControllers
 
         private PhotonPlayer _photonPlayer;
         private RobotOrbAnimator _animator;
+        private StatusEffects _statusEffect;
 
         private RobotOrbAnimator Animator =>
             _animator != null ? _animator : _animator = GetComponentInChildren<RobotOrbAnimator>();
+
+        public StatusEffects StatusEffect =>
+            _statusEffect != null ? _statusEffect : _statusEffect = GetComponent<StatusEffects>();
 
         public string Id { get; private set; }
 
@@ -82,6 +86,7 @@ namespace Photon.GameControllers
         [PunRPC]
         private void RPC_TakeDamage()
         {
+            if (photonView.IsMine) return;
             Animator.TakeDamage();
         }
     }

@@ -15,10 +15,10 @@ namespace Photon.Combat
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
-        private ContactPoint[] _hitContacts = new ContactPoint[5];
+        private readonly ContactPoint[] _hitContacts = new ContactPoint[5];
         private string _shootBy;
 
-        public Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
+        private Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
         private void Awake()
         {
@@ -30,7 +30,7 @@ namespace Photon.Combat
 
         private void OnEnable()
         {
-            if (PhotonNetwork.IsMasterClient) _timeToLiveCoroutine = StartCoroutine(DestroyBullet());
+            if (PhotonNetwork.IsMasterClient) _timeToLiveCoroutine = StartCoroutine(DestroyBulletCoroutine());
         }
 
         private void OnDisable()
@@ -42,31 +42,29 @@ namespace Photon.Combat
         {
             if (!PhotonNetwork.IsMasterClient) return;
 
-            if (CheckCollisionAndApplyDamage(other.gameObject))
-            {
-                if (other.GetContacts(_hitContacts) > 0)
-                {
-                    ExecuteCue(_hitContacts[0].point, _hitContacts[0].normal);
-                }
+            if (!CheckCollisionAndApplyDamage(other.gameObject, false)) return;
 
-                PunPool.Instance.Destroy(gameObject);
+            if (other.GetContacts(_hitContacts) > 0)
+            {
+                ExecuteCue(_hitContacts[0].point, _hitContacts[0].normal);
             }
+
+            DestroyBullet();
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            if (CheckCollisionAndApplyDamage(other.gameObject))
+            if (!CheckCollisionAndApplyDamage(other.gameObject, true)) return;
+
+            var position = transform.position;
+            var ray = new Ray(position, position - other.transform.position);
+            photonView.RPC(nameof(RPC_RaycastHelper), RpcTarget.All, position, position - other.transform.position);
+            if (Physics.Raycast(ray, out var hit))
             {
-                var position = transform.position;
-                var ray = new Ray(position, position - other.transform.position);
-                photonView.RPC(nameof(RPC_RaycastHelper), RpcTarget.All, position, position - other.transform.position);
-                if (Physics.Raycast(ray, out var hit))
-                {
-                    ExecuteCue(hit.point, hit.normal);
-                }
-                PunPool.Instance.Destroy(gameObject);
+                ExecuteCue(hit.point, hit.normal);
             }
+            DestroyBullet();
         }
 
         public void Shoot(string userId, Vector3 force)
@@ -75,34 +73,36 @@ namespace Photon.Combat
             Rigidbody.AddForce(force, ForceMode.Impulse);
         }
 
-        private IEnumerator DestroyBullet()
+        public void ExecuteCue(Vector3 contactPoint, Vector3 normal)
+        {
+            var rotation = Quaternion.LookRotation(normal);
+            cue.Execute(contactPoint, rotation);
+        }
+
+        public void DestroyBullet()
+        {
+            StopCoroutine(_timeToLiveCoroutine);
+            PunPool.Instance.Destroy(gameObject);
+        }
+
+        private IEnumerator DestroyBulletCoroutine()
         {
             yield return new WaitForSeconds(timeToLive);
             PunPool.Instance.Destroy(gameObject);
         }
 
-        private bool CheckCollisionAndApplyDamage(GameObject collidedWith)
+        private bool CheckCollisionAndApplyDamage(GameObject collidedWith, bool isTrigger)
         {
-            StopCoroutine(_timeToLiveCoroutine);
             var avatarSetup = collidedWith.GetComponentInParent<AvatarSetup>();
-            if (avatarSetup != null)
+            if (avatarSetup == null) return !isTrigger;
+
+            if (avatarSetup.Id == _shootBy)
             {
-                Debug.Log($"##### Hitting {avatarSetup.Id} by {_shootBy}");
-                if (avatarSetup.Id == _shootBy)
-                {
-                    return false;
-                }
-                Debug.Log($"##### Hitting another player by {damage}");
-                avatarSetup.TakeDamage(damage);
+                return false;
             }
-
+            Debug.Log($"##### Hitting another player by {damage}");
+            avatarSetup.TakeDamage(damage);
             return true;
-        }
-
-        private void ExecuteCue(Vector3 contactPoint, Vector3 normal)
-        {
-            var rotation = Quaternion.LookRotation(normal);
-            cue.Execute(contactPoint, rotation);
         }
 
         [PunRPC]

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Photon;
+﻿using Photon;
 using Photon.GameControllers;
 using UnityEngine;
 using Utils;
@@ -15,6 +14,7 @@ namespace UI.Combat
         [SerializeField] private ReloadButton reloadButton;
         [SerializeField] private HealthDisplayer localPlayerHealth;
         [SerializeField] private BulletDisplayer bulletDisplayer;
+        [SerializeField] private OutOfLimitsWarning outOfLimitsWarning;
 
         [Header("UI - Remote player")]
         [SerializeField] private HealthDisplayer remotePlayerHealth;
@@ -35,6 +35,7 @@ namespace UI.Combat
             shootButton.Show();
             reloadButton.Show();
             bulletDisplayer.Show();
+            outOfLimitsWarning.Show();
         }
 
         private void AmmoChange(int newAmmo)
