@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.IO;
+﻿using System.IO;
+using Cues.Animations;
+using Photon.Combat;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SpatialTracking;
-using Random = UnityEngine.Random;
 
 namespace Photon.GameControllers
 {
@@ -13,24 +12,20 @@ namespace Photon.GameControllers
         [SerializeField] private int maxHealth;
 
         private TrackedPoseDriver _camera;
-        private Transform _playerAvatar;
+        private AvatarSetup _playerAvatar;
         private Shooter _shooter;
         private int _currentHealth;
+        private RobotOrbAnimator _animator;
 
-        public Shooter Shooter
-        {
-            get
-            {
-                if(_shooter == null) _shooter = _playerAvatar.GetComponentInChildren<Shooter>();
-                return _shooter;
-            }
-        }
+        // This will only work on the local PhotonPlayer!!
+        public Shooter Shooter => _shooter != null
+            ? _shooter
+            : _shooter = _playerAvatar.GetComponentInChildren<Shooter>();
 
         public int MaxHealth => maxHealth;
-
         public Transform CameraTransform => _camera.transform;
-
         public delegate void HealthUpdateCallback(int currentHealth);
+
         public event HealthUpdateCallback OnHealthUpdate;
 
         private void Awake()
@@ -40,21 +35,15 @@ namespace Photon.GameControllers
             if (!photonView.IsMine) return;
 
             _playerAvatar = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerAvatar"),
-                Vector3.zero, Quaternion.identity).transform;
+                Vector3.zero, Quaternion.identity).GetComponent<AvatarSetup>();
+            _playerAvatar.SetPhotonPlayer(photonView.ViewID);
+
+            Debug.Log($"##### Photon player id: {PhotonNetwork.LocalPlayer.UserId}");
 
             _camera = FindObjectOfType<TrackedPoseDriver>();
             if (_camera == null) Debug.LogError("First person camera not found!");
 
             PhotonRoom.Instance.AddPhotonPlayer(this);
-        }
-
-        private void Update()
-        {
-            // TODO remove theses methods when player movement is tested
-            // if (!photonView.IsMine) return;
-            // var cameraTransform = _camera.transform;
-            // SetUpRotation(cameraTransform);
-            // SetUpPosition(cameraTransform);
         }
 
         public void ReceiveDamage(int damage)
@@ -68,16 +57,6 @@ namespace Photon.GameControllers
             _currentHealth -= damage;
             OnHealthUpdate?.Invoke(_currentHealth);
             Debug.Log($"##### New {(photonView.IsMine ? "Own" : "Enemy")} Health: {_currentHealth}");
-        }
-
-        private void SetUpRotation(Transform cameraTransform)
-        {
-            _playerAvatar.rotation = cameraTransform.rotation;
-        }
-
-        private void SetUpPosition(Transform cameraTransform)
-        {
-            _playerAvatar.position = cameraTransform.position;
         }
     }
 }

@@ -35,21 +35,36 @@ MonoBehaviour:
   RpcList:
   - ClickRpc
   - DestroyRpc
-  - RPC_AddCharacter
+  - RPC_Activate
+  - RPC_AddNetworkCharacter
+  - RPC_AddPlayer
+  - RPC_ChangeName
+  - RPC_Deactivate
+  - RPC_FinishHosting
+  - RPC_FinishPlacingObjects
   - RPC_HideMesh
   - RPC_InitializeObstacle
+  - RPC_PlayerReady
+  - RPC_PlayParticleEffect
+  - RPC_RaycastHelper
+  - RPC_ReceiveDamage
+  - RPC_Rematch
+  - RPC_RematchAccepted
+  - RPC_RematchCanceled
+  - RPC_RematchDeclined
   - RPC_ScaleInX
   - RPC_ScaleInZ
   - RPC_SetCloudAnchorId
+  - RPC_SetIsActive
+  - RPC_SetParent
+  - RPC_SetPhotonPlayer
+  - RPC_SetPosition
   - RPC_SetPositionAndRotation
-  - RPC_Shoot
-  - FinishPlacingObjects
-  - RPC_FinishPlacingObjects
+  - RPC_SetPositionAndRotationAndActivate
   - RPC_SetPositionAndScale
-  - RPC_AddNetworkCharacter
-  - RPC_AddPlayer
-  - RPC_PlayerReady
-  - RPC_ReceiveDamage
+  - RPC_SpawnBullet
+  - RPC_TakeDamage
+  - SetSelectedMaterial
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using Photon.CustomPunPool;
+using Photon.GameControllers;
 using Photon.Pun;
 using UnityEngine;
 
-namespace Photon.GameControllers
+namespace Photon.Combat
 {
     public class Shooter : MonoBehaviourPun
     {
@@ -32,6 +34,7 @@ namespace Photon.GameControllers
 
         private int _currentShootingPoint;
         private ShootingPoint[] _shootingPoints;
+        private string _bulletId = Path.Combine("PhotonPrefabs", "Blue Bullet");
 
         private ShootingPoint[] ShootingPoints =>
             _shootingPoints ?? (_shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>());
@@ -43,10 +46,14 @@ namespace Photon.GameControllers
 
         private void Awake()
         {
-            _opponentHit = OpponentHit;
             _currentClipAmmo = maxClipAmmo;
             _reloadingWaitTime = new WaitForSeconds(reloadingTime);
             _startReloadingCoroutine = StartReloadingCoroutine;
+
+            // Initialize the first bullets
+            if (PhotonNetwork.IsMasterClient)
+                PunPool.Instance.CreateInstances(_bulletId,
+                    (int) (maxClipAmmo * PhotonRoom.Instance.Settings.maxPlayers * 1.5));
         }
 
         public void Shoot(float force)
@@ -56,7 +63,13 @@ namespace Photon.GameControllers
             _lastShoot = now;
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
-            SpawnBullet(force);
+            photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
+                PhotonNetwork.LocalPlayer.UserId,
+                force,
+                ShootingPoints[_currentShootingPoint].Transform.position,
+                GetShootingDirection()
+            );
+            _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
         }
 
         public void Reload()
@@ -67,11 +80,6 @@ namespace Photon.GameControllers
         public bool CanReload()
         {
             return _currentClipAmmo < maxClipAmmo && !_reloading;
-        }
-
-        private static void OpponentHit()
-        {
-            Debug.Log("Opponent Hit");
         }
 
         private bool CanShoot(float now)
@@ -90,18 +98,15 @@ namespace Photon.GameControllers
             _reloading = false;
         }
 
-        private void SpawnBullet(float force)
+        [PunRPC]
+        private void RPC_SpawnBullet(string shooterId, float force, Vector3 position, Vector3 direction)
         {
-            var direction = GetShootingDirection();
-            var bullet = PhotonNetwork.Instantiate(
-                Path.Combine("PhotonPrefabs", "Blue Bullet"),
-                ShootingPoints[_currentShootingPoint].Transform.position,
-                Quaternion.identity).GetComponent<Bullet>();
-            bullet.transform.rotation = Quaternion.LookRotation(direction);
-            bullet.Rigidbody.AddForce(direction * force, ForceMode.Impulse);
-            bullet.OnOpponentHit += _opponentHit;
-
-            _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
+            var bullet = PunPool.Instance.Instantiate(
+                _bulletId,
+                position,
+                Quaternion.LookRotation(direction)).GetComponent<Bullet>();
+            Debug.Log($"##### Bullet: {bullet.name}");
+            bullet.Shoot(shooterId, direction * force);
         }
 
         private Vector3 GetShootingDirection()
@@ -109,10 +114,9 @@ namespace Photon.GameControllers
             var shootingPoint = ShootingPoints[_currentShootingPoint].Transform;
             var shootingPointPosition = shootingPoint.position;
             var ray = new Ray(shootingPointPosition, shootingPoint.forward);
-            var target = Physics.Raycast(ray, out var hit) ? hit.transform.position : ray.GetPoint(10);
+            var target = Physics.Raycast(ray, out var hit) ? hit.point : ray.GetPoint(10);
             var direction = (target - shootingPointPosition).normalized;
             return direction;
         }
     }
 }
-

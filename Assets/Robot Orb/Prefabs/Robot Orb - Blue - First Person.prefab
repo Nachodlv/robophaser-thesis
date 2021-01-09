@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 488958}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigRightWingGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 490244}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 493886}
   - component: {fileID: 13746654}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Robot Orb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -155,7 +155,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 427442}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigRightWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +185,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 412122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigLeftWing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 403548}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,11 @@ GameObject:
   m_Component:
   - component: {fileID: 497256}
   - component: {fileID: 9500488}
-  m_Layer: 0
+  - component: {fileID: 6605318610551691512}
+  - component: {fileID: 2140046154114021987}
+  - component: {fileID: 7310666802633415949}
+  - component: {fileID: 5343729840548823831}
+  m_Layer: 8
   m_Name: Robot Orb - Blue - First Person
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,9 +287,9 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 151508}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ff6fbe3488e562543bf847d180b9e950, type: 3}
-  m_Controller: {fileID: 9100000, guid: 02386867f79c2d648807222ee1ef5897, type: 2}
+  m_Controller: {fileID: 9100000, guid: 53676e8e7dcd0c24b863afaee1e6e933, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -294,6 +298,58 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6605318610551691512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde152a7d9f04c159c706067ca17d511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 9500488}
+--- !u!135 &2140046154114021987
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151508}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.40387213
+  m_Center: {x: 0, y: 1.217626, z: 0}
+--- !u!65 &7310666802633415949
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151508}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.37255943, y: 0.62692785, z: 0.28211766}
+  m_Center: {x: 0.5963511, y: 1.2209654, z: -0.0028262436}
+--- !u!65 &5343729840548823831
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151508}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.38386452, y: 0.6280946, z: 0.2804063}
+  m_Center: {x: -0.5850459, y: 1.2175784, z: -0.0036820173}
 --- !u!1 &161438
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 430336}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigLeftWingGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -333,7 +389,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 467752}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigEyeGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +419,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 435122}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigMain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RigMainGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 433997784853784914}
   - component: {fileID: 6705960673958527761}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BottomRight Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +525,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2196802882861316387}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShootingPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -504,7 +560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3088079988826121657}
   - component: {fileID: 9000446569699443049}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TopRight Shooting Point (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7803025073718255084}
   - component: {fileID: 8261642236752123545}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TopLeft Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 692647530465355764}
   - component: {fileID: 7309919245922633508}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BottomLeft Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

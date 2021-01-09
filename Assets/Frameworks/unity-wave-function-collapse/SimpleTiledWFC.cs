@@ -121,7 +121,8 @@ public class SimpleTiledWFC : MonoBehaviour{
 		}
 
 		if (fab == null) return null;
-		var newGameObject = Instantiate(fab, position, Quaternion.identity, group);
+		var newGameObject = Instantiate(fab, Vector3.zero, Quaternion.identity, group);
+		newGameObject.transform.localPosition = position;
 		var fscale = newGameObject.transform.localScale;
 		newGameObject.transform.localEulerAngles = localEulerAngles;
 		newGameObject.transform.localScale = fscale;

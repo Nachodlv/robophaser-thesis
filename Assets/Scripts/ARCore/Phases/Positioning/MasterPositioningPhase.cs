@@ -28,7 +28,9 @@ namespace ARCore.Phases
 
             _cloudAnchorsController.OnAnchorFinishHosting += AnchorsHosted;
             _cloudAnchorsController.OnAnchorStartInstantiating += StartInstantiating;
+            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
             _networkUiController.ShowDebugMessage("Find a plane, tap to create a Cloud Anchor.");
+
             if (_skipAR)
             {
                 PhaseManager.StartCoroutine(WaitInitializationsAndHostAnchor());
@@ -55,7 +57,6 @@ namespace ARCore.Phases
                 return;
             }
 #endif
-            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
             PhotonRoom.Instance.PlayerReady(PhotonRoom.Instance.LocalPlayer);
         }
 

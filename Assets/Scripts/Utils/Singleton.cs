@@ -1,4 +1,5 @@
 ﻿using System;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Utils
@@ -8,7 +9,23 @@ namespace Utils
         private static T _instance;
         public static T Instance => _instance ? _instance : FindObjectOfType<T>();
 
-        private void Awake()
+        protected virtual void Awake()
+        {
+            if (_instance != null)
+            {
+                Destroy(this);
+                return;
+            }
+            _instance = FindObjectOfType<T>();
+        }
+    }
+
+    public abstract class PunSingleton<T> : MonoBehaviourPun where T : Component
+    {
+        private static T _instance;
+        public static T Instance => _instance ? _instance : FindObjectOfType<T>();
+
+        protected virtual void Awake()
         {
             if (_instance != null)
             {

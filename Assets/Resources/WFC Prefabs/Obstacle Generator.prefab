@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 786254078487497014}
   - component: {fileID: 786254078487497015}
   - component: {fileID: 2935203920097606168}
+  - component: {fileID: 864199616229618727}
+  - component: {fileID: 4333264879208081603}
   m_Layer: 0
   m_Name: Obstacle Generator
   m_TagString: Untagged
@@ -46,10 +48,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wfcTile: {fileID: 1683620589312024049}
-  tries: 50
+  tries: 100
   tilesPerFrame: 5
   width: 20
   depth: 20
+  customMaterials:
+  - {fileID: 2100000, guid: dd41db2cdb4e66e4985303e1287ab101, type: 2}
+  - {fileID: 2100000, guid: 2d9674097da42b2448220c5e2805bb27, type: 2}
+  - {fileID: 2100000, guid: c6a5181c39f2ce4408030b9c2d1b47e2, type: 2}
+  - {fileID: 2100000, guid: 382781f3eb846ba4992cfb4e635c76ed, type: 2}
+  mapLimits: {fileID: 864199616229618727}
 --- !u!114 &2935203920097606168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,6 +80,34 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &864199616229618727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786254078487497012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd35026850341578d76655391eb7e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxCollider: {fileID: 4333264879208081603}
+  damagePerSecondWhenOutOfLimits: 1
+  extraSpace: 1
+--- !u!65 &4333264879208081603
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786254078487497012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &1683620589312024049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xml: {fileID: 4900000, guid: 05f1fe32c1b2fb04f9734de2beff2bed, type: 3}
-  gridsize: 1.25
+  gridsize: 1.23
   width: 16
   depth: 16
   seed: 0
@@ -93,7 +129,7 @@ MonoBehaviour:
   iterations: 1
   incremental: 1
   output: {fileID: 3694895226488974427}
-  scale: 0.35
+  scale: 0.5
 --- !u!114 &2943710820158531177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,17 +222,17 @@ PrefabInstance:
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4156737015554280956, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa, type: 3}

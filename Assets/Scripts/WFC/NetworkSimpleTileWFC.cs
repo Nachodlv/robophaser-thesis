@@ -1,5 +1,4 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
 
 namespace WFC
@@ -10,6 +9,10 @@ namespace WFC
         [SerializeField] private float scale = 1f;
 
         private PhotonView _photonView;
+
+        public delegate void GameObjectInstantiatedCallback(GameObject gameObject);
+
+        public GameObjectInstantiatedCallback OnGameObjectInstantiated { private get; set; }
 
         public float GridSize => gridsize * scale;
 
@@ -25,7 +28,6 @@ namespace WFC
             var newGameObject = PhotonNetwork.Instantiate(prefabName.Substring(1, prefabName.Length - 1), Vector3.zero,
                 Quaternion.identity);
             var newPhotonView = newGameObject.GetComponent<PhotonView>();
-            Debug.Log(_photonView.ToString());
             _photonView.RPC(
                 nameof(RPC_InitializeObstacle), RpcTarget.All, newPhotonView.ViewID, position, localEulerAngles);
             return newGameObject;
@@ -40,9 +42,9 @@ namespace WFC
             Transform obstacleTransform;
             (obstacleTransform = obstacle.transform).SetParent(parent);
             obstacleTransform.localPosition = localPosition;
-            var fscale = obstacleTransform.localScale;
             obstacleTransform.localEulerAngles = localEulerAngles;
-            obstacleTransform.localScale = fscale;
+            obstacleTransform.localScale = Vector3.one;
+            OnGameObjectInstantiated?.Invoke(obstacle.gameObject);
         }
     }
 }

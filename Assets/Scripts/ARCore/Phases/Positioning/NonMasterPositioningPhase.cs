@@ -1,5 +1,7 @@
-﻿using GoogleARCore.Examples.CloudAnchors;
+﻿using System.Collections;
+using GoogleARCore.Examples.CloudAnchors;
 using Photon;
+using UnityEngine;
 
 namespace ARCore.Phases
 {
@@ -26,6 +28,7 @@ namespace ARCore.Phases
                 "Look at the same scene as the hosting phone.");
             _cloudAnchorsController.OnAnchorStartInstantiating += StartInstantiating;
             _cloudAnchorsController.OnAnchorFinishResolving += FinishResolving;
+            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
         }
 
         public override void OnExit()
@@ -50,14 +53,20 @@ namespace ARCore.Phases
                 return;
             }
 #endif
-            PhotonRoom.Instance.OnAllPlayersReady += AllPlayersReady;
-            PhotonRoom.Instance.PlayerReady(PhotonRoom.Instance.LocalPlayer);
+            PhaseManager.StartCoroutine(WaitForLocalPlayer());
         }
 
         private void AllPlayersReady()
         {
             PhotonRoom.Instance.OnAllPlayersReady -= AllPlayersReady;
             _phaseManager.ChangePhase(_instantiatingPhase);
+        }
+
+        // TODO, this should be fixed
+        private IEnumerator WaitForLocalPlayer()
+        {
+            yield return new WaitUntil(() => PhotonRoom.Instance.LocalPlayer != null);
+            PhotonRoom.Instance.PlayerReady(PhotonRoom.Instance.LocalPlayer);
         }
     }
 }

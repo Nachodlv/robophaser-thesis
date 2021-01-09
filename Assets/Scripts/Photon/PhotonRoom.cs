@@ -18,7 +18,7 @@ namespace Photon
         [SerializeField] private MultiplayerSettings settings;
         [SerializeField] private float waitTimeWhenFull;
 
-        public event Action OnPlayerLeft;
+        public event Action OnOpponentDisconnect;
 
         public static PhotonRoom Instance;
 
@@ -48,6 +48,8 @@ namespace Photon
                 return _localPlayer;
             }
         }
+
+        public MultiplayerSettings Settings => settings;
 
         public event Action OnAllPlayersReady;
 
@@ -110,13 +112,12 @@ namespace Photon
         {
             base.OnPlayerLeftRoom(otherPlayer);
             Debug.Log($"{otherPlayer.NickName} has left the game");
-            LeaveRoom();
+            OnOpponentDisconnect?.Invoke();
         }
 
         public override void OnLeftRoom()
         {
             base.OnLeftRoom();
-            OnPlayerLeft?.Invoke();
             RestartTimer();
         }
 
@@ -127,7 +128,7 @@ namespace Photon
 
         public void LeaveRoom()
         {
-            SceneLoader.Instance.LoadSceneAsync(settings.mainMenuScene);
+            SceneLoader.Instance.LoadSceneWithoutSync(settings.mainMenuScene);
             PhotonNetwork.LeaveRoom();
             Destroy(gameObject);
         }
@@ -138,8 +139,17 @@ namespace Photon
             photonView.RPC(nameof(RPC_AddPlayer), RpcTarget.All, photonPlayer.photonView.ViewID);
         }
 
+        public void RestartRoom()
+        {
+            _localPlayer = null;
+            _photonPlayersReady = new Dictionary<int, bool>(settings.maxPlayers);
+            PhotonPlayers = new List<PhotonPlayer>(settings.maxPlayers);
+        }
+
         private bool AllPlayersReady()
         {
+            Debug.Log($"##### Max players: {settings.maxPlayers}, players ready: {_photonPlayersReady.Count}");
+            if (settings.maxPlayers > _photonPlayersReady.Count) return false;
             foreach (var keyValuePair in _photonPlayersReady)
             {
                 if (!keyValuePair.Value) return false;
@@ -190,17 +200,19 @@ namespace Photon
         [PunRPC]
         private void RPC_PlayerReady(int viewId)
         {
-            foreach (var photonPlayer in _photonPlayersReady.Keys.ToList())
+            if (_photonPlayersReady.ContainsKey(viewId))
             {
-                if (photonPlayer == viewId)
-                {
-                    _photonPlayersReady[photonPlayer] = true;
-                }
+                _photonPlayersReady[viewId] = true;
+            }
+            else
+            {
+                Debug.LogError("Player not added is trying to get ready");
             }
 
             if (AllPlayersReady())
             {
                 PhotonPlayers = FindObjectsOfType<PhotonPlayer>().ToList();
+                Debug.Log("##### All players ready");
                 OnAllPlayersReady?.Invoke();
             }
         }
