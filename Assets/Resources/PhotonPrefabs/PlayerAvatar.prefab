@@ -48,7 +48,7 @@ MonoBehaviour:
   minForce: 5
   addForceVelocity: 5
   timeBetweenShoots: 0.5
-  reloadingTime: 2
+  reloadingTime: 1.5
   maxClipAmmo: 4
 --- !u!114 &6984713992092003214
 MonoBehaviour:

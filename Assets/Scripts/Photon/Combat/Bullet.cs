@@ -58,12 +58,13 @@ namespace Photon.Combat
             if (!CheckCollisionAndApplyDamage(other.gameObject, true)) return;
 
             var position = transform.position;
-            var ray = new Ray(position, position - other.transform.position);
-            photonView.RPC(nameof(RPC_RaycastHelper), RpcTarget.All, position, position - other.transform.position);
-            if (Physics.Raycast(ray, out var hit))
-            {
-                ExecuteCue(hit.point, hit.normal);
-            }
+            ExecuteCue(position, position - other.transform.position);
+            // var ray = new Ray(position, position - other.transform.position);
+            // photonView.RPC(nameof(RPC_RaycastHelper), RpcTarget.All, position, position - other.transform.position);
+            // if (Physics.Raycast(ray, out var hit))
+            // {
+            //     ExecuteCue(hit.point, hit.normal);
+            // }
             DestroyBullet();
         }
 

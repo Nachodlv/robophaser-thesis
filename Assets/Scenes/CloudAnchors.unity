@@ -4295,8 +4295,8 @@ MonoBehaviour:
   networkUi: {fileID: 1077067569}
   playerUI: {fileID: 1934697694}
   endGameScreen: {fileID: 1920365922}
-  skipAR: 1
-  skipGameArea: 1
+  skipAR: 0
+  skipGameArea: 0
   skipCombat: 0
 --- !u!4 &881141471
 Transform:
