@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wfcTile: {fileID: 1683620589312024049}
-  tries: 50
+  tries: 100
   tilesPerFrame: 5
   width: 20
   depth: 20
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xml: {fileID: 4900000, guid: 05f1fe32c1b2fb04f9734de2beff2bed, type: 3}
-  gridsize: 1.25
+  gridsize: 1.23
   width: 16
   depth: 16
   seed: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   iterations: 1
   incremental: 1
   output: {fileID: 3694895226488974427}
-  scale: 0.35
+  scale: 0.5
 --- !u!114 &2943710820158531177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,17 +186,17 @@ PrefabInstance:
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4156737015554280959, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.35
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4156737015554280956, guid: cf6f0a2942c163f4fb7ac1fd6f74f7aa, type: 3}

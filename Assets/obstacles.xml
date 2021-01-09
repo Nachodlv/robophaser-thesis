@@ -1,80 +1,94 @@
 <set>
   <tiles>
-<tile name="WFC Prefabs/Obstacles/Tree_04_X" symmetry="X" weight="0,1"/>
-<tile name="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L" symmetry="L" weight="0,1"/>
-<tile name="WFC Prefabs/Obstacles/WindowFrame_Blue_I" symmetry="I" weight="0,3"/>
-<tile name="WFC Prefabs/Obstacles/EmptyTile_X" symmetry="X" weight="2"/>
-<tile name="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I" symmetry="I" weight="0,05"/>
-<tile name="WFC Prefabs/Obstacles/TreeDead_X" symmetry="X" weight="0,1"/>
-<tile name="WFC Prefabs/Obstacles/Tree_03_X" symmetry="X" weight="0,1"/>
-<tile name="WFC Prefabs/Obstacles/Tree_01_X" symmetry="X" weight="0,1"/>
-<tile name="WFC Prefabs/Obstacles/Wall_Blue_I" symmetry="I" weight="0,7"/>
+    <tile name="WFC Prefabs/Obstacles/Tree_04_X" symmetry="X" weight="0,01"/>
+    <tile name="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L" symmetry="L" weight="1,0"/>
+    <tile name="WFC Prefabs/Obstacles/WindowFrame_Blue_I" symmetry="I" weight="2,5"/>
+    <tile name="WFC Prefabs/Obstacles/Blue/EmptyTile_X" symmetry="X" weight="0,5"/>
+    <tile name="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I" symmetry="I" weight="0,3"/>
+    <tile name="WFC Prefabs/Obstacles/TreeDead_X" symmetry="X" weight="0,01"/>
+    <tile name="WFC Prefabs/Obstacles/Tree_03_X" symmetry="X" weight="0,01"/>
+    <tile name="WFC Prefabs/Obstacles/Tree_01_X" symmetry="X" weight="0,01"/>
+    <tile name="WFC Prefabs/Obstacles/Wall_Blue_I" symmetry="I" weight="2,0"/>
+    <tile name="WFC Prefabs/Obstacles/Blue/Box_Blue_X" symmetry="X" weight="0,01"/>
+    <tile name="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X" symmetry="X" weight="0,01"/>
 	</tiles>
-<neighbors>  <neighbor left="WFC Prefabs/Obstacles/Tree_04_X 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/TreeDead_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Tree_04_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/TreeDead_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/TreeDead_X 0" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/TreeDead_X 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_04_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/Tree_04_X 0" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 3"/>
+<neighbors>  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/TreeDead_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Tree_04_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/TreeDead_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/TreeDead_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/TreeDead_X 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_04_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Tree_04_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Tree_04_X 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 3"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
   <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 3" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
   <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Tree_03_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Tree_03_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Blue/Box_Blue_X 1"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 3" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 3"/>
   <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
   <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 1" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_03_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/Tree_03_X 0" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_03_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Tree_03_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Box_Blue_X 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Blue/Box_Blue_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Box_Blue_X 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
   <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 3"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 3" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 1" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 3"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Wall_Blue_I 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0" right="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_01_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/Tree_01_X 0" right="WFC Prefabs/Obstacles/EmptyTile_X 0"/>
-  <neighbor left="WFC Prefabs/Obstacles/Tree_01_X 1" right="WFC Prefabs/Obstacles/EmptyTile_X 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
-  <neighbor left="WFC Prefabs/Obstacles/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Wall_Blue_I 3"/>
-  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/Wall_Blue_I 2"/>
   <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 0" right="WFC Prefabs/Obstacles/Wall_Blue_I 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Wall_Blue_I 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 1" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 3" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 0" right="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/OpeningDoor_Columns_Blue_I 2" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WindowFrame_Blue_I 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0" right="WFC Prefabs/Obstacles/Tree_01_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Tree_01_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Tree_01_X 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Box_Blue_X 0" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 0"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1" right="WFC Prefabs/Obstacles/Wall_Blue_I 3"/>
+  <neighbor left="WFC Prefabs/Obstacles/Wall_Blue_I 0" right="WFC Prefabs/Obstacles/WallTurn_Columns_Blue_L 2"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Box_Blue_X 1" right="WFC Prefabs/Obstacles/Blue/EmptyTile_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Box_Blue_X 1" right="WFC Prefabs/Obstacles/Blue/Box_Blue_X 1"/>
+  <neighbor left="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 1" right="WFC Prefabs/Obstacles/Blue/Double_Box_Blue_X 1"/>
 	</neighbors>
 </set>
