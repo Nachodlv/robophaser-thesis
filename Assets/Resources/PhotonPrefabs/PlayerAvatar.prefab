@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4762c8cd4b2a48ef9ac47e71f9dd6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxForce: 15
-  minForce: 5
   addForceVelocity: 5
   timeBetweenShoots: 0.5
   reloadingTime: 1.5

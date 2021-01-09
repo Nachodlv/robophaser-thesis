@@ -16,9 +16,6 @@ namespace UI.Combat
         [SerializeField] private BulletDisplayer bulletDisplayer;
         [SerializeField] private OutOfLimitsWarning outOfLimitsWarning;
 
-        [Header("UI - Remote player")]
-        [SerializeField] private HealthDisplayer remotePlayerHealth;
-
         [Header("Components")]
         [SerializeField] private Fader fader;
 
@@ -31,7 +28,6 @@ namespace UI.Combat
             localPlayer.Shooter.OnAmmoChange += AmmoChange;
             localPlayer.Shooter.OnStopReloading += StopReloading;
             localPlayerHealth.DisplayHealth(localPlayer);
-            if(TryGetRemotePlayer(out var remotePlayer)) remotePlayerHealth.DisplayHealth(remotePlayer);
             shootButton.Show();
             reloadButton.Show();
             bulletDisplayer.Show();
@@ -51,19 +47,6 @@ namespace UI.Combat
             if (!_reloadingButtonInMainSection) return;
             shootButton.gameObject.SetActive(true);
             reloadButton.transform.SetParent(secondaryButtonSection, false);
-        }
-
-        private static bool TryGetRemotePlayer(out PhotonPlayer remotePlayer)
-        {
-            var localPlayer = PhotonRoom.Instance.LocalPlayer;
-            remotePlayer = default;
-            foreach (var photonPlayer in FindObjectsOfType<PhotonPlayer>())
-            {
-                if (photonPlayer == localPlayer) continue;
-                remotePlayer = photonPlayer;
-                return true;
-            }
-            return false;
         }
     }
 }
