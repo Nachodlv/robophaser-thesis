@@ -10,8 +10,6 @@ namespace Photon.Combat
 {
     public class Shooter : MonoBehaviourPun
     {
-        [SerializeField] private float maxForce;
-        [SerializeField] private float minForce;
         [SerializeField] private float addForceVelocity;
         [SerializeField] private float timeBetweenShoots = 0.5f;
         [SerializeField] private float reloadingTime = 2f;
@@ -39,8 +37,6 @@ namespace Photon.Combat
         private ShootingPoint[] ShootingPoints =>
             _shootingPoints ?? (_shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>());
 
-        public float MaxForce => maxForce;
-        public float MinForce => minForce;
         public float AddForceVelocity => addForceVelocity;
         public int MaxClipAmmo => maxClipAmmo;
 
@@ -56,7 +52,7 @@ namespace Photon.Combat
                     (int) (maxClipAmmo * PhotonRoom.Instance.Settings.maxPlayers * 1.5));
         }
 
-        public void Shoot(float force)
+        public void Shoot()
         {
             var now = Time.time;
             if (!CanShoot(now)) return;
@@ -65,7 +61,7 @@ namespace Photon.Combat
             OnAmmoChange?.Invoke(_currentClipAmmo);
             photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.UserId,
-                force,
+                addForceVelocity,
                 ShootingPoints[_currentShootingPoint].Transform.position,
                 GetShootingDirection()
             );
