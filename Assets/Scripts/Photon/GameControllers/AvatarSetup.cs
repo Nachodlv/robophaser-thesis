@@ -23,6 +23,8 @@ namespace Photon.GameControllers
 
         public string Id { get; private set; }
 
+        public PhotonPlayer PhotonPlayer => _photonPlayer;
+
         private void Start()
         {
             if (photonView.IsMine)
