@@ -1,5 +1,5 @@
 ﻿using Photon;
-using Photon.GameControllers;
+using UnityEditor;
 using UnityEngine;
 using Utils;
 
@@ -49,4 +49,32 @@ namespace UI.Combat
             reloadButton.transform.SetParent(secondaryButtonSection, false);
         }
     }
+
+#if UNITY_EDITOR
+    [CustomEditor (typeof(PlayerUI))]
+    public class PlayerUIEditor : Editor {
+        public override void OnInspectorGUI () {
+            var playerUI = (PlayerUI)target;
+            if(GUILayout.Button("Show/Hide"))
+            {
+                if (playerUI.TryGetComponent<CanvasGroup>(out var canvasGroup))
+                {
+                    if (canvasGroup.interactable)
+                    {
+                        canvasGroup.alpha = 0;
+                        canvasGroup.interactable = false;
+                        canvasGroup.blocksRaycasts = false;
+                    }
+                    else
+                    {
+                        canvasGroup.alpha = 1;
+                        canvasGroup.interactable = true;
+                        canvasGroup.blocksRaycasts = true;
+                    }
+                }
+            }
+            DrawDefaultInspector ();
+        }
+    }
+#endif
 }
