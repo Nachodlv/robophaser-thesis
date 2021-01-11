@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a51a549deb0e4bbeb41a440872ca21b8, type: 3}
   m_Name: Multiplayer Settings
   m_EditorClassIdentifier: 
-  maxPlayers: 2
+  maxPlayers: 1
   multiplayerScene: 1
   mainMenuScene: 0

@@ -2,6 +2,7 @@
 using Photon.Combat;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using UI;
 using UnityEngine;
 
 namespace Photon.GameControllers
@@ -14,6 +15,7 @@ namespace Photon.GameControllers
         private PhotonPlayer _photonPlayer;
         private RobotOrbAnimator _animator;
         private StatusEffects _statusEffect;
+        private ImageFlash _cameraFlash;
 
         private RobotOrbAnimator Animator =>
             _animator != null ? _animator : _animator = GetComponentInChildren<RobotOrbAnimator>();
@@ -31,7 +33,10 @@ namespace Photon.GameControllers
             {
                 PhotonRoom.Instance.OnAllPlayersReady += AddCharacter;
             }
+
+            Invoke(nameof(TakeDamageBy1), 10);
         }
+        void TakeDamageBy1() => TakeDamage(1);
 
         public void TakeDamage(int damage)
         {
@@ -53,7 +58,12 @@ namespace Photon.GameControllers
 
         private void AddLocalCharacter()
         {
-            if (Camera.main != null) transform.parent = Camera.main.transform;
+            var cameraMain = Camera.main;
+            if (cameraMain != null)
+            {
+                transform.parent = cameraMain.transform;
+                _cameraFlash = cameraMain.GetComponent<ImageFlash>();
+            }
             var myTransform = transform;
             myTransform.localPosition = Vector3.zero;
             myTransform.localRotation = Quaternion.identity;
@@ -88,8 +98,8 @@ namespace Photon.GameControllers
         [PunRPC]
         private void RPC_TakeDamage()
         {
-            if (photonView.IsMine) return;
             Animator.TakeDamage();
+            if(photonView.IsMine) _cameraFlash.Flash();
         }
     }
 }
