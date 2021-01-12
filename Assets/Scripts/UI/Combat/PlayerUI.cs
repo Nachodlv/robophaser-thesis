@@ -1,4 +1,5 @@
 ﻿using Photon;
+using UI.Combat.Stats;
 using UnityEditor;
 using UnityEngine;
 using Utils;
@@ -12,7 +13,8 @@ namespace UI.Combat
         [SerializeField] private RectTransform secondaryButtonSection;
         [SerializeField] private ShootButton shootButton;
         [SerializeField] private ReloadButton reloadButton;
-        [SerializeField] private HealthDisplayer localPlayerHealth;
+        [SerializeField] private HealthDisplayer playerHealth;
+        [SerializeField] private EnergyDisplayer energyDisplayer;
         [SerializeField] private BulletDisplayer bulletDisplayer;
         [SerializeField] private OutOfLimitsWarning outOfLimitsWarning;
 
@@ -27,7 +29,8 @@ namespace UI.Combat
             var localPlayer = PhotonRoom.Instance.LocalPlayer;
             localPlayer.Shooter.OnAmmoChange += AmmoChange;
             localPlayer.Shooter.OnStopReloading += StopReloading;
-            localPlayerHealth.DisplayHealth(localPlayer);
+            playerHealth.DisplayHealth(localPlayer);
+            energyDisplayer.DisplayEnergy(localPlayer);
             shootButton.Show();
             reloadButton.Show();
             bulletDisplayer.Show();

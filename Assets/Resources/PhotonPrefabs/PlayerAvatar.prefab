@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: -861990231563283224}
   - component: {fileID: -852923114960333645}
   - component: {fileID: 7091485483328434046}
+  - component: {fileID: 7812611528866202415}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Avatar
@@ -185,3 +186,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7812611528866202415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8951429683785024791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f178c89793a4b8a87737a1423b3ef61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEnergy: 100
+  energyRegen: 20
+  energyDecrease: 30
+  statusEffect: {fileID: -852923114960333645}
+  damageWhenNoEnergy: 1
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 512

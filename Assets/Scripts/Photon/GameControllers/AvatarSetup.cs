@@ -99,7 +99,11 @@ namespace Photon.GameControllers
         private void RPC_TakeDamage()
         {
             Animator.TakeDamage();
-            if(photonView.IsMine) _cameraFlash.Flash();
+            if (photonView.IsMine)
+            {
+                _cameraFlash.Flash();
+                Handheld.Vibrate();
+            }
         }
     }
 }
