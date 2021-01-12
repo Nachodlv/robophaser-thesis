@@ -11,6 +11,7 @@ namespace Photon.GameControllers
     {
         [SerializeField] private Vector3 characterPositionOffset = new Vector3(0, -1.22f, 1f);
         [SerializeField] private Quaternion characterRotationOffset = Quaternion.identity;
+        [SerializeField] private FlashSettings flashWhenDamaged = new FlashSettings(0.4f, 0.15f, 0, 1, Color.red);
 
         private PhotonPlayer _photonPlayer;
         private RobotOrbAnimator _animator;
@@ -33,10 +34,7 @@ namespace Photon.GameControllers
             {
                 PhotonRoom.Instance.OnAllPlayersReady += AddCharacter;
             }
-
-            Invoke(nameof(TakeDamageBy1), 10);
         }
-        void TakeDamageBy1() => TakeDamage(1);
 
         public void TakeDamage(int damage)
         {
@@ -101,7 +99,7 @@ namespace Photon.GameControllers
             Animator.TakeDamage();
             if (photonView.IsMine)
             {
-                _cameraFlash.Flash();
+                _cameraFlash.Flash(flashWhenDamaged);
                 Handheld.Vibrate();
             }
         }
