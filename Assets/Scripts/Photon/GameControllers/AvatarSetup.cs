@@ -98,10 +98,7 @@ namespace Photon.GameControllers
         {
             Animator.TakeDamage();
             if (photonView.IsMine)
-            {
                 _cameraFlash.Flash(flashWhenDamaged);
-                Handheld.Vibrate();
-            }
         }
     }
 }

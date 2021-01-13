@@ -4288,8 +4288,8 @@ MonoBehaviour:
   networkUi: {fileID: 1077067569}
   playerUI: {fileID: 1934697694}
   endGameScreen: {fileID: 1920365922}
-  skipAR: 1
-  skipGameArea: 1
+  skipAR: 0
+  skipGameArea: 0
   skipCombat: 0
   countdownTime: 3
 --- !u!4 &881141471
@@ -7054,10 +7054,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1044160350}
-  speed: 0.4
-  maxAlpha: 0.15
-  minAlpha: 0
-  quantityOfFlashes: 1
 --- !u!1 &1340890070
 GameObject:
   m_ObjectHideFlags: 0
