@@ -11,10 +11,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Multiplayer Scene.unity
     guid: 03e09bfe3fd3e9d4cb93b841c7c03a06
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Initial Screens.unity
     guid: 693ddca4c71c87c4d828a0bb75d1ddb2
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/QuickStart Scene.unity
     guid: d50dd37481dd84745bd960c3a13d013f
   - enabled: 1
