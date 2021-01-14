@@ -742,6 +742,7 @@ MonoBehaviour:
   nicknameInput: {fileID: 237488555}
   playButton: {fileID: 1737066361}
   photonLobby: {fileID: 1497442028}
+  screensController: {fileID: 1042268243}
 --- !u!1 &847357773
 GameObject:
   m_ObjectHideFlags: 0

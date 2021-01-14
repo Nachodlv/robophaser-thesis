@@ -12,6 +12,7 @@ namespace UI.Screens
         [SerializeField] private TMP_InputField nicknameInput;
         [SerializeField] private Button playButton;
         [SerializeField] private PhotonLobby photonLobby;
+        [SerializeField] private ScreensController screensController;
 
         private bool _connectedToMaster;
 
@@ -27,6 +28,10 @@ namespace UI.Screens
         private void Start()
         {
             if (!_connectedToMaster) Loader.Instance.StartLoading();
+            if (!string.IsNullOrEmpty(PhotonNetwork.NickName))
+            {
+                screensController.ShowScreen(Screen.WaitingScreen);
+            }
         }
 
         private void InputSubmitted()
@@ -34,6 +39,7 @@ namespace UI.Screens
             var text = nicknameInput.text;
             if (text.Length == 0) return;
             photonLobby.ChangeNickname(text);
+            photonLobby.OnConnectToMaster -= ConnectedToMaster;
         }
 
         private void ConnectedToMaster()

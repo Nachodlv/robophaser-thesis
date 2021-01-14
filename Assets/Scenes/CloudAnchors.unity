@@ -2481,7 +2481,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.45
+  m_fontSize: 44.35
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3049,7 +3049,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 23.95
+  m_fontSize: 27.35
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3809,7 +3809,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 21.35
+  m_fontSize: 24
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4288,9 +4288,9 @@ MonoBehaviour:
   networkUi: {fileID: 1077067569}
   playerUI: {fileID: 1934697694}
   endGameScreen: {fileID: 1920365922}
-  skipAR: 0
-  skipGameArea: 0
-  skipCombat: 0
+  skipAR: 1
+  skipGameArea: 1
+  skipCombat: 1
   countdownTime: 3
 --- !u!4 &881141471
 Transform:
@@ -6622,7 +6622,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.45
+  m_fontSize: 44.35
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8424,7 +8424,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.45
+  m_fontSize: 44.35
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
