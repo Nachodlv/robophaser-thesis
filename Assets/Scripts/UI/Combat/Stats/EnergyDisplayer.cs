@@ -11,6 +11,7 @@ namespace UI.Combat.Stats
         public void DisplayEnergy(PhotonPlayer player)
         {
             var wallPhaser = player.CameraTransform.GetComponentInChildren<WallPhaser>();
+            if (wallPhaser == null) return;
             slider.MaxValue = wallPhaser.MaxEnergy;
             slider.Value = wallPhaser.MaxEnergy;
             wallPhaser.OnEnergyUpdate += EnergyUpdated;
