@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 257823789536321371}
   - component: {fileID: 8601661560676098568}
   - component: {fileID: 6984713992092003214}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,6 +48,9 @@ MonoBehaviour:
   timeBetweenShoots: 0.5
   reloadingTime: 1.5
   maxClipAmmo: 4
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 768
 --- !u!114 &6984713992092003214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +88,7 @@ GameObject:
   - component: {fileID: -852923114960333645}
   - component: {fileID: 7091485483328434046}
   - component: {fileID: 7812611528866202415}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PlayerAvatar
   m_TagString: Avatar
   m_Icon: {fileID: 0}

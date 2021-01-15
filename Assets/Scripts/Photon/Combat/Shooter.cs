@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define SHOW_GIZMOS
+
+using System;
 using System.Collections;
 using System.IO;
 using Photon.CustomPunPool;
@@ -15,6 +17,7 @@ namespace Photon.Combat
         [SerializeField] private float timeBetweenShoots = 0.5f;
         [SerializeField] private float reloadingTime = 2f;
         [SerializeField] private int maxClipAmmo = 3;
+        [SerializeField] private LayerMask targetLayer;
 
         public delegate void AmmoChangeCallback(int currentClipAmmo);
 
@@ -30,6 +33,8 @@ namespace Photon.Combat
         private bool _reloading;
         private WaitForSeconds _reloadingWaitTime;
         private Func<IEnumerator> _startReloadingCoroutine;
+        private RaycastHit[] _raycastHits = new RaycastHit[10];
+        private Camera _camera;
 
         private int _currentShootingPoint;
         private ShootingPoint[] _shootingPoints;
@@ -48,18 +53,11 @@ namespace Photon.Combat
             _currentClipAmmo = maxClipAmmo;
             _reloadingWaitTime = new WaitForSeconds(reloadingTime);
             _startReloadingCoroutine = StartReloadingCoroutine;
-
+            _camera = Camera.main;
             // Initialize the first bullets
             if (PhotonNetwork.IsMasterClient)
                 PunPool.Instance.CreateInstances(_bulletId,
                     (int) (maxClipAmmo * PhotonRoom.Instance.Settings.maxPlayers * 1.5));
-            if (photonView.IsMine) Invoke(nameof(StartShooting), 5f);
-        }
-
-        public void StartShooting()
-        {
-            InvokeRepeating(nameof(Shoot), 10f, reloadingTime + 0.2f);
-            InvokeRepeating(nameof(Reload), 10.2f, reloadingTime);
         }
 
         public void Shoot()
@@ -121,10 +119,41 @@ namespace Photon.Combat
         {
             var shootingPoint = ShootingPoints[_currentShootingPoint].Transform;
             var shootingPointPosition = shootingPoint.position;
-            var ray = new Ray(shootingPointPosition, shootingPoint.forward);
-            var target = Physics.Raycast(ray, out var hit) ? hit.point : ray.GetPoint(10);
+            var cameraTransform = _camera.transform;
+            var ray = new Ray(cameraTransform.position, cameraTransform.forward);
+            var size = Physics.RaycastNonAlloc(ray, _raycastHits, 100, targetLayer);
+            var target = Vector3.zero;
+            var setTarget = false;
+            for (var i = 0; i < size; i++)
+            {
+                if (_raycastHits[i].transform != transform.parent)
+                {
+                    target = _raycastHits[i].point;
+                    setTarget = true;
+                    break;
+                }
+            }
+            if (!setTarget) target = ray.GetPoint(10);
             var direction = (target - shootingPointPosition).normalized;
+
+#if SHOW_GIZMOS
+            _gizmosShootingTarget = target;
+            _showGizmos = true;
+#endif
             return direction;
         }
+
+#if SHOW_GIZMOS
+        private Vector3 _gizmosShootingTarget;
+        private bool _showGizmos;
+
+        private void OnDrawGizmos()
+        {
+            if (!_showGizmos) return;
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_gizmosShootingTarget, 0.05f);
+        }
+#endif
     }
 }
