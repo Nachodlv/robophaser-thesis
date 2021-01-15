@@ -8,38 +8,44 @@ namespace Audio
     [RequireComponent(typeof(AudioSource))]
     public class AudioSourcePooleable: Pooleable
     {
-        private AudioSource _audioSource;
+        protected AudioSource AudioSource;
         private Func<IEnumerator> _playingSoundCoroutine;
         public Transform Transform { get; private set; }
 
+        public bool Spatialize
+        {
+            get => AudioSource.spatialize;
+            set => AudioSource.spatialize = value;
+        }
+
         private void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
-            _audioSource.playOnAwake = false;
-            _audioSource.loop = false;
+            AudioSource = GetComponent<AudioSource>();
+            AudioSource.playOnAwake = false;
+            AudioSource.loop = false;
             _playingSoundCoroutine = WaitClipToStop;
             Transform = transform;
         }
 
-        public void SetClip(AudioClip clip)
+        public virtual void SetClip(AudioType clip)
         {
-            _audioSource.clip = clip;
+            AudioSource.clip = AudioManager.Instance.GetAudioClip(clip);
         }
 
-        public void SetVolume(float volume)
+        public virtual void SetVolume(float volume)
         {
-            _audioSource.volume = volume;
+            AudioSource.volume = volume;
         }
 
-        public void StartClip()
+        public virtual void StartClip()
         {
-            _audioSource.Play();
+            AudioSource.Play();
             StartCoroutine(_playingSoundCoroutine());
         }
 
         private IEnumerator WaitClipToStop()
         {
-            var clipLength = _audioSource.clip.length;
+            var clipLength = AudioSource.clip.length;
             var now = Time.time;
             while (Time.time - now < clipLength)
                 yield return null;

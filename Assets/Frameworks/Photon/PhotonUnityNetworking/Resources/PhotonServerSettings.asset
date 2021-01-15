@@ -68,6 +68,9 @@ MonoBehaviour:
   - RPC_TakeDamage
   - SetSelectedMaterial
   - RPC_SetMaterial
+  - RPC_SetClip
+  - RPC_SetVolume
+  - RPC_StartClip
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
