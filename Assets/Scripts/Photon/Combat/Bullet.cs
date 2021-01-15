@@ -12,11 +12,14 @@ namespace Photon.Combat
         [SerializeField] private int damage;
         [SerializeField] private float timeToLive;
         [SerializeField] private Cue cue;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Material[] materials;
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
         private readonly ContactPoint[] _hitContacts = new ContactPoint[5];
         private string _shootBy;
+        private int _currentMaterial;
 
         private Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
@@ -62,10 +65,11 @@ namespace Photon.Combat
             DestroyBullet();
         }
 
-        public void Shoot(string userId, Vector3 force)
+        public void Shoot(string userId, int playerNumber, Vector3 force)
         {
             _shootBy = userId;
             Rigidbody.AddForce(force, ForceMode.Impulse);
+            if(_currentMaterial != playerNumber) photonView.RPC(nameof(RPC_SetMaterial), RpcTarget.All, playerNumber);
         }
 
         public void ExecuteCue(Vector3 contactPoint, Vector3 normal)
@@ -101,9 +105,10 @@ namespace Photon.Combat
         }
 
         [PunRPC]
-        private void RPC_RaycastHelper(Vector3 start, Vector3 direction)
+        private void RPC_SetMaterial(int materialIndex)
         {
-            Debug.DrawRay(start, direction, Color.red, 60);
+            meshRenderer.material = materials[materialIndex];
+            _currentMaterial = materialIndex;
         }
     }
 }

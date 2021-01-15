@@ -50,7 +50,8 @@ namespace Photon.GameControllers
         private void AddCharacter()
         {
             PhotonRoom.Instance.OnAllPlayersReady -= AddCharacter;
-            photonView.RPC(nameof(RPC_AddNetworkCharacter), RpcTarget.OthersBuffered);
+            photonView.RPC(nameof(RPC_AddNetworkCharacter), RpcTarget.OthersBuffered,
+                PhotonNetwork.LocalPlayer.GetPlayerNumber());
             AddLocalCharacter();
         }
 
@@ -62,6 +63,7 @@ namespace Photon.GameControllers
                 transform.parent = cameraMain.transform;
                 _cameraFlash = cameraMain.GetComponent<ImageFlash>();
             }
+
             var myTransform = transform;
             myTransform.localPosition = Vector3.zero;
             myTransform.localRotation = Quaternion.identity;
@@ -74,9 +76,8 @@ namespace Photon.GameControllers
         }
 
         [PunRPC]
-        private void RPC_AddNetworkCharacter()
+        private void RPC_AddNetworkCharacter(int playerNumber)
         {
-            var playerNumber = PhotonNetwork.LocalPlayer.GetPlayerNumber();
             var character = Instantiate(PlayerInfo.Instance.GetNetworkCharacter(playerNumber), Vector3.zero,
                 Quaternion.identity,
                 transform);

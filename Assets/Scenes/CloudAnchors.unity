@@ -4290,7 +4290,7 @@ MonoBehaviour:
   endGameScreen: {fileID: 1920365922}
   skipAR: 1
   skipGameArea: 1
-  skipCombat: 1
+  skipCombat: 0
   countdownTime: 3
 --- !u!4 &881141471
 Transform:

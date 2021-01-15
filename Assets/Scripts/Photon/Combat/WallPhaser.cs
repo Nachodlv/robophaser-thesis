@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UI;
 using UnityEngine;
 
 namespace Photon.Combat
 {
-    public class WallPhaser : MonoBehaviour
+    public class WallPhaser : MonoBehaviourPun
     {
         [SerializeField] private float maxEnergy = 100f;
         [SerializeField] private float energyRegen = 20f;
@@ -33,6 +34,7 @@ namespace Photon.Combat
 
         private void Awake()
         {
+            if(!photonView.IsMine) Destroy(this);
             _currentEnergy = maxEnergy;
             _colliders = new List<Collider>(3);
             _flashCached = Flash;

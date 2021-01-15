@@ -4,6 +4,7 @@ using System.IO;
 using Photon.CustomPunPool;
 using Photon.GameControllers;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 
 namespace Photon.Combat
@@ -35,7 +36,9 @@ namespace Photon.Combat
         private string _bulletId = Path.Combine("PhotonPrefabs", "Blue Bullet");
 
         private ShootingPoint[] ShootingPoints =>
-            _shootingPoints ?? (_shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>());
+            _shootingPoints != null && _shootingPoints.Length > 0
+                ? _shootingPoints
+                : _shootingPoints = transform.parent.GetComponentsInChildren<ShootingPoint>();
 
         public float AddForceVelocity => addForceVelocity;
         public int MaxClipAmmo => maxClipAmmo;
@@ -50,6 +53,13 @@ namespace Photon.Combat
             if (PhotonNetwork.IsMasterClient)
                 PunPool.Instance.CreateInstances(_bulletId,
                     (int) (maxClipAmmo * PhotonRoom.Instance.Settings.maxPlayers * 1.5));
+            if (photonView.IsMine) Invoke(nameof(StartShooting), 5f);
+        }
+
+        public void StartShooting()
+        {
+            InvokeRepeating(nameof(Shoot), 10f, reloadingTime + 0.2f);
+            InvokeRepeating(nameof(Reload), 10.2f, reloadingTime);
         }
 
         public void Shoot()
@@ -62,6 +72,7 @@ namespace Photon.Combat
             photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.UserId,
                 addForceVelocity,
+                PhotonNetwork.LocalPlayer.GetPlayerNumber(),
                 ShootingPoints[_currentShootingPoint].Transform.position,
                 GetShootingDirection()
             );
@@ -95,14 +106,15 @@ namespace Photon.Combat
         }
 
         [PunRPC]
-        private void RPC_SpawnBullet(string shooterId, float force, Vector3 position, Vector3 direction)
+        private void RPC_SpawnBullet(string shooterId, float force, int playerNumber, Vector3 position,
+            Vector3 direction)
         {
             var bullet = PunPool.Instance.Instantiate(
                 _bulletId,
                 position,
                 Quaternion.LookRotation(direction)).GetComponent<Bullet>();
             Debug.Log($"##### Bullet: {bullet.name}");
-            bullet.Shoot(shooterId, direction * force);
+            bullet.Shoot(shooterId, playerNumber, direction * force);
         }
 
         private Vector3 GetShootingDirection()
