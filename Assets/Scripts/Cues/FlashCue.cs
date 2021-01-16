@@ -12,10 +12,17 @@ namespace Cues
         [NonSerialized] private ImageFlash _cameraFlash;
 
         private ImageFlash CameraFlash => _cameraFlash != null ? _cameraFlash : _cameraFlash = Camera.main?.GetComponent<ImageFlash>();
+        private float _loopFlashId;
 
         public override void Execute(Vector3 position, Quaternion rotation)
         {
-            CameraFlash.Flash(flashSettings);
+            if (flashSettings.loop) _loopFlashId = CameraFlash.LoopFlash(flashSettings);
+            else CameraFlash.Flash(flashSettings);
+        }
+
+        public override void StopExecution()
+        {
+            CameraFlash.StopLoopingFlash(_loopFlashId, flashSettings);
         }
     }
 }

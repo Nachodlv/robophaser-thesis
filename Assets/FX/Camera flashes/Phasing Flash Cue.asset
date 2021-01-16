@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420cacbb99fd4dbbb06e450de7ff0812, type: 3}
-  m_Name: Phase Wall Audio Cue
+  m_Script: {fileID: 11500000, guid: 2e68ae1bfbf7492d98410dfbeda7c233, type: 3}
+  m_Name: Phasing Flash Cue
   m_EditorClassIdentifier: 
-  settings:
-    audioType: 4
-    volume: 0.3
-    replicated: 0
-    spatial: 0
+  flashSettings:
+    speed: 0.5
+    maxAlpha: 0.25
+    minAlpha: 0
+    quantityOfFlashes: 1
+    color: {r: 0, g: 0.71, b: 1, a: 1}
     loop: 1
-    loopSettings:
-      timeBetweenLoops: 1
+    timeBetweenFlashes: 1

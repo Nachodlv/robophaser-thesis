@@ -73,6 +73,8 @@ MonoBehaviour:
   - RPC_StartClip
   - RPC_PlaySound
   - RPC_PlaySoundOnPosition
+  - RPC_PlayLoopingSound
+  - RPC_StopPlayingLoopingSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

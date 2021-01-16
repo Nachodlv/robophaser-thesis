@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420cacbb99fd4dbbb06e450de7ff0812, type: 3}
-  m_Name: Phase Wall Audio Cue
+  m_Script: {fileID: 11500000, guid: 31324ca11b394b6fa4e4cfb4d07a8ac9, type: 3}
+  m_Name: Phasing Effect Cue
   m_EditorClassIdentifier: 
-  settings:
-    audioType: 4
-    volume: 0.3
-    replicated: 0
-    spatial: 0
-    loop: 1
-    loopSettings:
-      timeBetweenLoops: 1
+  cues:
+  - {fileID: 11400000, guid: 84621dc7644da1c45b4bb11a120a0b55, type: 2}
+  - {fileID: 11400000, guid: 79d01ad02aca8404e8ecc2c23d55de3a, type: 2}

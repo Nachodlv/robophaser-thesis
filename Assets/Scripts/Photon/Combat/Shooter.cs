@@ -20,6 +20,7 @@ namespace Photon.Combat
         [SerializeField] private int maxClipAmmo = 3;
         [SerializeField] private LayerMask targetLayer;
         [SerializeField] private Cue shootCue;
+        [SerializeField] private Cue reloadCue;
 
         public delegate void AmmoChangeCallback(int currentClipAmmo);
 
@@ -83,7 +84,9 @@ namespace Photon.Combat
 
         public void Reload()
         {
-            if (CanReload()) StartCoroutine(_startReloadingCoroutine());
+            if (!CanReload()) return;
+            StartCoroutine(_startReloadingCoroutine());
+            reloadCue.Execute(transform.position, Quaternion.identity);
         }
 
         public bool CanReload()

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7859991167357508024}
   - component: {fileID: 7859991167357508027}
   - component: {fileID: 7859991167357508026}
+  - component: {fileID: 16396837646360367}
   m_Layer: 5
   m_Name: Icon Button
   m_TagString: Untagged
@@ -62,6 +63,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -118,6 +120,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &16396837646360367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7859991167357508020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d14e0e1342854bdbb574286111a20ded, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 7859991167357508026}
+  cue: {fileID: 11400000, guid: f4d3598e957a8704b92d54b72d5bcd9e, type: 2}
 --- !u!1 &7859991168462516832
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +194,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.11764707, g: 0.11764707, b: 0.11764707, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

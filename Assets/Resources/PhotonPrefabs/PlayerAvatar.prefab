@@ -52,6 +52,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 768
   shootCue: {fileID: 11400000, guid: 06f54b60c55ac024989a109542127a5a, type: 2}
+  reloadCue: {fileID: 11400000, guid: 926ae4287c90e2a419e8347d8aad751f, type: 2}
 --- !u!114 &6984713992092003214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,10 +212,4 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 512
-  flashWhenPhasing:
-    speed: 0.5
-    maxAlpha: 0.25
-    minAlpha: 0
-    quantityOfFlashes: 1
-    color: {r: 0, g: 0.7176471, b: 1, a: 1}
-  timeBetweenFlashes: 1
+  phasingCue: {fileID: 11400000, guid: 742d075463ab6eb44a5c67ea18faba5b, type: 2}

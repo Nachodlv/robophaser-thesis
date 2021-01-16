@@ -14,5 +14,13 @@ namespace Cues
                 cue.Execute(position, rotation);
             }
         }
+
+        public override void StopExecution()
+        {
+            foreach (var cue in cues)
+            {
+                cue.StopExecution();
+            }
+        }
     }
 }

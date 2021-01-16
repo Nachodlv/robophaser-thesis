@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     audioType: 0
-    volume: 1
-    replicated: 0
+    volume: 0.5
+    replicated: 1
     spatial: 1
+    loop: 0
+    loopSettings:
+      timeBetweenLoops: 0

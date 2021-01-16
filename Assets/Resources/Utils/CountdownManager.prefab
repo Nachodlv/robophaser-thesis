@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7657cdcefd94ef9a980c6f411042b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  countdownCue: {fileID: 11400000, guid: 049746f2d9ed5b842bee5ccccff4012f, type: 2}
+  countdownCueTime: 2.5
 --- !u!114 &-3436753246766346027
 MonoBehaviour:
   m_ObjectHideFlags: 0

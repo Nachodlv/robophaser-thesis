@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 420cacbb99fd4dbbb06e450de7ff0812, type: 3}
-  m_Name: Phase Wall Audio Cue
+  m_Name: Countdown Audio Cue
   m_EditorClassIdentifier: 
   settings:
-    audioType: 4
-    volume: 0.3
-    replicated: 0
+    audioType: 6
+    volume: 0.7
+    replicated: 1
     spatial: 0
-    loop: 1
+    loop: 0
     loopSettings:
-      timeBetweenLoops: 1
+      timeBetweenLoops: 0

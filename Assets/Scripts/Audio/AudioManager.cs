@@ -14,7 +14,8 @@ namespace Audio
         ReceiveShootAsPlayer,
         ReceiveShoot,
         WallPhase,
-        Shoot
+        Shoot,
+        Countdown
     }
 
     [Serializable]
@@ -24,15 +25,6 @@ namespace Audio
         public AudioClip audioClip;
         public AudioType TValue => audioType;
         public AudioClip TsValue => audioClip;
-    }
-
-    [Serializable]
-    public class AudioSettings
-    {
-        public AudioType audioType;
-        public float volume = 1;
-        public bool replicated;
-        public bool spatial;
     }
 
     [RequireComponent(typeof(AudioSource))]
@@ -45,6 +37,7 @@ namespace Audio
         private AudioSource _audioSource;
         private ObjectPooler<AudioSourcePooleable> _pooler;
         private Dictionary<AudioType, AudioClip> _audios;
+        private Dictionary<float, AudioSourcePooleable> _audioSourceLooping = new Dictionary<float, AudioSourcePooleable>();
 
         protected override void Awake()
         {
@@ -71,27 +64,62 @@ namespace Audio
            else RPC_PlaySound(settingsBytes);
         }
 
+        public float PlayLoopingSound(AudioSettings settings)
+        {
+            var id = Time.time;
+            var settingsBytes = ByteArray.ObjectToByteArray(settings);
+            if (settings.replicated) photonView.RPC(nameof(RPC_PlayLoopingSound), RpcTarget.All, settingsBytes, id);
+            else RPC_PlayLoopingSound(settingsBytes, id);
+            return id;
+        }
+
+        public void StopLoopingSound(float id, AudioSettings settings)
+        {
+            if(settings.replicated) photonView.RPC(nameof(RPC_StopPlayingLoopingSound), RpcTarget.All, id);
+            else RPC_StopPlayingLoopingSound(id);
+        }
+
         [PunRPC]
-        private void RPC_PlaySoundOnPosition(byte[] settings, Vector3 position)
+        private AudioSourcePooleable RPC_PlaySoundOnPosition(byte[] settings, Vector3 position)
         {
             var audioSource = _pooler.GetNextObject();
             audioSource.Spatialize = true;
             audioSource.Transform.position = position;
             SetAudioSourceSettings(audioSource, ByteArray.ByteArrayToObject<AudioSettings>(settings));
+            return audioSource;
         }
 
         [PunRPC]
-        private void RPC_PlaySound(byte[] settings)
+        private AudioSourcePooleable RPC_PlaySound(byte[] settings)
         {
             var audioSource = _pooler.GetNextObject();
             audioSource.Spatialize = false;
             SetAudioSourceSettings(audioSource, ByteArray.ByteArrayToObject<AudioSettings>(settings));
+            return audioSource;
+        }
+
+        [PunRPC]
+        private void RPC_PlayLoopingSound(byte[] settings, float id)
+        {
+            var audioSource = RPC_PlaySound(settings);
+            _audioSourceLooping.Add(id, audioSource);
+        }
+
+        [PunRPC]
+        private void RPC_StopPlayingLoopingSound(float id)
+        {
+            if (_audioSourceLooping.TryGetValue(id, out var audioSource))
+            {
+                audioSource.Deactivate();
+            }
         }
 
         private void SetAudioSourceSettings(AudioSourcePooleable audioSource, AudioSettings settings)
         {
             audioSource.SetClip(settings.audioType);
             audioSource.SetVolume(settings.volume);
+            audioSource.Loop = settings.loop;
+            audioSource.TimeBetweenLoops = settings.loopSettings.timeBetweenLoops;
             audioSource.StartClip();
         }
     }
