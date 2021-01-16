@@ -1,5 +1,6 @@
 ﻿using Photon;
-using Photon.GameControllers;
+using UI.Combat.Stats;
+using UnityEditor;
 using UnityEngine;
 using Utils;
 
@@ -12,12 +13,10 @@ namespace UI.Combat
         [SerializeField] private RectTransform secondaryButtonSection;
         [SerializeField] private ShootButton shootButton;
         [SerializeField] private ReloadButton reloadButton;
-        [SerializeField] private HealthDisplayer localPlayerHealth;
+        [SerializeField] private HealthDisplayer playerHealth;
+        [SerializeField] private EnergyDisplayer energyDisplayer;
         [SerializeField] private BulletDisplayer bulletDisplayer;
         [SerializeField] private OutOfLimitsWarning outOfLimitsWarning;
-
-        [Header("UI - Remote player")]
-        [SerializeField] private HealthDisplayer remotePlayerHealth;
 
         [Header("Components")]
         [SerializeField] private Fader fader;
@@ -30,8 +29,8 @@ namespace UI.Combat
             var localPlayer = PhotonRoom.Instance.LocalPlayer;
             localPlayer.Shooter.OnAmmoChange += AmmoChange;
             localPlayer.Shooter.OnStopReloading += StopReloading;
-            localPlayerHealth.DisplayHealth(localPlayer);
-            if(TryGetRemotePlayer(out var remotePlayer)) remotePlayerHealth.DisplayHealth(remotePlayer);
+            playerHealth.DisplayHealth(localPlayer);
+            energyDisplayer.DisplayEnergy(localPlayer);
             shootButton.Show();
             reloadButton.Show();
             bulletDisplayer.Show();
@@ -52,18 +51,33 @@ namespace UI.Combat
             shootButton.gameObject.SetActive(true);
             reloadButton.transform.SetParent(secondaryButtonSection, false);
         }
+    }
 
-        private static bool TryGetRemotePlayer(out PhotonPlayer remotePlayer)
-        {
-            var localPlayer = PhotonRoom.Instance.LocalPlayer;
-            remotePlayer = default;
-            foreach (var photonPlayer in FindObjectsOfType<PhotonPlayer>())
+#if UNITY_EDITOR
+    [CustomEditor (typeof(PlayerUI))]
+    public class PlayerUIEditor : Editor {
+        public override void OnInspectorGUI () {
+            var playerUI = (PlayerUI)target;
+            if(GUILayout.Button("Show/Hide"))
             {
-                if (photonPlayer == localPlayer) continue;
-                remotePlayer = photonPlayer;
-                return true;
+                if (playerUI.TryGetComponent<CanvasGroup>(out var canvasGroup))
+                {
+                    if (canvasGroup.interactable)
+                    {
+                        canvasGroup.alpha = 0;
+                        canvasGroup.interactable = false;
+                        canvasGroup.blocksRaycasts = false;
+                    }
+                    else
+                    {
+                        canvasGroup.alpha = 1;
+                        canvasGroup.interactable = true;
+                        canvasGroup.blocksRaycasts = true;
+                    }
+                }
             }
-            return false;
+            DrawDefaultInspector ();
         }
     }
+#endif
 }

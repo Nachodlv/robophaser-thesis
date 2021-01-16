@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 257823789536321371}
   - component: {fileID: 8601661560676098568}
   - component: {fileID: 6984713992092003214}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shooter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,12 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4762c8cd4b2a48ef9ac47e71f9dd6e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxForce: 15
-  minForce: 5
   addForceVelocity: 5
   timeBetweenShoots: 0.5
   reloadingTime: 1.5
   maxClipAmmo: 4
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 768
+  shootCue: {fileID: 11400000, guid: 06f54b60c55ac024989a109542127a5a, type: 2}
+  reloadCue: {fileID: 11400000, guid: 926ae4287c90e2a419e8347d8aad751f, type: 2}
 --- !u!114 &6984713992092003214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,7 +89,8 @@ GameObject:
   - component: {fileID: -861990231563283224}
   - component: {fileID: -852923114960333645}
   - component: {fileID: 7091485483328434046}
-  m_Layer: 0
+  - component: {fileID: 7812611528866202415}
+  m_Layer: 8
   m_Name: PlayerAvatar
   m_TagString: Avatar
   m_Icon: {fileID: 0}
@@ -159,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPositionOffset: {x: 0, y: -1.22, z: 1}
   characterRotationOffset: {x: 0, y: 0, z: 0, w: 1}
+  playerDamagedCue: {fileID: 11400000, guid: b97096aa583e9ca438ae68df6f7c18e1, type: 2}
 --- !u!114 &-852923114960333645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,3 +192,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7812611528866202415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8951429683785024791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f178c89793a4b8a87737a1423b3ef61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEnergy: 100
+  energyRegen: 20
+  energyDecrease: 30
+  statusEffect: {fileID: -852923114960333645}
+  damageWhenNoEnergy: 1
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  phasingCue: {fileID: 11400000, guid: 742d075463ab6eb44a5c67ea18faba5b, type: 2}

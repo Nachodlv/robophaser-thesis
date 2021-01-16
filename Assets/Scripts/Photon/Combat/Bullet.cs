@@ -1,22 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Cues;
 using Photon.CustomPunPool;
 using Photon.GameControllers;
 using Photon.Pun;
 using UnityEngine;
+using Utils;
 
 namespace Photon.Combat
 {
+    [Serializable]
+    public class BulletCueByLayer
+    {
+        public LayerMask layer;
+        public Cue cue;
+    }
     public class Bullet : MonoBehaviourPun
     {
         [SerializeField] private int damage;
         [SerializeField] private float timeToLive;
-        [SerializeField] private Cue cue;
+        [SerializeField] private MeshRenderer meshRenderer;
+        [SerializeField] private Material[] materials;
+        [SerializeField] private BulletCueByLayer[] bulletCueByLayer;
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
         private readonly ContactPoint[] _hitContacts = new ContactPoint[5];
         private string _shootBy;
+        private int _currentMaterial;
 
         private Rigidbody Rigidbody => _rigidbody != null ? _rigidbody : _rigidbody = GetComponent<Rigidbody>();
 
@@ -46,7 +57,7 @@ namespace Photon.Combat
 
             if (other.GetContacts(_hitContacts) > 0)
             {
-                ExecuteCue(_hitContacts[0].point, _hitContacts[0].normal);
+                ExecuteCue(other.gameObject, _hitContacts[0].point, _hitContacts[0].normal);
             }
 
             DestroyBullet();
@@ -58,26 +69,27 @@ namespace Photon.Combat
             if (!CheckCollisionAndApplyDamage(other.gameObject, true)) return;
 
             var position = transform.position;
-            ExecuteCue(position, position - other.transform.position);
-            // var ray = new Ray(position, position - other.transform.position);
-            // photonView.RPC(nameof(RPC_RaycastHelper), RpcTarget.All, position, position - other.transform.position);
-            // if (Physics.Raycast(ray, out var hit))
-            // {
-            //     ExecuteCue(hit.point, hit.normal);
-            // }
-            DestroyBullet();
+            ExecuteCue(other.gameObject, position, position - other.transform.position);
         }
 
-        public void Shoot(string userId, Vector3 force)
+        public void Shoot(string userId, int playerNumber, Vector3 force)
         {
             _shootBy = userId;
             Rigidbody.AddForce(force, ForceMode.Impulse);
+            if(_currentMaterial != playerNumber) photonView.RPC(nameof(RPC_SetMaterial), RpcTarget.All, playerNumber);
         }
 
-        public void ExecuteCue(Vector3 contactPoint, Vector3 normal)
+        public void ExecuteCue(GameObject collidedWith, Vector3 contactPoint, Vector3 normal)
         {
             var rotation = Quaternion.LookRotation(normal);
-            cue.Execute(contactPoint, rotation);
+            foreach (var cueByLayer in bulletCueByLayer)
+            {
+                if (cueByLayer.layer.Includes(collidedWith.layer))
+                {
+                    cueByLayer.cue.Execute(contactPoint, rotation);
+                    return;
+                }
+            }
         }
 
         public void DestroyBullet()
@@ -107,9 +119,10 @@ namespace Photon.Combat
         }
 
         [PunRPC]
-        private void RPC_RaycastHelper(Vector3 start, Vector3 direction)
+        private void RPC_SetMaterial(int materialIndex)
         {
-            Debug.DrawRay(start, direction, Color.red, 60);
+            meshRenderer.material = materials[materialIndex];
+            _currentMaterial = materialIndex;
         }
     }
 }

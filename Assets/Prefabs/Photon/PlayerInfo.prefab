@@ -43,8 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 969844c02b1a488297434069823514a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allCharacters:
-  - {fileID: 4093477862507206506, guid: 45965ddf66ef1cb48afae020a4b44f54, type: 3}
-  - {fileID: 8655358462529155832, guid: 298c652f5f636e846a111224ebb6ac08, type: 3}
-  - {fileID: 4344632485983736969, guid: 8455e08b98412564cb36a3665ba80bbd, type: 3}
-  - {fileID: 1632611328179804072, guid: 6a633094070d2ae499f28b1587ca65f2, type: 3}
+  networkPlayerCharacters:
+  - {fileID: 151508, guid: d3f49a39274db764dbc07fb33c212a53, type: 3}
+  - {fileID: 308537461919781223, guid: fcac8a8267cada74c8172400475dc550, type: 3}
+  localPlayerCharacters:
+  - {fileID: 151508, guid: 9e8845e9d5d252245bedcec63501b648, type: 3}
+  - {fileID: 4119252026748978294, guid: 62f38bd60605f214caafb76d5b02b0fc, type: 3}

@@ -50,7 +50,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   timeToLive: 5
-  cue: {fileID: 11400000, guid: 0d76d937b09ec7a43b9c0e942667f3b4, type: 2}
+  meshRenderer: {fileID: 2510411482559924463}
+  materials:
+  - {fileID: 2100000, guid: 8616b97c3fa5e73469b5fa8bf2b32fdb, type: 2}
+  - {fileID: 2100000, guid: 27a8ff846b5bc3f4192617f2663995b3, type: 2}
+  bulletCueByLayer:
+  - layer:
+      serializedVersion: 2
+      m_Bits: 256
+    cue: {fileID: 11400000, guid: 1573bea2696ce0d43a59ea222271c4dc, type: 2}
+  - layer:
+      serializedVersion: 2
+      m_Bits: 567
+    cue: {fileID: 11400000, guid: ab8e66452a55eb848ab12b4ef426ee0c, type: 2}
 --- !u!136 &8569030564437021620
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -174,6 +186,12 @@ PrefabInstance:
 --- !u!4 &2510411482561865921 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 449392, guid: f86eba1ac647d7949b497987137a5d09,
+    type: 3}
+  m_PrefabInstance: {fileID: 2510411482562278321}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2510411482559924463 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2390878, guid: f86eba1ac647d7949b497987137a5d09,
     type: 3}
   m_PrefabInstance: {fileID: 2510411482562278321}
   m_PrefabAsset: {fileID: 0}

@@ -9,6 +9,8 @@ namespace Photon
     {
         [SerializeField] private bool initializeRematchManager = true;
         [SerializeField] private bool initializeParticleEffectPooler = true;
+        [SerializeField] private bool initializeCountdownManager = true;
+        [SerializeField] private bool initializeAudioManager = true;
 
         private void Awake()
         {
@@ -19,6 +21,10 @@ namespace Photon
             if (initializeParticleEffectPooler)
                 PhotonNetwork.Instantiate(Path.Combine("FX", "Particle Effect Pooler"), Vector3.zero,
                     Quaternion.identity);
+            if (initializeCountdownManager)
+                PhotonNetwork.Instantiate(Path.Combine("Utils", "CountdownManager"), Vector3.zero, Quaternion.identity);
+            if (initializeAudioManager)
+                PhotonNetwork.Instantiate(Path.Combine("Utils", "AudioManager"), Vector3.zero, Quaternion.identity);
         }
     }
 }

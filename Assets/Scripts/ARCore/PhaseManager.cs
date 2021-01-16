@@ -26,6 +26,8 @@ namespace ARCore
         [SerializeField] private bool skipGameArea;
         [SerializeField] private bool skipCombat;
 
+        [Header("Settings")] [SerializeField] private float countdownTime;
+
         private Phase _currentState;
         private ObstacleGenerator _obstacleGenerator;
         public ObstacleGenerator ObstacleGenerator =>
@@ -73,7 +75,7 @@ namespace ARCore
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, skipCombat);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime);
             var nonMasterInstantiatingPhase =
                 new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
@@ -82,7 +84,7 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, skipCombat);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase, skipAR);

@@ -38,6 +38,8 @@ MonoBehaviour:
   - RPC_Activate
   - RPC_AddNetworkCharacter
   - RPC_AddPlayer
+  - RPC_BroadcastFinishCountdown
+  - RPC_BroadcastStartCountdown
   - RPC_ChangeName
   - RPC_Deactivate
   - RPC_FinishHosting
@@ -45,8 +47,10 @@ MonoBehaviour:
   - RPC_HideMesh
   - RPC_InitializeObstacle
   - RPC_PlayerReady
+  - RPC_PlayLoopingSound
   - RPC_PlayParticleEffect
-  - RPC_RaycastHelper
+  - RPC_PlaySound
+  - RPC_PlaySoundOnPosition
   - RPC_ReceiveDamage
   - RPC_Rematch
   - RPC_RematchAccepted
@@ -56,6 +60,7 @@ MonoBehaviour:
   - RPC_ScaleInZ
   - RPC_SetCloudAnchorId
   - RPC_SetIsActive
+  - RPC_SetMaterial
   - RPC_SetParent
   - RPC_SetPhotonPlayer
   - RPC_SetPosition
@@ -63,6 +68,7 @@ MonoBehaviour:
   - RPC_SetPositionAndRotationAndActivate
   - RPC_SetPositionAndScale
   - RPC_SpawnBullet
+  - RPC_StopPlayingLoopingSound
   - RPC_TakeDamage
   - SetSelectedMaterial
   DisableAutoOpenWizard: 1
