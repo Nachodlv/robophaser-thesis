@@ -11,17 +11,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   AppSettings:
     AppIdRealtime: fdb9daaf-34a0-4666-9c48-50a84ebb2f46
-    AppIdChat: 
-    AppIdVoice: 
-    AppVersion: 
+    AppIdChat:
+    AppIdVoice:
+    AppVersion:
     UseNameServer: 1
-    FixedRegion: 
-    Server: 
+    FixedRegion:
+    Server:
     Port: 0
-    ProxyServer: 
+    ProxyServer:
     Protocol: 0
     EnableProtocolFallback: 1
     AuthMode: 0
@@ -47,8 +47,10 @@ MonoBehaviour:
   - RPC_HideMesh
   - RPC_InitializeObstacle
   - RPC_PlayerReady
+  - RPC_PlayLoopingSound
   - RPC_PlayParticleEffect
-  - RPC_RaycastHelper
+  - RPC_PlaySound
+  - RPC_PlaySoundOnPosition
   - RPC_ReceiveDamage
   - RPC_Rematch
   - RPC_RematchAccepted
@@ -58,6 +60,7 @@ MonoBehaviour:
   - RPC_ScaleInZ
   - RPC_SetCloudAnchorId
   - RPC_SetIsActive
+  - RPC_SetMaterial
   - RPC_SetParent
   - RPC_SetPhotonPlayer
   - RPC_SetPosition
@@ -65,16 +68,9 @@ MonoBehaviour:
   - RPC_SetPositionAndRotationAndActivate
   - RPC_SetPositionAndScale
   - RPC_SpawnBullet
+  - RPC_StopPlayingLoopingSound
   - RPC_TakeDamage
   - SetSelectedMaterial
-  - RPC_SetMaterial
-  - RPC_SetClip
-  - RPC_SetVolume
-  - RPC_StartClip
-  - RPC_PlaySound
-  - RPC_PlaySoundOnPosition
-  - RPC_PlayLoopingSound
-  - RPC_StopPlayingLoopingSound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0
