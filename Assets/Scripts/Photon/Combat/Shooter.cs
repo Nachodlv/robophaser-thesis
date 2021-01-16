@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using Cues;
 using Photon.CustomPunPool;
 using Photon.GameControllers;
 using Photon.Pun;
@@ -18,6 +19,7 @@ namespace Photon.Combat
         [SerializeField] private float reloadingTime = 2f;
         [SerializeField] private int maxClipAmmo = 3;
         [SerializeField] private LayerMask targetLayer;
+        [SerializeField] private Cue shootCue;
 
         public delegate void AmmoChangeCallback(int currentClipAmmo);
 
@@ -67,13 +69,15 @@ namespace Photon.Combat
             _lastShoot = now;
             _currentClipAmmo -= 1;
             OnAmmoChange?.Invoke(_currentClipAmmo);
+            var shootingPosition = ShootingPoints[_currentShootingPoint].Transform.position;
             photonView.RPC(nameof(RPC_SpawnBullet), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.UserId,
                 addForceVelocity,
                 PhotonNetwork.LocalPlayer.GetPlayerNumber(),
-                ShootingPoints[_currentShootingPoint].Transform.position,
+                shootingPosition,
                 GetShootingDirection()
             );
+            shootCue.Execute(shootingPosition, Quaternion.identity);
             _currentShootingPoint = (_currentShootingPoint + 1) % ShootingPoints.Length;
         }
 

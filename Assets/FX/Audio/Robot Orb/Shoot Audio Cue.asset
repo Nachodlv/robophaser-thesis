@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shoot Audio Cue
   m_EditorClassIdentifier: 
   settings:
-    audioType: 6
-    volume: 1
+    audioType: 5
+    volume: 0.5
     replicated: 1
     spatial: 1

@@ -1,4 +1,5 @@
-﻿using Cues.Animations;
+﻿using Cues;
+using Cues.Animations;
 using Photon.Combat;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
@@ -11,7 +12,7 @@ namespace Photon.GameControllers
     {
         [SerializeField] private Vector3 characterPositionOffset = new Vector3(0, -1.22f, 1f);
         [SerializeField] private Quaternion characterRotationOffset = Quaternion.identity;
-        [SerializeField] private FlashSettings flashWhenDamaged = new FlashSettings(0.4f, 0.15f, 0, 1, Color.red);
+        [SerializeField] private Cue playerDamagedCue;
 
         private PhotonPlayer _photonPlayer;
         private RobotOrbAnimator _animator;
@@ -99,7 +100,10 @@ namespace Photon.GameControllers
         {
             Animator.TakeDamage();
             if (photonView.IsMine)
-                _cameraFlash.Flash(flashWhenDamaged);
+            {
+                var transformCached = transform;
+                playerDamagedCue.Execute(transformCached.position, transformCached.rotation);
+            }
         }
     }
 }

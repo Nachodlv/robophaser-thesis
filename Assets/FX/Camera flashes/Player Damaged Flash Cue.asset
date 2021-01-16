@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a51a549deb0e4bbeb41a440872ca21b8, type: 3}
-  m_Name: Multiplayer Settings
+  m_Script: {fileID: 11500000, guid: 2e68ae1bfbf7492d98410dfbeda7c233, type: 3}
+  m_Name: Player Damaged Flash Cue
   m_EditorClassIdentifier: 
-  maxPlayers: 2
-  multiplayerScene: 1
-  mainMenuScene: 0
+  flashSettings:
+    speed: 0.4
+    maxAlpha: 0.15
+    minAlpha: 0
+    quantityOfFlashes: 1
+    color: {r: 1, g: 0, b: 0, a: 1}

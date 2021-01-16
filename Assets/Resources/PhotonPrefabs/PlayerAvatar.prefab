@@ -51,6 +51,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 768
+  shootCue: {fileID: 11400000, guid: 06f54b60c55ac024989a109542127a5a, type: 2}
 --- !u!114 &6984713992092003214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,12 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPositionOffset: {x: 0, y: -1.22, z: 1}
   characterRotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  flashWhenDamaged:
-    speed: 0.4
-    maxAlpha: 0.15
-    minAlpha: 0
-    quantityOfFlashes: 1
-    color: {r: 1, g: 0, b: 0, a: 1}
+  playerDamagedCue: {fileID: 11400000, guid: b97096aa583e9ca438ae68df6f7c18e1, type: 2}
 --- !u!114 &-852923114960333645
 MonoBehaviour:
   m_ObjectHideFlags: 0

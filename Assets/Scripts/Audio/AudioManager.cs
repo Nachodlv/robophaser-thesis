@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Photon.CustomPunPool;
+using Photon.Pun;
 using UnityEngine;
 using Utils;
 using Utils.Pools;
@@ -36,7 +36,7 @@ namespace Audio
     }
 
     [RequireComponent(typeof(AudioSource))]
-    public class AudioManager: Singleton<AudioManager>
+    public class AudioManager: PunSingleton<AudioManager>
     {
         [SerializeField] private int audioSourceQuantity;
         [SerializeField] private AudioSourcePooleable audioSourcePrefab;
@@ -59,16 +59,33 @@ namespace Audio
 
         public void PlaySoundOnPosition(AudioSettings settings, Vector3 position)
         {
-            var audioSource = InstantiateAudioSource(settings, position);
-            audioSource.Spatialize = true;
-            SetAudioSourceSettings(audioSource, settings);
+            var settingsBytes = ByteArray.ObjectToByteArray(settings);
+            if(settings.replicated) photonView.RPC(nameof(RPC_PlaySoundOnPosition), RpcTarget.All, settingsBytes, position);
+            else RPC_PlaySoundOnPosition(settingsBytes, position);
         }
 
         public void PlaySound(AudioSettings settings)
         {
-            var audioSource = InstantiateAudioSource(settings, Vector3.zero);
+            var settingsBytes = ByteArray.ObjectToByteArray(settings);
+           if(settings.replicated) photonView.RPC(nameof(RPC_PlaySound), RpcTarget.All, settingsBytes);
+           else RPC_PlaySound(settingsBytes);
+        }
+
+        [PunRPC]
+        private void RPC_PlaySoundOnPosition(byte[] settings, Vector3 position)
+        {
+            var audioSource = _pooler.GetNextObject();
+            audioSource.Spatialize = true;
+            audioSource.Transform.position = position;
+            SetAudioSourceSettings(audioSource, ByteArray.ByteArrayToObject<AudioSettings>(settings));
+        }
+
+        [PunRPC]
+        private void RPC_PlaySound(byte[] settings)
+        {
+            var audioSource = _pooler.GetNextObject();
             audioSource.Spatialize = false;
-            SetAudioSourceSettings(audioSource, settings);
+            SetAudioSourceSettings(audioSource, ByteArray.ByteArrayToObject<AudioSettings>(settings));
         }
 
         private void SetAudioSourceSettings(AudioSourcePooleable audioSource, AudioSettings settings)
@@ -76,18 +93,6 @@ namespace Audio
             audioSource.SetClip(settings.audioType);
             audioSource.SetVolume(settings.volume);
             audioSource.StartClip();
-        }
-
-        private AudioSourcePooleable InstantiateAudioSource(AudioSettings settings, Vector3 position)
-        {
-            if (settings.replicated)
-            {
-                return PunPool.Instance.Instantiate("Audio/Audio Source Network Pooleable", position, Quaternion.identity)
-                    .GetComponent<AudioSourcePooleable>();
-            }
-            var pooleable = _pooler.GetNextObject();
-            pooleable.Transform.position = position;
-            return pooleable;
         }
     }
 }

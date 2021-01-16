@@ -47,7 +47,7 @@ namespace WFC
             if (bulletHeight > floorHeight) return;
 
             Debug.Log($"##### Bullet hitting map limit ({other.name})");
-            bullet.ExecuteCue(bulletPosition, Vector3.up);
+            bullet.ExecuteCue(gameObject, bulletPosition, Vector3.up);
             bullet.DestroyBullet();
         }
 

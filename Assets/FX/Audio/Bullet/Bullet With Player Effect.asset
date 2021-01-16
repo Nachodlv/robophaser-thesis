@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a51a549deb0e4bbeb41a440872ca21b8, type: 3}
-  m_Name: Multiplayer Settings
+  m_Script: {fileID: 11500000, guid: 31324ca11b394b6fa4e4cfb4d07a8ac9, type: 3}
+  m_Name: Bullet With Player Effect
   m_EditorClassIdentifier: 
-  maxPlayers: 2
-  multiplayerScene: 1
-  mainMenuScene: 0
+  cues:
+  - {fileID: 11400000, guid: 0d76d937b09ec7a43b9c0e942667f3b4, type: 2}
+  - {fileID: 11400000, guid: eb8a465961c442d4098068fb01dc51bc, type: 2}

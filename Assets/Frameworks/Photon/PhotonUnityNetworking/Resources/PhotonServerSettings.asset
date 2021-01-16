@@ -71,6 +71,8 @@ MonoBehaviour:
   - RPC_SetClip
   - RPC_SetVolume
   - RPC_StartClip
+  - RPC_PlaySound
+  - RPC_PlaySoundOnPosition
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

@@ -1,19 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Cues;
 using Photon.CustomPunPool;
 using Photon.GameControllers;
 using Photon.Pun;
 using UnityEngine;
+using Utils;
 
 namespace Photon.Combat
 {
+    [Serializable]
+    public class BulletCueByLayer
+    {
+        public LayerMask layer;
+        public Cue cue;
+    }
     public class Bullet : MonoBehaviourPun
     {
         [SerializeField] private int damage;
         [SerializeField] private float timeToLive;
-        [SerializeField] private Cue cue;
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private Material[] materials;
+        [SerializeField] private BulletCueByLayer[] bulletCueByLayer;
 
         private Rigidbody _rigidbody;
         private Coroutine _timeToLiveCoroutine;
@@ -49,7 +57,7 @@ namespace Photon.Combat
 
             if (other.GetContacts(_hitContacts) > 0)
             {
-                ExecuteCue(_hitContacts[0].point, _hitContacts[0].normal);
+                ExecuteCue(other.gameObject, _hitContacts[0].point, _hitContacts[0].normal);
             }
 
             DestroyBullet();
@@ -61,8 +69,7 @@ namespace Photon.Combat
             if (!CheckCollisionAndApplyDamage(other.gameObject, true)) return;
 
             var position = transform.position;
-            ExecuteCue(position, position - other.transform.position);
-            DestroyBullet();
+            ExecuteCue(other.gameObject, position, position - other.transform.position);
         }
 
         public void Shoot(string userId, int playerNumber, Vector3 force)
@@ -72,10 +79,17 @@ namespace Photon.Combat
             if(_currentMaterial != playerNumber) photonView.RPC(nameof(RPC_SetMaterial), RpcTarget.All, playerNumber);
         }
 
-        public void ExecuteCue(Vector3 contactPoint, Vector3 normal)
+        public void ExecuteCue(GameObject collidedWith, Vector3 contactPoint, Vector3 normal)
         {
             var rotation = Quaternion.LookRotation(normal);
-            cue.Execute(contactPoint, rotation);
+            foreach (var cueByLayer in bulletCueByLayer)
+            {
+                if (cueByLayer.layer.Includes(collidedWith.layer))
+                {
+                    cueByLayer.cue.Execute(contactPoint, rotation);
+                    return;
+                }
+            }
         }
 
         public void DestroyBullet()
