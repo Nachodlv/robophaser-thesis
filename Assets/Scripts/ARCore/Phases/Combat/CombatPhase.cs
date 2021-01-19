@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using Photon;
+﻿using Photon;
+using Photon.Countdown;
 using Photon.GameControllers;
 using Photon.Pun;
 using UI;
@@ -13,14 +13,16 @@ namespace ARCore.Phases.Combat
         private readonly EndGameScreen _defeatScreen;
         private readonly bool _skipCombat;
         private readonly float _countdownTime;
+        private readonly FinishCountdownEvent _finishCountdownEvent;
         private bool _gameEnded;
 
-        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, bool skipCombat, float countdownTime) : base(phaseManager)
+        public CombatPhase(PhaseManager phaseManager, PlayerUI playerUI, bool skipCombat, float countdownTime, FinishCountdownEvent finishCountdownEvent) : base(phaseManager)
         {
             _playerUI = playerUI;
             _defeatScreen = phaseManager.EndGameScreen;
             _skipCombat = skipCombat;
             _countdownTime = countdownTime;
+            _finishCountdownEvent = finishCountdownEvent;
         }
 
         public override void OnEnter()
@@ -28,7 +30,7 @@ namespace ARCore.Phases.Combat
             if(_skipCombat) FinishCountdown();
             else if (PhotonNetwork.IsMasterClient)
             {
-                CountdownManager.Instance.OnFinishCountdown += FinishCountdown;
+                _finishCountdownEvent.OnTriggerEvent += FinishCountdown;
                 CountdownManager.Instance.StartCountdown(_countdownTime);
             }
         }

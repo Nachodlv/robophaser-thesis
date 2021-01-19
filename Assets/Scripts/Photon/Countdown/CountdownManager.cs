@@ -1,22 +1,18 @@
-﻿using System;
-using Cues;
+﻿using Cues;
 using Photon.Pun;
 using UnityEngine;
 using Utils;
 
-namespace Photon
+namespace Photon.Countdown
 {
     public class CountdownManager : PunSingleton<CountdownManager>
     {
         [SerializeField] private Cue countdownCue;
         [SerializeField] private float countdownCueTime;
+        [SerializeField] private StartCountdownEvent startCountdownEvent;
+        [SerializeField] private FinishCountdownEvent finishCountdownEvent;
 
         private WaitSeconds _waitSeconds;
-
-        public delegate void StartCountdownCallback(float countdownTime);
-
-        public event StartCountdownCallback OnStartCountdown;
-        public event Action OnFinishCountdown;
 
         protected override void Awake()
         {
@@ -52,13 +48,13 @@ namespace Photon
         [PunRPC]
         private void RPC_BroadcastStartCountdown(float time)
         {
-            OnStartCountdown?.Invoke(time);
+            startCountdownEvent.TriggerEvent(time);
         }
 
         [PunRPC]
         private void RPC_BroadcastFinishCountdown()
         {
-            OnFinishCountdown?.Invoke();
+            finishCountdownEvent.TriggerEvent();
         }
     }
 }

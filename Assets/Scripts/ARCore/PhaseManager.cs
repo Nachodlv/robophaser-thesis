@@ -4,6 +4,7 @@ using ARCore.Phases.Combat;
 using ARCore.Phases.Instantiating;
 using GoogleARCore.Examples.CloudAnchors;
 using Photon;
+using Photon.Countdown;
 using Photon.Pun;
 using UI;
 using UI.Combat;
@@ -26,7 +27,9 @@ namespace ARCore
         [SerializeField] private bool skipGameArea;
         [SerializeField] private bool skipCombat;
 
-        [Header("Settings")] [SerializeField] private float countdownTime;
+        [Header("Settings")]
+        [SerializeField] private float countdownTime;
+        [SerializeField] private FinishCountdownEvent finishCountdownEvent;
 
         private Phase _currentState;
         private ObstacleGenerator _obstacleGenerator;
@@ -75,7 +78,7 @@ namespace ARCore
 
         private NonMasterPositioningPhase InstantiateNonMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime, finishCountdownEvent);
             var nonMasterInstantiatingPhase =
                 new NonMasterInstantiatingPhase(this, networkUi, combatPhase);
             return new NonMasterPositioningPhase(this, networkUi, anchorsExampleController,
@@ -84,7 +87,7 @@ namespace ARCore
 
         private MasterPositioningPhase InstantiateMasterPhases()
         {
-            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime);
+            var combatPhase = new CombatPhase(this, playerUI, skipCombat, countdownTime, finishCountdownEvent);
             var masterInstantiatingPhase =
                 new MasterInstantiatingPhase(this, networkUi, anchorsExampleController, ObstacleGenerator,
                     combatPhase, skipAR);

@@ -600,6 +600,8 @@ MonoBehaviour:
   messageAtEnd: Battle!
   timeMessageAtEnd: 2
   animator: {fileID: 177222389}
+  startCountdownEvent: {fileID: 11400000, guid: f396448593312094babe699d5ca16836,
+    type: 2}
 --- !u!1001 &191724961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4294,6 +4296,8 @@ MonoBehaviour:
   skipGameArea: 0
   skipCombat: 0
   countdownTime: 5
+  finishCountdownEvent: {fileID: 11400000, guid: 14b113b61aa8c5645bb85b3c366410b3,
+    type: 2}
 --- !u!4 &881141471
 Transform:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Photon;
+using Photon.Countdown;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +12,7 @@ namespace UI.Combat
         [SerializeField] private string messageAtEnd = "Battle!";
         [SerializeField] private float timeMessageAtEnd = 2f;
         [SerializeField] private Animator animator;
+        [SerializeField] private StartCountdownEvent startCountdownEvent;
 
 
         private WaitForSeconds _waitOneSecond;
@@ -26,11 +27,7 @@ namespace UI.Combat
             _waitMessageAtEnd = new WaitForSeconds(timeMessageAtEnd);
             _startCountdownCouroutineCached = Countdown;
             timeDisplay.gameObject.SetActive(false);
-        }
-
-        private void Start()
-        {
-            CountdownManager.Instance.OnStartCountdown += StartCountdown;
+            startCountdownEvent.OnTriggerEvent += StartCountdown;
         }
 
         private void StartCountdown(float time)
