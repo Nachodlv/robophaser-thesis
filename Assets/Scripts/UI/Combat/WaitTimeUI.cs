@@ -17,7 +17,6 @@ namespace UI.Combat
 
         private WaitForSeconds _waitOneSecond;
         private WaitForSeconds _waitMessageAtEnd;
-        private Func<int, IEnumerator> _startCountdownCouroutineCached;
         private static readonly int Show = Animator.StringToHash("show");
         private static readonly int Hide = Animator.StringToHash("hide");
 
@@ -25,14 +24,18 @@ namespace UI.Combat
         {
             _waitOneSecond = new WaitForSeconds(1);
             _waitMessageAtEnd = new WaitForSeconds(timeMessageAtEnd);
-            _startCountdownCouroutineCached = Countdown;
             timeDisplay.gameObject.SetActive(false);
             startCountdownEvent.OnTriggerEvent += StartCountdown;
         }
 
+        private void OnDestroy()
+        {
+            startCountdownEvent.OnTriggerEvent -= StartCountdown;
+        }
+
         private void StartCountdown(float time)
         {
-            StartCoroutine(_startCountdownCouroutineCached((int) Math.Ceiling(time)));
+            StartCoroutine(Countdown((int) Math.Ceiling(time)));
         }
 
         private IEnumerator Countdown(int time)

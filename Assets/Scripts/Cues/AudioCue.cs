@@ -13,20 +13,24 @@ namespace Cues
 
         public override void Execute(Vector3 position, Quaternion rotation)
         {
+            var audioManager = AudioManager.Instance;
+            if (audioManager == null) return;
             if (settings.loop)
             {
-                _audioLoopId = AudioManager.Instance.PlayLoopingSound(settings);
+                _audioLoopId = audioManager.PlayLoopingSound(settings);
             }
             else
             {
-                if(settings.spatial) AudioManager.Instance.PlaySoundOnPosition(settings, position);
-                else AudioManager.Instance.PlaySound(settings);
+                if(settings.spatial) audioManager.PlaySoundOnPosition(settings, position);
+                else audioManager.PlaySound(settings);
             }
         }
 
         public override void StopExecution()
         {
-            AudioManager.Instance.StopLoopingSound(_audioLoopId, settings);
+            var audioManager = AudioManager.Instance;
+            if (audioManager == null) return;
+            audioManager.StopLoopingSound(_audioLoopId, settings);
         }
     }
 }

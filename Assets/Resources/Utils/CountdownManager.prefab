@@ -48,7 +48,7 @@ MonoBehaviour:
   countdownCueTime: 2.5
   startCountdownEvent: {fileID: 11400000, guid: f396448593312094babe699d5ca16836,
     type: 2}
-  finishCountdownEvent: {fileID: 11400000, guid: 14b113b61aa8c5645bb85b3c366410b3,
+  finishCountdownEvent: {fileID: 11400000, guid: 92fd32e02d86d084984cd7abe9defcf1,
     type: 2}
 --- !u!114 &-3436753246766346027
 MonoBehaviour:

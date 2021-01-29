@@ -27,12 +27,21 @@ namespace ARCore.Phases.Combat
 
         public override void OnEnter()
         {
-            if(_skipCombat) FinishCountdown();
-            else if (PhotonNetwork.IsMasterClient)
+            if (_skipCombat)
             {
-                _finishCountdownEvent.OnTriggerEvent += FinishCountdown;
+                FinishCountdown();
+                return;
+            }
+            _finishCountdownEvent.OnTriggerEvent += FinishCountdown;
+            if (PhotonNetwork.IsMasterClient)
+            {
                 CountdownManager.Instance.StartCountdown(_countdownTime);
             }
+        }
+
+        public override void OnExit()
+        {
+            _finishCountdownEvent.OnTriggerEvent -= FinishCountdown;
         }
 
         private void FinishCountdown()

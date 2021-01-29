@@ -13,6 +13,7 @@ namespace UI.Combat
 
         public void DisplayHealth(PhotonPlayer player)
         {
+            if (!slider.gameObject.activeSelf) slider.gameObject.SetActive(true);
             slider.MaxValue = player.MaxHealth;
             slider.Value = player.MaxHealth;
             player.OnHealthUpdate += UpdateHealth;
