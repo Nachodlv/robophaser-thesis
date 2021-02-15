@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Cues;
 using Photon.Pun;
 using UnityEngine;
 using Utils;
@@ -15,7 +16,8 @@ namespace Audio
         ReceiveShoot,
         WallPhase,
         Shoot,
-        Countdown
+        Countdown,
+        BackgroundMusic
     }
 
     [Serializable]
@@ -33,8 +35,8 @@ namespace Audio
         [SerializeField] private int audioSourceQuantity;
         [SerializeField] private AudioSourcePooleable audioSourcePrefab;
         [SerializeField] private AudioClipWithAudioType[] audioClipWithAudioType;
+        [SerializeField] private AudioCue backgroundMusic;
 
-        private AudioSource _audioSource;
         private ObjectPooler<AudioSourcePooleable> _pooler;
         private Dictionary<AudioType, AudioClip> _audios;
         private Dictionary<float, AudioSourcePooleable> _audioSourceLooping = new Dictionary<float, AudioSourcePooleable>();
@@ -42,10 +44,14 @@ namespace Audio
         protected override void Awake()
         {
             base.Awake();
-            _audioSource = GetComponent<AudioSource>();
             _pooler = new ObjectPooler<AudioSourcePooleable>();
             _audios = ArrayToDictionary.ToDictionary<AudioType, AudioClip, AudioClipWithAudioType>(audioClipWithAudioType);
             _pooler.InstantiateObjects(audioSourceQuantity, audioSourcePrefab, "Audio Sources");
+        }
+
+        private void OnEnable()
+        {
+            PlayLoopingSound(backgroundMusic.settings);
         }
 
         public AudioClip GetAudioClip(AudioType type) => _audios[type];
