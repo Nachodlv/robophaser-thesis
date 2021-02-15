@@ -23,6 +23,7 @@ namespace UI
             set
             {
                 var fiftyPercent = slider.maxValue / 2;
+                if (!bar.gameObject.activeSelf) bar.gameObject.SetActive(true);
                 bar.color = value >= fiftyPercent
                     ? Color.Lerp(middleColor, maximumColor, (value - fiftyPercent) / fiftyPercent)
                     : Color.Lerp(minimumColor, middleColor, value / fiftyPercent);
